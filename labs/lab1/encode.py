@@ -17,12 +17,14 @@ tweets = Tweets()
 with file('twitter.data', 'r') as f:
   for line in imap(loads, f):
     tweet = tweets.tweets.add()
+    tweet.is_delete = ('delete' in line)
     if 'delete' in line:
       status = line['delete']['status']
       tweet.delete.id = status['id']
       tweet.delete.uid = status['user_id']
     else:
       insert = tweet.insert
+      insert.uid = line['user']['id']
       insert.truncated = line['truncated']
       insert.text = line['text']
       if line.get('in_reply_to_status_id', None):
@@ -61,3 +63,11 @@ with file('twitter.data', 'r') as f:
 
 with file('twitter.pb', 'w') as f:
   f.write(tweets.SerializeToString())
+
+
+# insert into sqlite database
+for tweet in tweets.tweets:
+  if tweet.is_delete:
+    delete = tweet.delete
+  else:
+    insert = tweet.insert

@@ -26,19 +26,21 @@ message Tweet {
     optional int64 reply_to = 3;
     optional string reply_to_name = 4;
     required int64 id = 5;
-    optional int32 favorite_count = 6;
-    optional string source = 7;
-    required bool retweeted = 8;
-    optional bool possibly_sensitive = 9;
-    optional string lang = 10;
-    required string created_at = 11;
-    optional Coord coord = 12;
-    required string filter_level = 13;
-    optional Place place = 14;
+    required int64 uid = 6;
+    optional int32 favorite_count = 7;
+    optional string source = 8;
+    required bool retweeted = 9;
+    optional bool possibly_sensitive = 10;
+    optional string lang = 11;
+    required string created_at = 12;
+    optional Coord coord = 13;
+    required string filter_level = 14;
+    optional Place place = 15;
   }
 
-  optional Delete delete = 1;
-  optional Insert insert = 2;
+  required bool is_delete = 1;
+  optional Delete delete = 2;
+  optional Insert insert = 3;
 }
 
 message Tweets {
