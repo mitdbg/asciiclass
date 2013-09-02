@@ -8,6 +8,7 @@
 # @author eugene wu 2013
 #
 
+
 from pdb import set_trace
 from json import loads
 from itertools import imap
@@ -65,9 +66,4 @@ with file('twitter.pb', 'w') as f:
   f.write(tweets.SerializeToString())
 
 
-# insert into sqlite database
-for tweet in tweets.tweets:
-  if tweet.is_delete:
-    delete = tweet.delete
-  else:
-    insert = tweet.insert
+
