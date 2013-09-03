@@ -1,52 +1,64 @@
 # Lab 1
 
-The goal of this lab is for you to set up  amazon/cloud  experience the pain of working
-with data in various degrees of structure.  
+The goal of this lab is for you to set up Amazon Web Services ("Amazon
+Cloud") and gain experiment with working with data in various degrees
+of structure.
 
-You will the same tweet dataset encoded in multiple ways to compute
+You will the a dataset of Tweeets encoded in multiple ways to compute
 some summary information and reflect on the pros and cons of each
-encoding.  
+approach.
 
 
 # Step 0: Setup Amazon EC2
 
-Many of the labs in this class will involve running on cloud computing infrastructure.
-so we ask that you to run the labs an such an infrastructure from the very beginning.  
-The class has recieved Amazon credits so the instructions will be written towards their
-services.
-
-If you would like to use another cloud infrastructure, feel free
-to do so but you're on your own!
+Many of the labs in this class will use Amazon's cloud computing infrastructure.
+Using a cloud service like Amazon makes it easy to share data sets, and quickly run any number virtual machines that 
+are identical for all students in the class.
+We have credits from Amazon, which we will use for later labs (in this lab, we will use a free "micro" instance.)
 
 ### Sign up and setup the OS
 
 **Signup**: [register for an account](https://aws-portal.amazon.com/gp/aws/developer/registration/index.html)
 
-You will need to provide a credit card, however the class has amazon credits so
+You will need to provide a credit card, however the class has Amazon credits so
 you should not expect to _use_ the credit card.  Once the class registration has 
-settled down, we will add you to the class's amazon groups.
+settled down, we will add you to the class's Amazon groups.
 
 **Launch an instance**
 
 1. Go to [http://aws.amazon.com](http://aws.amazon.com) and click 'AWS Management Console' under 'My Account/Console' 
 in the upper right.  
 1. Click EC2
-1. Click Launch Instance.  Amazon lets you launch one micro-instance for free, so we strongly recommend 
-   that you do this.
-1. Use one of the Ubuntu Server images (doesn't matter exactly which one for this lab)
-1. Check its public address.  It should look something like ec2-xx-xxx-xx-xxx.us-west-2.compute.amazonaws.com
+1. Click Launch Instance.  
+1. Use the "Classic Wizard". As of this writing the "Quick Launch Wizard" would not successfully launch.
+1. Select one of the Ubuntu Server images ("AMIs"); it doesn't matter exactly which one for this lab.
+1. Specify 1 instance of type "t1.micro". Amazon lets you launch one micro-instance for free, so this won't cost you anything to launch.  
+1. You don't care about the subnet, and can simply click "Continue" on the "Advanced Instance Options", "Storage Device Configuration", and "Add Tags" pages.
+1. You will need to specify a key value pair, or create a new one.  If you choose to create a new one, make sure you download it and save it (your should have a .pem file).
+1. The default security group is fine.
+1. Click "Launch".  It will take a few minutes for the instance to launch.
+1. After the instances launches, click on it to obtain its DNS name.  It should look something like ec2-xx-xxx-xx-xxx.us-west-2.compute.amazonaws.com
 
-**Download your keys**: you need to download a pem file in order to ssh to your instance.
-Download it and ssh:
+**SSH to Your Instance**: 
 
-    ssh -i <PEM FILE> ubuntu@<public address>
+Type something like:
 
-**Setup the OS**: ensure the following packages are available using apt-get.  
+ssh -i <PEM FILE> ubuntu@<public address>
 
-* python 2.7
-  * psycopg2
-  * sqlalchemy
-* protocol buffers
+Where <PEM FILE> is key file you downloaded when launching the instance.
+
+**Setup the OS**: ensure the following packages are available using the Ubuntu package management tool apt-get.  
+
+To install a package, type:
+
+sudo apt-get install <packagename>
+
+Make sure you have the following packages:
+
+* python2.7
+  * python-psycopg2
+  * python-sqlalchemy
+* python-protobuf
 * postgresql
 * sqlite3
 * git
@@ -55,12 +67,19 @@ Checkout the class repository
 
     git clone git@github.com:sirrice/asciiclass.git
 
+
+xxx this gives me the error:
+Warning: Permanently added 'github.com,192.30.252.130' (RSA) to the list of known hosts.
+Permission denied (publickey).
+fatal: The remote end hung up unexpectedly
+
+
 Go to lab 1:
 
     cd asciiclass/labs/lab1
 
 
-# Step 1: Analyses on JSON
+# Step 1: Analysis on JSON
 
 ### Setup
 
@@ -122,7 +141,7 @@ Perform the same analyses as step 1 using the dataset encoded as protocol buffer
 ### Setup
 
 In this step, you will be working with the twitter data encoded as a
-sqlite3 database file.  The file, `twitter.db` was generate using `python createdb.py`.
+sqlite3 database file.  The file, `twitter.db` was generated using `python createdb.py`.
 The schemas are defined in `twitter.ddl`.
 
 Start a sqlite3 prompt by typing:
