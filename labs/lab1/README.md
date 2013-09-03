@@ -43,7 +43,7 @@ in the upper right.
 
 Type something like:
 
-ssh -i <PEM FILE> ubuntu@<public address>
+    ssh -i <PEM FILE> ubuntu@<public address>
 
 Where <PEM FILE> is key file you downloaded when launching the instance.
 
@@ -51,7 +51,7 @@ Where <PEM FILE> is key file you downloaded when launching the instance.
 
 To install a package, type:
 
-sudo apt-get install <packagename>
+    sudo apt-get install <packagename>
 
 Make sure you have the following packages:
 
