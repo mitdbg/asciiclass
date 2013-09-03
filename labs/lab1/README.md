@@ -65,7 +65,7 @@ Make sure you have the following packages:
 
 Checkout the class repository
 
-    git clone git@github.com:sirrice/asciiclass.git
+    git clone https://github.com/mitdbg/asciiclass.git
 
 
 xxx this gives me the error:
