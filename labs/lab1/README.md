@@ -30,7 +30,7 @@ in the upper right.
 1. Select the 64-bit version of "Ubuntu Server 13.04."
 1. Specify 1 instance of type "t1.micro". Amazon lets you launch one micro-instance for free, so this won't cost you anything to launch.  
 1. You don't care about the subnet, and can simply click "Continue" on the "Advanced Instance Options", "Storage Device Configuration", and "Add Tags" pages.
-1. You will need to specify a key pair, or create a new one.  If you choose to create a new one, make sure you download it and save it (your file extension is .pem)>
+1. You will need to specify a key pair, or create a new one.  If you choose to create a new one, make sure you download it and save it (your file extension should be `.pem`).
 1. The default security group is fine.
 1. Click "Launch".  It will take a few minutes for the instance to launch.  Close the dialog, and wait on the instance listing table.
 1. After the instances launches, click on it to obtain its "Public DNS" name.  It should look something like ec2-xx-xxx-xx-xxx.us-REGION-2.compute.amazonaws.com
@@ -77,9 +77,7 @@ directory called `asciiclass`.
 
     git clone https://github.com/mitdbg/asciiclass.git
 
-
-
-**Test that things worked***
+**Test that things worked**
 
 Let's make sure you have access to Python, sqlite3, MongoDB, and the git repository.
 
