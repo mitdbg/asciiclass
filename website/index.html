@@ -1,0 +1,787 @@
+<html>
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap --> 
+    <meta charset="utf-8">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <style type="text/css">
+      html {
+        overflow-y:scroll;
+      }
+
+      body {
+          text-align: left;
+          font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+          font-size: 15px;
+          font-weight: 300;
+          background-color: #fdfdfd;
+      }
+      </style>
+      
+<title>6.885: From ASCII to Answers:  Advanced Topics in Data Processing</title>
+</head>
+<body>
+
+<div class="container">
+<h2>6.885: From ASCII to Answers:  Advanced Topics in Data Processing</h2>
+
+<div class="row">
+  <div class="span2">
+<b>Units: </b>
+</div>
+<div class="span8"><p valign="bottom">3-0-9 (Grad H) 
+</div>
+</div>
+<div class="row">
+<div class="span2">
+<b>Instructors:</b>
+</div>
+<div class="span8"><p valign="bottom">Samuel Madden (madden@csail.mit.edu)  <br> Amol Deshpande (amol@cs.umd.edu) <br> Adam Marcus (marcua@marcua.net) <br> Eugene Wu (eugenewu@mit.edu) </div>
+</div>
+
+<div class="row">
+  <div class="span2">
+<b>Meetings:</b>
+</div>
+<div class="span8"><p valign="bottom">TR1-2:30, room 4-231  (First Meeting Thursday, 9/5)
+</div>
+</div>
+
+<div class="row">
+<div class="span2"><b>Description:</b></div>
+
+<div class="span8"> This class will survey techniques and systems for ingesting, efficiently processing, analyzing, and visualizing large data sets. Topics will include data cleaning, data integration, scalable systems (relational databases, NoSQL, Hadoop, etc.), analytics (data cubes, scalable statistics and machine learning), and scalable visualization of large data sets.  The goal of the class is to gain working experience along with in-depth discussions of the topics covered.  Students should have a background in database or distributed systems (6.814/6.830 or 6.824 or permission of instructor). There will be a semester-long project and paper, and hands-on labs involving using real systems. There will be no exams, and grading will be based largely on class participation and whether assignments are completed.
+</div>
+</div>
+
+
+<h3> Tentative Syllabus </h3>
+<div class="container">
+<table class="table table-striped" >
+<thead>
+    <tr >
+      <th >
+	<p >
+	  <span >Topic
+	  </span>
+	</p>
+      </th>
+      <th >
+	<p >
+	  <span >Objectives
+	  </span>
+	</p>
+      </th>
+      <th >
+	<p >
+	  <span >Readings
+	  </span>
+	</p>
+      </th>
+      <th >
+	<p >
+	  <span >Hands-on
+	  </span>
+	</p>
+      </th>
+    </tr>
+</thead>
+  <tbody>
+    <tr >
+      <td >
+	<p >
+	  <span >L1: Class Intro;
+	  </span>
+	  <span >Data Modeling and Representation Overview
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Schemas / structure are valuable (even if it not in relational world); E.g., Protobufs
+	  </span>
+	</p>
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Relational overview (TBD)
+	  </span>
+	</p>
+	<p >
+	  <span >
+	    <a  href="http://vldb.org/pvldb/vol5/p1771_georgelee_vldb2012.pdf">Unified twitter logging
+	    </a>
+	  </span>
+	</p>
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Set up an Amazon instance; &nbsp;run a few simple SQL queries
+	  </span>
+	  <span >on Postgres; &nbsp;Use protobufs to serialize / deserialize some data
+	  </span>
+	</p>
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L2: Alternative Data Models
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Understand different data models, and what they are good for. &nbsp;Semi-structured storage, arrays, graphs, etc.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >BigTable paper only the model section; RDF paper?
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Mongo and Cassandra
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L3: Data Cleaning and Integration #1
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Text -&gt; Relations/Structured Data
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Data Wrangler
+	  </span>
+	</p>
+	<p >
+	  <span >Potter&rsquo;s Wheel
+	  </span>
+	</p>
+	<p >
+	  <span >Research Directions in Data Wrangling
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >sed/awk, wrangler on Goby Events dataset
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L4: Data Cleaning and Integration #2
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Overview: &nbsp;A ?= A&rsquo;
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	    <a  href="http://repository.upenn.edu/cgi/viewcontent.cgi?article=1034&amp;context=db_research">Crossing The Structure Chasm
+	    </a>
+	  </span>
+	</p>
+	<p >
+	  <span >Finding related tables.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Try data integration tools (e.g., data tamer); &nbsp;Google Knowledge Graph
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L5: Data Cleaning and Integration #4
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Combining Info From Multiple Sources (Truthfulness, Veracity, etc.)
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Luna Dong Paper
+	  </span>
+	</p>
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Dong Flight Data or Geospatial example or event data -- duplicate and error detection
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L6: Data Cleaning and Integration #5
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Statistical Approaches
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Andrew McCallum Work
+	  </span>
+	</p>
+	<p >
+	  <span >
+	    <a  href="http://turing.cs.washington.edu/papers/acl08.pdf">TextRunner
+	    </a>
+	  </span>
+	  <span >&nbsp;
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Try McCallum code:
+	  </span>
+	  <span >
+	    <a  href="http://people.cs.umass.edu/~mccallum/code.html">http://people.cs.umass.edu/~mccallum/code.html
+	    </a>
+	  </span>
+	  <span >&nbsp;
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L7: MapReduce
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Split up larger computations into map and reduce. &nbsp;Learn to connect multiple MapReduce phases.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	    <a  href="http://static.googleusercontent.com/external_content/untrusted_dlcp/research.google.com/en/us/archive/mapreduce-osdi04.pdf">MapReduce paper
+	    </a>
+	  </span>
+	  <span >, Elastic MapReduce/Hadoop documentation.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Implement sed / grep / count &nbsp;in MR. &nbsp;TF/IDF workflow in MR.
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L8: Column-oriented Databases
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Perform queries like sums, counts, and averages over huge datasets in seconds using Column Oriented DBs.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	    <a  href="http://vldb.org/pvldb/vol5/p1790_andrewlamb_vldb2012.pdf">The Vertica Analytic Database: C-Store 7 Years Later
+	    </a>
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Vertica (or Redshift) vs Postgres vs MR: Sums and Joins.
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L9: Data Cubes + Materialized views
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Frequently, your dataset is so large that asking a question of it in real-time isn&rsquo;t possible. &nbsp;Cubes and materialized views allow you to precompute the answers to questions so that you have them when you need them later.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	    <a  href="http://research.microsoft.com/en-us/um/people/gray/DataCube.doc">The original data cube paper
+	    </a>
+	  </span>
+	  <span >: Distributive/Algebraic/Holistic operations.
+	  </span>
+	</p>
+	<p >
+	  <span >
+	  </span>
+	</p>
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >IMDB: query for bacon number with degree 2 with materialized and unmaterialized table. &nbsp;Update with a new acting relationship.
+	  </span>
+	</p>
+	<p >
+	  <span >
+	  </span>
+	</p>
+	<p >
+	  <span >Compute count of actors&rsquo; movies per year broken down by genre, year, and age of actor in column store, row store, and ROLAP.
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L10: Approximate query processing
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Sometimes, you don&rsquo;t actually need a perfect answer, and statistics can make it easy to get very close. &nbsp;We&rsquo;ll cover techniques like sampling, sketching, and generating histograms.
+	  </span>
+	  <span >&nbsp;
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	    <a  href="https://en.wikipedia.org/wiki/Bloom_filter">Bloom filters
+	    </a>
+	  </span>
+	  <span >,
+	  </span>
+	  <span >
+	    <a  href="https://en.wikipedia.org/wiki/Reservoir_sampling">Reservoir sampling
+	    </a>
+	  </span>
+	  <span >,
+	  </span>
+	  <span >
+	    <a  href="http://blog.aggregateknowledge.com/tag/count-min-sketch/">Count-min Sketches
+	    </a>
+	  </span>
+	</p>
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >We&rsquo;ll give you ten gigabytes of data. &nbsp;You will use less than a megabyte of data to tell us approximately which items are in it, returns a 1000 representaive items without knowing how large the set is, and tell us how frequently the items in the set appear.
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L11: Computation inside and outside the database
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Traditionally, people use tools like databases to store/retrieve/ask basic questions (sums, counts, averages, etc.) of data. &nbsp;They use tools like R/numpy/Julia to do deeper exploration of the data. &nbsp;It turns out that you can do deep computation inside the database, and ask high-level questions of data outside of the database, and we&rsquo;ll show you how.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >&nbsp;
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	    <a  href="http://doc.madlib.net/v1.0/group__grp__linreg.html">Linear regression in postgres using MADLIB
+	    </a>
+	  </span>
+	</p>
+	<p >
+	  <span >
+	  </span>
+	</p>
+	<p >
+	  <span >
+	    <a  href="https://github.com/amplab/shark/wiki/Running-Shark-on-EC2">Query json files in shark
+	    </a>
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L12:
+	  </span>
+	  <span >Iterative Algorithms
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Iterative algorithms require you to do several passes over your data. &nbsp;Tools like MapReduce are not as useful for this because both their programming model and execution model aren&rsquo;t designed around iteration.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	    <a  href="http://www.cs.berkeley.edu/~matei/papers/2010/hotcloud_spark.pdf">Spark paper
+	    </a>
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Implement
+	  </span>
+	  <span >
+	    <a  href="http://ampcamp.berkeley.edu/big-data-mini-course/machine-learning-with-spark.html">K-means in Spark
+	    </a>
+	  </span>
+	  <span >&nbsp;and in MapReduce. &nbsp;Which has a better programmatic interface? &nbsp;Which is faster?
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L13: Stream data processing
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Sometimes your datasets are both large and not static (think Twitter, or the stock market): as data streams in, you have to compute information on it without knowing when the stream will end.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	    <a  href="http://cs.brown.edu/research/pubs/pdfs/2003/Abadi-2003-ANM.pdf">Aurora paper
+	    </a>
+	  </span>
+	</p>
+	<p >
+	  <span >Storm paper?
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	    <a  href="https://github.com/nathanmarz/storm-deploy/wiki">Deploy Storm
+	    </a>
+	  </span>
+	  <span >&nbsp;and then use either
+	  </span>
+	  <span >
+	    <a  href="https://github.com/nathanmarz/storm/wiki/Tutorial">Storm
+	    </a>
+	  </span>
+	  <span >&nbsp;or
+	  </span>
+	  <span >
+	    <a  href="https://github.com/nathanmarz/storm/wiki/Trident-tutorial">Trident
+	    </a>
+	  </span>
+	  <span >&nbsp;to connect to the Twitter streaming API and calculate the most retweeted tweets and identify trending topics.
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L14: Graph processing
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Lots of data is graphical, be it the world wide web or social networks. &nbsp;Graph processing systems help you run algorithms to process these graphs.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	    <a  href="http://kowshik.github.io/JPregel/pregel_paper.pdf">Pregel paper
+	    </a>
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >&nbsp;
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L15: Scalable Algos #1
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Scaling machines learning algorithms is still an open problem. &nbsp;Map-reduce happens to scale well, and Gradient Descent methods are currently the most understood algorithm to run scalably on map-reduce frameworks to solve problems such as SVMs.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Jimmy Lin Paper (MR as a hammer)
+	  </span>
+	</p>
+	<p >
+	  <span >Hogwild for extra credit. &nbsp;It&rsquo;s probably too math dense.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Implement IGD for SVM
+	  </span>
+	  <span >&nbsp;on spark
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L16: Scalable Algos #2
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Database techniques may be able to further speed up machine learning techniques by embedding them within the DBMS, declaratively specifying the machine learning algorithms and parameters and letting the DBMS optimize the parameters, or implementing the algortihms on map-reduce systems.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Daisy&rsquo;s paper, MLBase?
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Compare and contrast runnning in-database ML (madlib) vs out-of-database ML.
+	  </span>
+	</p>
+	<p >
+	  <span >
+	  </span>
+	</p>
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L17: Visualizations
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Visualizations map summary statistics of your data into the visual domain. &nbsp;We will have a crash course on typical summary statistics, and a comparison of declarative vs painting based models of visualizations.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Intro to stats (summary statistics: medians, averages, clt, etc.)
+	  </span>
+	</p>
+	<p >
+	  <span >matplotlib vs ggplot2/d3
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Make plots using d3 and matplotlib and compare the differences. &nbsp;Then try gg/ggplot2
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L18: Scalable Visualizations #1
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >We&rsquo;ve discussing scaling algorithms for faster data cleaning and processing. &nbsp;How do we scale visualizations to encode more data (dimensions, hierarchical, # tuples) in the same space? &nbsp;
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >High density visualizations, Semantic Zoom, PCA family
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >TBD
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L19: Scalable Visualizations #2
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Interactive _statistical_ visualization require sub 100ms interaction times to process user inputs, re-compute analytic queries, and render the resulting data with low latency. &nbsp;We will review some modern techniques using GPUs.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >MapD
+	  </span>
+	</p>
+	<p >
+	  <span >Heer&rsquo;s datavore or his&rsquo; postdoc&rsquo;s recent thing
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >TBD
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr >
+      <td >
+	<p >
+	  <span >L20: Conclusion
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+</div>
+</body>
+</html>
