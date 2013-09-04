@@ -111,6 +111,27 @@ If you do, push `ctrl+d` to exit the prompt.
 
 You should see the instructions for this lab fly by.
 
+**Save your virtual machine**: 
+
+You should now save the virtual machine you just configured, so that you don't have to reinstall everything again for the next lab.   To do this:
+
+1. Go to the [EC2 Console](https://console.aws.amazon.com/ec2/v2/home?region=us-west-2).
+1. In the dashboard on the left, click on "Instances"
+1. Click on the checkbox on the left of your running micro instance.
+1. In the "Actions" menu at the top, choose "Create Image (EBS AMI)".  An "AMI" is a saved virtual machine instance that you can 
+   boot, just like the base Ubuntu image you booted from.
+1. Give the saved instance a name, like "6.885-lab1"
+1. After a few minutes, the AMI creation should complete and the AMI should be available in the list of AMIs.  You can go back to this list of AMIs and launch virtual machines from it after the AMI is created.
+
+You also want to shut it down so that you don't unnecessarily use up your "free" Amazon hours:
+
+
+
+
+**Handing in your work**:
+
+XXX add some simple mongo query they have to run
+
 If you do, congratulations.  You're done!  Go read the assiged paper for today.
 
 You can always feel free to email us with questions.

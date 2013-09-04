@@ -7,12 +7,13 @@
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="dateformat.js"></script>
     <style type="text/css">
       html {
         overflow-y:scroll;
       }
 
-      body {
+body,tr {
           text-align: left;
           font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
           font-size: 15px;
@@ -20,10 +21,50 @@
           background-color: #fdfdfd;
       }
       </style>
+
+<script type="text/javascript">
+    function update_dates() {
+        var holidays = ['10/15/13','11/28/13'];
+        var curClass = new Date(2013,8,5,12,0,0,0);
+        var lastClass = new Date(2013,11,11,12,0,0,0);        
+        var gap = 5;
+        var spans = document.getElementsByClassName("date");
+        var lastClassWasBefore = true;
+        for (i = 0; i < spans.length; i++) {
+            var dayString = dateFormat(curClass,'m/d/yy');         
+            var holiday = false;   
+            do {
+                holiday = false;
+                for (j = 0; j < holidays.length; j++) {
+                    if (holidays[j] == dayString)
+                        holiday = true;
+                }
+                if (holiday) {
+                    curClass = new Date(curClass.getTime() + (24 * 60 * 60 * gap * 1000));
+                    if (gap == 5) { gap = 2; } else { gap = 5; }
+                    dayString = dateFormat(curClass,'m/d/yy');
+                }
+            } while (holiday);
+            var now = new Date();
+            if (lastClassWasBefore && curClass.getTime() > new Date()) { // this is the next class
+                spans[i].innerHTML =  dayString + "<p> <b>(This is the next class!)</b>";
+                lastClassWasBefore = false;
+            } else 
+                spans[i].innerHTML = dayString;
+            curClass = new Date(curClass.getTime() + (24 * 60 * 60 * gap * 1000));
+            if (gap == 5) { gap = 2; } else { gap = 5; }
+        }
+    }
+
+    function page_onload() {
+        update_dates();
+    }
+</script>
+
       
 <title>6.885: From ASCII to Answers:  Advanced Topics in Data Processing</title>
 </head>
-<body>
+<body onLoad="page_onload()">
 
 <div class="container">
 <h2>6.885: From ASCII to Answers:  Advanced Topics in Data Processing</h2>
@@ -56,13 +97,31 @@
 <div class="span8"> This class will survey techniques and systems for ingesting, efficiently processing, analyzing, and visualizing large data sets. Topics will include data cleaning, data integration, scalable systems (relational databases, NoSQL, Hadoop, etc.), analytics (data cubes, scalable statistics and machine learning), and scalable visualization of large data sets.  The goal of the class is to gain working experience along with in-depth discussions of the topics covered.  Students should have a background in database or distributed systems (6.814/6.830 or 6.824 or permission of instructor). There will be a semester-long project and paper, and hands-on labs involving using real systems. There will be no exams, and grading will be based largely on class participation and whether assignments are completed.
 </div>
 </div>
+<br>
+<div class="row">
+<div class="span2"><b>Grading:</b></div>
+<div class="span8"> The grade distribution is as follows:
+<table class="table table-striped"><tr><td>Participation<td>33%
+<tr><td>Homeworks<td>33%
+<tr><td>Final Project<td>33%
+</table>
+</div>
+
+</div>
 
 
-<h3> Tentative Syllabus </h3>
+<h3> Syllabus </h3>
 <div class="container">
 <table class="table table-striped" >
 <thead>
     <tr >
+      <th >
+	<p >
+	  <span >Date
+	  </span>
+	</p>
+      </th>
+
       <th >
 	<p >
 	  <span >Topic
@@ -77,14 +136,13 @@
       </th>
       <th >
 	<p >
-	  <span >Readings
+    <span >Readings <br> <i>To be read before class</i>
 	  </span>
 	</p>
       </th>
       <th >
 	<p >
-	  <span >Hands-on
-	  </span>
+	  <span >Assignments</span>
 	</p>
       </th>
     </tr>
@@ -92,6 +150,11 @@
   <tbody>
     <tr >
       <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
+        <td>
 	<p >
 	  <span >L1: Class Intro;
 	  </span>
@@ -111,14 +174,10 @@
       </td>
       <td >
 	<p >
-	  <span >Relational overview (TBD)
+	  <span >
 	  </span>
 	</p>
 	<p >
-	  <span >
-	    <a  href="http://vldb.org/pvldb/vol5/p1771_georgelee_vldb2012.pdf">Unified twitter logging
-	    </a>
-	  </span>
 	</p>
 	<p >
 	  <span >
@@ -127,9 +186,7 @@
       </td>
       <td >
 	<p >
-	  <span >Set up an Amazon instance; &nbsp;run a few simple SQL queries
-	  </span>
-	  <span >on Postgres; &nbsp;Use protobufs to serialize / deserialize some data
+    <span > Assigned: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab1">Lab 1</a>
 	  </span>
 	</p>
 	<p >
@@ -138,7 +195,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L2: Alternative Data Models
@@ -153,18 +215,27 @@
       </td>
       <td >
 	<p >
-	  <span >BigTable paper only the model section; RDF paper?
+        <span >
+            <a href="http://pages.cs.wisc.edu/~cs764-1/datamodel.pdf">What goes around comes around</a> <br>
+	    <a  href="http://vldb.org/pvldb/vol5/p1771_georgelee_vldb2012.pdf">Unified twitter logging
+	    </a>
 	  </span>
 	</p>
       </td>
       <td >
 	<p >
+    <span > Due: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab1">Lab 1</a> <br>
 	  <span >Mongo and Cassandra
 	  </span>
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L3: Data Cleaning and Integration #1
@@ -198,7 +269,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L4: Data Cleaning and Integration #2
@@ -230,7 +306,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L5: Data Cleaning and Integration #4
@@ -260,7 +341,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L6: Data Cleaning and Integration #5
@@ -300,7 +386,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L7: MapReduce
@@ -330,7 +421,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L8: Column-oriented Databases
@@ -358,7 +454,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L9: Data Cubes + Materialized views
@@ -404,7 +505,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L10: Approximate query processing
@@ -450,7 +556,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L11: Computation inside and outside the database
@@ -488,7 +599,13 @@
 	</p>
       </td>
     </tr>
-    <tr >
+    <tr style="color:gray;"><td>10/15/13<td colspan=4><b> HOLIDAY: VETERANS DAY </b></tr>
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L12:
@@ -524,7 +641,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L13: Stream data processing
@@ -572,7 +694,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L14: Graph processing
@@ -600,7 +727,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L15: Scalable Algos #1
@@ -632,7 +764,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L16: Scalable Algos #2
@@ -666,7 +803,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L17: Visualizations
@@ -696,7 +838,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L18: Scalable Visualizations #1
@@ -722,7 +869,12 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L19: Scalable Visualizations #2
@@ -752,7 +904,170 @@
 	</p>
       </td>
     </tr>
-    <tr >
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
+      <td >
+	<p >
+	  <span >L20: TBD
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+    </tr>
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
+      <td >
+	<p >
+	  <span >L21: TBD
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+    </tr>
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
+      <td >
+	<p >
+	  <span >L22: TBD
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+    </tr>
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
+      <td >
+	<p >
+	  <span >L23: TBD
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+    </tr>
+    <tr style="color:gray;"><td>11/28/13<td colspan=4><b> HOLIDAY: THANKSGIVING </b></tr>
+
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
+      <td >
+	<p >
+	  <span >L24: TBD
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+    </tr>
+
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
       <td >
 	<p >
 	  <span >L20: Conclusion
@@ -778,6 +1093,39 @@
 	</p>
       </td>
     </tr>
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
+      <td >
+	<p >
+	  <span >L25: Conclusion
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+    </tr>
+
+
   </tbody>
 </table>
 
