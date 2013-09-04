@@ -126,7 +126,7 @@ You should now save the virtual machine you just configured, so that you don't h
 
 You also want to shut it down so that you don't unnecessarily use up your "free" Amazon hours:
 
-1. 1. Go to the [EC2 Console](https://console.aws.amazon.com/ec2/v2/home?region=us-west-2).
+1. Go to the [EC2 Console](https://console.aws.amazon.com/ec2/v2/home?region=us-west-2).
 1. In the dashboard on the left, click on "Instances"
 1. Click on the checkbox on the left of your running micro instance.
 1. In the "Actions" menu at the top, choose "Stop".  This will shut down the instance.  Note that you can restart this same
