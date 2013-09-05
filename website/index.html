@@ -20,13 +20,25 @@ body,tr {
           font-weight: 300;
           background-color: #fdfdfd;
       }
+
+body {
+  padding-top: 45px;
+}
+
+a[name] {
+  padding-top: 55px;
+  margin-top: -55px;
+  display: inline-block; /* required for webkit browsers */
+}
+
       </style>
+
 
 <script type="text/javascript">
     function update_dates() {
         var holidays = ['10/15/13','11/28/13'];
-        var curClass = new Date(2013,8,5,12,0,0,0);
-        var lastClass = new Date(2013,11,11,12,0,0,0);        
+        var curClass = new Date(2013,8,5,15,0,0,0);
+        var lastClass = new Date(2013,11,11,15,0,0,0);        
         var gap = 5;
         var spans = document.getElementsByClassName("date");
         var lastClassWasBefore = true;
@@ -47,7 +59,7 @@ body,tr {
             } while (holiday);
             var now = new Date();
             if (lastClassWasBefore && curClass.getTime() > new Date()) { // this is the next class
-                spans[i].innerHTML =  dayString + "<p> <b>(This is the next class!)</b>";
+                spans[i].innerHTML = "<a name='schedule'></a>" + dayString + "<p> <b>(This is the next class!)</b>";
                 lastClassWasBefore = false;
             } else 
                 spans[i].innerHTML = dayString;
@@ -65,9 +77,33 @@ body,tr {
 <title>6.885: From ASCII to Answers:  Advanced Topics in Data Processing</title>
 </head>
 <body onLoad="page_onload()">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">6.885 Fall 2013</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#staff">Staff</a></li>
+              <li><a href="#grading">Grading</a></li>
+              <li><a href="#links">Links</a></li>
+              <li><a href="#schedule">Schedule</a></li>
+
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
 
 <div class="container">
-<h2>6.885: From ASCII to Answers:  Advanced Topics in Data Processing</h2>
+
+<h2>From ASCII to Answers:  Advanced Topics in Data Processing</h2>
+
 
 <div class="row">
   <div class="span2">
@@ -80,7 +116,7 @@ body,tr {
 <div class="span2">
 <b>Instructors:</b>
 </div>
-<div class="span8"><p valign="bottom">Samuel Madden (madden@csail.mit.edu)  <br> Amol Deshpande (amol@cs.umd.edu) <br> Adam Marcus (marcua@marcua.net) <br> Eugene Wu (eugenewu@mit.edu) </div>
+<div class="span8"><a name="staff"></a><p valign="bottom">Samuel Madden (madden@csail.mit.edu)  <br> Amol Deshpande (amol@cs.umd.edu) <br> Adam Marcus (marcua@marcua.net) <br> Eugene Wu (eugenewu@mit.edu) </div>
 </div>
 
 <div class="row">
@@ -99,7 +135,7 @@ body,tr {
 </div>
 <br>
 <div class="row">
-<div class="span2"><b>Grading:</b></div>
+<div class="span2"><a name="grading"></a><b>Grading:</b></div>
     <div class="span8"> Grading will be based on class participation, successful completion of labs, and a final project, as follows:
 <br>
 <table class="table table-striped"><tr><td>Participation<td>33%
@@ -113,19 +149,21 @@ Details about the final project will be provided a few weeks into class.
 </div>
 <p>
 <div class="row">
-    <div class="span2"><b>Useful links:</b>
+    <div class="span2"><a name="links"></a><b>Useful links:</b>
 </div>
     <div class="span8">Hand in assignments on <a href="http://stellar.mit.edu/S/course/6/fa13/6.885/">Stellar</a>.
 <br>
 Discuss the class on <a href="https://piazza.com/class/hl6u4m7ft8n373">Piazza</a>.
 <br>
-    <a href="mailto://6885-staff@mit.edu">Email the staff</a>.
+    <a href="mailto:6885-staff@mit.edu">Email the staff</a>.
+<br> 
+    Check out <a href="https://github.com/mitdbg/asciiclass">the course github repository</a> (including lecture notes and slides!).
 </div>
 
 </div>
 
 
-
+<br>
 <h3> Class Schedule </h3>
 <div class="container">
 <table class="table table-striped" >
@@ -180,7 +218,7 @@ Discuss the class on <a href="https://piazza.com/class/hl6u4m7ft8n373">Piazza</a
       </td>
       <td >
 	<p >
-	  <span >Schemas / structure are valuable (even if it not in relational world); E.g., Protobufs
+	  <span >Schemas / structure are valuable (even if it not in relational world); case studies and class overview
 	  </span>
 	</p>
 	<p >
@@ -233,8 +271,8 @@ Discuss the class on <a href="https://piazza.com/class/hl6u4m7ft8n373">Piazza</a
 	<p >
         <span >
             <a href="http://pages.cs.wisc.edu/~cs764-1/datamodel.pdf">What goes around comes around</a> <br>
-	    <a  href="http://vldb.org/pvldb/vol5/p1771_georgelee_vldb2012.pdf">Unified twitter logging
-	    </a>
+	    Section 3 of <a  href="http://vldb.org/pvldb/vol5/p1771_georgelee_vldb2012.pdf">Unified twitter logging
+</a> (you may also want to skim the intro to get the motivation)
 	  </span>
 	</p>
       </td>

@@ -95,7 +95,12 @@ Let's make sure you have access to Python, sqlite3, MongoDB, and the git reposit
 
 If you do, push `ctrl+d` to exit the prompt.
 
-**sqlite3**: Type `sqlite3` and ensure that you see the following:
+**sqlite3**: 
+
+SQLite is an "embedded" SQL database (it doesn't depend on a dedicated server process;  instead the client just manipulated a stored
+datbase file directly.)
+
+To ensure it is installed, type `sqlite3` and verify that you see the following:
 
     SQLite version 3.7.15.2 2013-01-09 11:53:05
     Enter ".help" for instructions
@@ -104,7 +109,14 @@ If you do, push `ctrl+d` to exit the prompt.
 
 If you do, push `ctrl+d` to exit the prompt.
 
-**MongoDB**: Type `mongo` and ensure that you see the following:
+**MongoDB**:
+
+MongoDB is a "document database" that stores and queries collections
+of JSON-like documents.  Spend a bit of time familiarizing yourself
+with its features by browsing [the MongoDB
+website](http://www.mongodb.org).
+
+To ensure that you have it installed correctly, `mongo` and verify that you see the following:
 
     MongoDB shell version: 2.2.4
     connecting to: test
@@ -157,8 +169,8 @@ You should now have a collection called `animals` with several animals of note. 
 
 Your task is to write a query that finds the names of the snakes in the zoo.  You will find the [Mongo Find Command Documentation](http://docs.mongodb.org/manual/reference/method/db.collection.find/#db.collection.find) useful.
 
-You should create a text file with your name, the mongo expression your wrote to do this, and its output.  Upload it to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab1" assignment.
+You should create a text file with your name, the MongoDB expression your wrote to do this, and its output.  Upload it to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab1" assignment.
 
-Now you're almost done!  Go read the assigned paper for today.
+Now you're almost done!  Go read the assigned paper(s) for today.
 
-You can always feel free to email us with questions.
+You can always feel free to email us with questions at [6885staff@mit.edu](mailto:6885staff@mit.edu).

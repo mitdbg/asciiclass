@@ -4,8 +4,9 @@
 \margl1440\margr1440\vieww12540\viewh16140\viewkind1
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
-\f0\b\fs24 \cf0 What is this course about?\
-
+\f0\b\fs24 \cf0 6.885 Lecture 1 -- 9/5/2013\
+\
+What is this course about?
 \b0 \
 A survey of systems, tools, algorithms, tips, tricks, etc to help make sense out of data.\
 \
@@ -20,11 +21,9 @@ Key concepts:\
 	-	and designed with different types of data in mind\
 \
 - basic stats and machine learning\
-\
 	- at scale\
 \
 - visualization techniques\
-\
 	- when data is large, needs to be interacted with, etc\
 \
 
@@ -34,7 +33,10 @@ Key concepts:\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc
 
 \b0 \cf0 {{\NeXTGraphic Pasted Graphic 1.pdf \width3060 \height5800
-}¬}\
+}¬}
+\b \
+
+\b0 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
 \b \cf0 One Size Doesn't Fit All\
@@ -123,8 +125,21 @@ GPU + RAM + Disk		Custom sequential scan + 	Heatmaps make painting lots\
 \b \
 \
 
-\b0 \ul Search Engines\
-\ulnone \
+\b0 \ul Google Search Engine\
+\
+\
+Raw\ulnone 				\ul Processed\ulnone 			\ul Integration\ulnone \
+(docid, html text, date,\'85.)	(docid, wordid)		Entity extraction, \
+\ul 				
+\i \ulnone "inverted index"			disambiguation, etc
+\i0 \ul \
+\ulnone 				created via MR or \
+					Percolator\
+\
+\ul Storage\ulnone 			\ul Querying\ulnone 			\ul Visualization\ulnone \
+GFS + BigTable		Search queries		Search page, plus\
+(partitioned distributed store)	mapped into		specialized results\
+					big table requests	for particular domains\
 
 \b \
 \
@@ -139,6 +154,7 @@ YOU MUST PARTICIPATE.\
 \
 What do you guys want to get out the class?  What topics would you like to cover?
 \b \
+\
 \
 Brief Overview of the Relational Model + SQL\
 \
@@ -168,9 +184,11 @@ SQL databases implement this model, and provide a query language for accessing r
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 \cf0 For example, find tweets of iPhone users:\
-	SELECT text FROM tweets, users where tweets.userid = users.userid and userid.device = 'iPhone'\
+
+\i 	SELECT text FROM tweets, users where tweets.userid = users.userid and userid.device = 'iPhone'\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
-\cf0 \
+
+\i0 \cf0 \
 \
 Why is this better, e.g., than a text file of tweets?\
 \
@@ -181,7 +199,6 @@ Databases offer a plethora of other features we won't talk about now, including:
 - recovery/durability (guarantee that committed actions will be present in the database even in the presence of faults), \
 \
 - replication / high availability, \
-\
 etc\
 \
 SQL is a very flexible, (actually turing complete) language, but some concerns:\
@@ -199,6 +216,4 @@ SQL is a very flexible, (actually turing complete) language, but some concerns:\
 6) Are there some things that are painful?  How do I find the three most recent tweets a user wrote?\
 \
 7) What about more complicated analytics, e.g., finding the sentiment of tweets, or clustering users by their similarity\
-\
-\
 }
