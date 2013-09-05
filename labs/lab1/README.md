@@ -37,7 +37,7 @@ in the upper right.
 
 **SSH to Your Instance**: 
 
-Type something like:
+Using a terminal program (e.g, MacOS Terminal, or an xterm on Athena, or a Cygwin terminal under windows), type:
 
     ssh -i <PEM FILE> ubuntu@<public address>
 
@@ -135,7 +135,11 @@ instance but doing so will cause it to boot from the original Ubuntu AMI you cho
 
 **Handing in your work**:
 
-XXX add some simple mongo query they have to run
+To complete this lab, download the "zoo.json" file from Amazon into your "micro" instance, by typing:
+
+        curl https://s3.amazonaws.com/6885public/zoo.json > zoo.json
+
+
 
 If you do, congratulations.  You're done!  Go read the assiged paper for today.
 
