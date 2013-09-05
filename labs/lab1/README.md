@@ -1,6 +1,7 @@
 # Lab 1
 
 Assigned: September 5, 2013
+
 Due: September 10, 2013, 12:59 PM (just before class)
 
 The goal of this lab is for you to set up Amazon Web Services ("Amazon
