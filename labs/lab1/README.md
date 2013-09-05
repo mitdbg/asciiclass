@@ -1,11 +1,11 @@
 # Lab 1
 
 The goal of this lab is for you to set up Amazon Web Services ("Amazon
-Cloud") 
+Cloud").
 
 Many of the labs in this class will use Amazon's cloud computing
 infrastructure.  Using a cloud service like Amazon makes it easy to
-share data sets, and quickly run any number virtual machines that are
+share data sets, and quickly run any number of virtual machines that are
 identical for all students in the class.  We have credits from Amazon,
 which we will use for later labs (in this lab, we will use a free
 "micro" instance.)
@@ -15,10 +15,11 @@ which we will use for later labs (in this lab, we will use a free
 **Signup**: [register for an account](https://aws-portal.amazon.com/gp/aws/developer/registration/index.html)
 
 You will need to provide a credit card, however the class has Amazon credits so
-you should not expect to _use_ the credit card.  Once the class registration has 
-settled down, we will add you to the class's Amazon groups.
+you should not expect to _use_ the credit card even if you exhaust the free usage tier.  
+Once the class registration has settled down, we can provide you with an account to utilize the class' Amazon credits instead. 
+[[ old: Once the class registration has settled down, we will add you to the class's Amazon groups. ]]
 
-If you're worried about being billed unexpectedly because you left  aserver or service running for too long, sign up for [billing alerts](https://portal.aws.amazon.com/gp/aws/developer/account?ie=UTF8&action=billing-alerts&sc_icampaign=welcome_email_2&sc_icontent=billing_alerts_link&sc_iplace=welcome_email_2&sc_idetail=aws_resources).
+If you're worried about being billed unexpectedly because you left a server or service running for too long, sign up for [billing alerts](https://portal.aws.amazon.com/gp/aws/developer/account?ie=UTF8&action=billing-alerts&sc_icampaign=welcome_email_2&sc_icontent=billing_alerts_link&sc_iplace=welcome_email_2&sc_idetail=aws_resources).
 
 **Launch an instance**
 
@@ -49,7 +50,7 @@ You may get an error about the permissions of your PEM file.  If so, type:
 
 and then try to ssh again.
 
-**Setup the OS**: ensure the following packages are available using the Ubuntu package management tool apt-get.  
+**Setup the OS**: ensure the following packages are available using the Ubuntu package management tool _apt-get_.  
 
 To install a package, type:
 
@@ -131,12 +132,13 @@ You also want to shut it down so that you don't unnecessarily use up your "free"
 1. Click on the checkbox on the left of your running micro instance.
 1. In the "Actions" menu at the top, choose "Stop".  This will shut down the instance.  Note that you can restart this same
 instance but doing so will cause it to boot from the original Ubuntu AMI you chose (without any of the packages you just installed), not the AMI you just saved above.
+XXX Amol: Is this correct? I thought if you "terminate" you lose the AMI, but "stopping" persists the AMI as is.
 
 
 **Handing in your work**:
 
 XXX add some simple mongo query they have to run
 
-If you do, congratulations.  You're done!  Go read the assiged paper for today.
+If you do, congratulations.  You're done!  Go read the assigned paper for today.
 
 You can always feel free to email us with questions.
