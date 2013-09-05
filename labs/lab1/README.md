@@ -33,6 +33,7 @@ in the upper right.
 1. Use the "Classic Wizard". As of this writing the "Quick Launch Wizard" would not successfully launch.
 1. Select the 64-bit version of "Ubuntu Server 13.04."
 1. Specify 1 instance of type "t1.micro". Amazon lets you launch one micro-instance for free, so this won't cost you anything to launch.  
+XXX Amol: May want to change the last sentence to: During the first year, Amazon does not charge for the first 750 hours of micro-instance usage (per month), so this won't cost you anything to launch.
 1. You don't care about the subnet, and can simply click "Continue" on the "Advanced Instance Options", "Storage Device Configuration", and "Add Tags" pages.
 1. You will need to specify a key pair, or create a new one.  If you choose to create a new one, make sure you download it and save it (your file extension should be `.pem`).
 1. The default security group is fine.
