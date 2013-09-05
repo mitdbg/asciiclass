@@ -128,28 +128,20 @@ And then try `mongo` again
 
 You should see the instructions for this lab fly by.
 
-**Save your virtual machine**: 
+**Stop your virtual machine**: 
 
-You should now save the virtual machine you just configured, so that you don't have to reinstall everything again for the next lab.   To do this:
-
-1. Go to the [EC2 Console](https://console.aws.amazon.com/ec2/v2/home?region=us-west-2).
-1. In the dashboard on the left, click on "Instances"
-1. Click on the checkbox on the left of your running micro instance.
-1. In the "Actions" menu at the top, choose "Create Image (EBS AMI)".  An "AMI" is a saved virtual machine instance that you can 
-   boot, just like the base Ubuntu image you booted from.
-1. Give the saved instance a name, like "6.885-lab1"
-1. After a few minutes, the AMI creation should complete and the AMI should be available in the list of AMIs.  You can go back to this list of AMIs and launch virtual machines from it after the AMI is created.
-1. Note that AWS lets you store up to 30 GB of data in the "Elastic Block Store" where your AMIs live before you start being charged for storage (at a cost of $.10/mo/GB).
-
-You also want to shut it down so that you don't unnecessarily use up your "free" Amazon hours:
+While the AWS free tier should get you through the class, you only get
+750 hours per month of compute time.  That's enough time for one micro
+instance machine to run for a month, but later in the semester, we
+will be running multiple machines at the same time.  To conserve your
+hours (and avoid wasting energy), make sure to turn off your machine
+when not using it.  (Don't worry---we've got credits for those of you
+with course projects that require burning up compute resources!)
 
 1. Go to the [EC2 Console](https://console.aws.amazon.com/ec2/v2/home?region=us-west-2).
 1. In the dashboard on the left, click on "Instances"
 1. Click on the checkbox on the left of your running micro instance.
-1. In the "Actions" menu at the top, choose "Stop".  This will shut down the instance.  Note that you can restart this same
-instance but doing so will cause it to boot from the original Ubuntu AMI you chose (without any of the packages you just installed), not the AMI you just saved above.
-XXX Amol: Is this correct? I thought if you "terminate" you lose the AMI, but "stopping" persists the AMI as is.
-
+1. In the "Actions" menu at the top, choose "Stop".  This will shut down the instance.  Before doing future labs, you'll have to follow these instructions and choose "Start" to restart your instance.
 
 **Handing in your work**:
 
