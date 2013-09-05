@@ -33,8 +33,7 @@ in the upper right.
 1. Click Launch Instance.  (You can optionally change the region you're in from 'Oregon' to 'Virginia' in the top right, which might get you lower latency to your server.)
 1. Use the "Classic Wizard". As of this writing the "Quick Launch Wizard" would not successfully launch.
 1. Select the 64-bit version of "Ubuntu Server 13.04."
-1. Specify 1 instance of type "t1.micro". Amazon lets you launch one micro-instance for free, so this won't cost you anything to launch.  
-XXX Amol: May want to change the last sentence to: During the first year, Amazon does not charge for the first 750 hours of micro-instance usage (per month), so this won't cost you anything to launch.
+1. Specify 1 instance of type "t1.micro". During the first year, Amazon does not charge for the first 750 hours of micro-instance usage (per month), so this won't cost you anything to launch.
 1. You don't care about the subnet, and can simply click "Continue" on the "Advanced Instance Options", "Storage Device Configuration", and "Add Tags" pages.
 1. You will need to specify a key pair, or create a new one.  If you choose to create a new one, make sure you download it and save it (your file extension should be `.pem`).
 1. The default security group is fine.
@@ -156,18 +155,18 @@ XXX Amol: Is this correct? I thought if you "terminate" you lose the AMI, but "s
 
 To complete this lab, download the "zoo.json" file from Amazon into your "micro" instance, by typing:
 
-        curl https://s3.amazonaws.com/6885public/zoo.json > zoo.json
+    curl https://s3.amazonaws.com/6885public/zoo.json > zoo.json
 
-Load it into mongo by writing
+Load it into mongo by typing:
 
-        mongoimport -d test -c animals zoo.json
+    mongoimport -d test -c animals zoo.json
 
-Then start the mongo shell by running `mongo`.
+You should now have a collection called `animals` with several animals of note.  Then start the mongo shell by running `mongo`.
 
-Your task is to write a query that finds the names of the snakes in the zoo.  You will find the [Mongo Find Command Documentation] (http://docs.mongodb.org/manual/reference/method/db.collection.find/#db.collection.find) useful.
+Your task is to write a query that finds the names of the snakes in the zoo.  You will find the [Mongo Find Command Documentation](http://docs.mongodb.org/manual/reference/method/db.collection.find/#db.collection.find) useful.
 
-You should create a text file with your name, the mongo expression your wrote to do this, and its output.  Upload it to the [course Stellar site] (http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab1" assignment.
+You should create a text file with your name, the mongo expression your wrote to do this, and its output.  Upload it to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab1" assignment.
 
-If you do, congratulations.  You're done!  Go read the assigned paper for today.
+Now you're almost done!  Go read the assigned paper for today.
 
 You can always feel free to email us with questions.
