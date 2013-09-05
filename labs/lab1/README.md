@@ -1,5 +1,8 @@
 # Lab 1
 
+Assigned: September 5, 2013
+Due: September 10, 2013, 12:59 PM (just before class)
+
 The goal of this lab is for you to set up Amazon Web Services ("Amazon
 Cloud").
 
@@ -108,6 +111,18 @@ If you do, push `ctrl+d` to exit the prompt.
 
 If you do, push `ctrl+d` to exit the prompt.
 
+If when  running mongo, you get an error like this:
+
+            Thu Sep  5 01:22:46 Error: couldn't connect to server 127.0.0.1 shell/mongo.js:84
+            exception: connect failed
+
+Try running:
+
+            sudo rm /var/lib/mongodb/mongod.lock
+            sudo -u mongodb mongod -f /etc/mongodb.conf --repair
+
+And then try `mongo` again
+
 **git repository**: Type `cat asciiclass/labs/lab1/README.md`
 
 You should see the instructions for this lab fly by.
@@ -141,7 +156,15 @@ To complete this lab, download the "zoo.json" file from Amazon into your "micro"
 
         curl https://s3.amazonaws.com/6885public/zoo.json > zoo.json
 
+Load it into mongo by writing
 
+        mongoimport -d test -c animals zoo.json
+
+Then start the mongo shell by running `mongo`.
+
+Your task is to write a query that finds the names of the snakes in the zoo.  You will find the [Mongo Find Command Documentation] (http://docs.mongodb.org/manual/reference/method/db.collection.find/#db.collection.find) useful.
+
+You should create a text file with your name, the mongo expression your wrote to do this, and its output.  Upload it to the [course Stellar site] (http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab1" assignment.
 
 If you do, congratulations.  You're done!  Go read the assigned paper for today.
 
