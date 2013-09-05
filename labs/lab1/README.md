@@ -88,39 +88,39 @@ Let's make sure you have access to Python, sqlite3, MongoDB, and the git reposit
 
 **Python**: Type `python` and ensure that you see the following:
 
-            Python 2.7.4 (default, Apr 19 2013, 18:28:01) 
-            [GCC 4.7.3] on linux2
-            Type "help", "copyright", "credits" or "license" for more information.
-            >>> 
+    Python 2.7.4 (default, Apr 19 2013, 18:28:01) 
+    [GCC 4.7.3] on linux2
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>> 
 
 If you do, push `ctrl+d` to exit the prompt.
 
 **sqlite3**: Type `sqlite3` and ensure that you see the following:
 
-             SQLite version 3.7.15.2 2013-01-09 11:53:05
-             Enter ".help" for instructions
-             Enter SQL statements terminated with a ";"
-             sqlite>
+    SQLite version 3.7.15.2 2013-01-09 11:53:05
+    Enter ".help" for instructions
+    Enter SQL statements terminated with a ";"
+    sqlite>
 
 If you do, push `ctrl+d` to exit the prompt.
 
 **MongoDB**: Type `mongo` and ensure that you see the following:
 
-             MongoDB shell version: 2.2.4
-             connecting to: test
-             > 
+    MongoDB shell version: 2.2.4
+    connecting to: test
+    > 
 
 If you do, push `ctrl+d` to exit the prompt.
 
-If when  running mongo, you get an error like this:
+When running mongo, you may see an error like this:
 
-            Thu Sep  5 01:22:46 Error: couldn't connect to server 127.0.0.1 shell/mongo.js:84
-            exception: connect failed
+    Thu Sep  5 01:22:46 Error: couldn't connect to server 127.0.0.1 shell/mongo.js:84
+    exception: connect failed
 
 Try running:
 
-            sudo rm /var/lib/mongodb/mongod.lock
-            sudo -u mongodb mongod -f /etc/mongodb.conf --repair
+    sudo rm /var/lib/mongodb/mongod.lock
+    sudo -u mongodb mongod -f /etc/mongodb.conf --repair
 
 And then try `mongo` again
 
