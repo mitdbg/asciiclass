@@ -141,7 +141,7 @@ with course projects that require burning up compute resources!)
 1. Go to the [EC2 Console](https://console.aws.amazon.com/ec2/v2/home?region=us-west-2).
 1. In the dashboard on the left, click on "Instances"
 1. Click on the checkbox on the left of your running micro instance.
-1. In the "Actions" menu at the top, choose "Stop".  This will shut down the instance.  Before doing future labs, you'll have to follow these instructions and choose "Start" to restart your instance.
+1. In the "Actions" menu at the top, choose "Stop".  This will shut down the instance.  Before doing future labs, you'll have to follow these instructions and choose "Start" to restart your instance.  Note that restarting the instance will potentially change the "Public DNS" value for that instance.
 
 **Handing in your work**:
 
