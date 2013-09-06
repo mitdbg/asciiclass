@@ -1,3 +1,7 @@
+
+# WARNING: THIS LAB IS NOT COMPLETE.  DO NOT START IT!
+
+
 # Lab 2
 
 The goal of this lab is for you to experiment with working with data
