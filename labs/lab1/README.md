@@ -4,6 +4,8 @@
 
 *Due: September 10, 2013, 12:59 PM (just before class)*
 
+*Updated September 6 to specify that you need to modify the default security group
+
 The goal of this lab is for you to set up Amazon Web Services ("Amazon
 Cloud").
 
@@ -36,9 +38,22 @@ in the upper right.
 1. Specify 1 instance of type "t1.micro". During the first year, Amazon does not charge for the first 750 hours of micro-instance usage (per month), so this won't cost you anything to launch.
 1. You don't care about the subnet, and can simply click "Continue" on the "Advanced Instance Options", "Storage Device Configuration", and "Add Tags" pages.
 1. You will need to specify a key pair, or create a new one.  If you choose to create a new one, make sure you download it and save it (your file extension should be `.pem`).
-1. The default security group is fine.
+1. The default security group is fine (you will need to enable ssh access to it below)
 1. Click "Launch".  It will take a few minutes for the instance to launch.  Close the dialog, and wait on the instance listing table.
 1. After the instances launches, click on it to obtain its "Public DNS" name.  It should look something like ec2-xx-xxx-xx-xxx.us-REGION-2.compute.amazonaws.com
+
+**Enable SSH Access**: 
+
+Before you can ssh to your instance, you need to enable ssh access for it.  To do this:
+
+1. Go the [EC2 Console](https://console.aws.amazon.com/ec2/v2/home?region=us-west-2)
+1. Click on "Security Groups" under "Network & Security" in the leftmost panel.   
+1. Click the checkbox next to the "default" security group
+1. Click on the "inbound" tab
+1. Choose "SSH" from the "Create a new rule:" menu
+1. Enter 0.0.0.0/0 to enable access from all IPs, or enter the IP address of your machine followed by "/32". (e.g., 192.168.1.10/32) to enable access from just your IP.
+
+(This will enable ssh access to allow VMs in the default security group, so you shouldn't need to do this in the future.)
 
 **SSH to Your Instance**: 
 
