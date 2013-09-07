@@ -1,0 +1,83 @@
+= Why this class?
+Traditional database systems are super-formal, but increasingly, there are a bunch of tools to help process, understand, and visualize data.
+  -> Common theme: "One size doesn't fit all."  Different systems good for different things, and we want you to get a sense of what different systems are good for.
+
+This class will be about data processing.  It will be hands-on.  You will do labs every day, and come in and tell us what you thought about them.  It won't be lecturers lecturing the whole time.
+
+= What does a data processing pipeline look like?
+Raw Data -> Structured representation -> Storage + Querying        -> Analysis                      -> Visualization
+(txt, img     (features, tables,            (Relational DB,           (Tools for machine learning,      (For analysis
+ logs,         cleaned data,                 HDFS + Hadoop,            summarization, etc.)              and presentation)
+ html)         outliers removed)             HBase/BigTable, ...)
+ 
+In particular, we're concerned with doing all of these things at scale: larger datasets, dirty datasets, quickly changing datasets.
+
+The process of going from raw data to structured form is called data cleaning, integration, etc.  How do you merge disparate datasets that speak about the same things (users, tweets, etc.)?
+
+= Two examples to give us a sense of how this works
+1) MAPD---massively parallel database (interactive large-scale visualization using a GPU database)
+http://velocidy.net/MapD/
+Using this system, you can visualize hundreds of millions of tweets at a time, which a traditional relational database wouldn't be able to do with a few milliseconds of latency.
+To help understand trends in Twitter, having low-latency visualization allows really interesting exploration.
+
+What does the data processing pipeline look like for MapD?
+
+Raw: tweets in JSON
+Structured: tweetID, wordID (integer representing each word in a tweet), latitude, longitude,
+            integrate in geospatial datasets like maps, road segments, etc.
+Storage: MapD
+Analysis: Aggregation of counts, Normalization (or else NYC would always light up)
+Visualization: Heatmap, Word cloud, facets and filters to drill down data
+
+2) How a search engine (let's say Google) works
+Raw: crawler generating HTML, language, date of collection
+Processing: Inverted index (word -> documentID) so when you search for "cats," you can find all documents containing that word.
+			integrate in other datasets for weather, movie times, etc.
+Storage: Let's call it BigTable, but they've moved on to other tools on top of/to replace it by now.
+Analysis: Ranking by relevance---PageRank, etc.
+Visualization: Search box, presentation of results, structured presentation of things like weather
+
+What tools go into this?  For processing data, some mix of MapReduce/Percolator.  Storage in BigTable.  Ranking algorithms like PageRank also matter---how do you run and implement it at scale?
+
+In this class, we'll break such processes down and jump into them in detail.
+
+Student question: but in my research, I do a lot of exploration, and I don't know beforehand how to structure/organize my data.  I live in csv files, so how does that compare to these systems?
+ - You're not alone!
+ - Some of these systems like HDFS/Hadoop on something like AWS are designed for that: dump your unstructured data in place, iterate on it, and as you need specialized infrastructure/tooling, you will design a pipeline to optimize the process.
+ - Even a place like Google will take their pipeline, iterate on it, and ditch previous infrastructure for better tools based on their learnings.
+
+= Relational model
+Before we jump into other models, let's remind ourselves of a more traditional way of life: the relational model.
+
+The relational model:
+  - Collections of records and relationships between them
+  - Collections of records/rows that are similar are stored in a relation/table.  All of these records have the same set of attributes (a schema).
+  - Each record/row should be unique, and relations are unordered sets of these records.
+  - Each record/row has a unique ID (a primary key), and records in other tables can refer to records in some table with their unique ID.
+
+Properties of these relational database systems
+  - Usually offer transactions, which offer ACID
+    - Atomicity: all-or-nothing---a sequence of changes to the database will either all work out or will all be reverted.  Requires heavy-weight machinery like logging, etc.
+    - Consistency: data respects some set of constraints (unique IDs, foreign key references to other tables only refer to data that actually exists, data follows a schema, etc.).  No transaction will break this rule.
+    - Isolation: two transactions that are half-way done won't see each other's half-way dirtied data.
+    - Durability: committed operations remain visible, even across a variety of faults.
+
+What are some criticisms you'll read about relational databases
+  - difficulty in changing schemas: if i add a new column or something like it, i have to update every record in the DB, and if implemented incorrectly, that could slow things down significantly.
+    - relational database person response: not requiring set schema for data makes developers' lives harder
+  - they don't scale past a single machine
+    - relational database person response: there's nothing fundamental in the relational model that makes it not scale.  open source rdbms don't have excellent support for this.  certain sql constructs might not parallelize well, and certain transactional guarantees make it hard.
+  - performance of queries is variable/unpredictable/depends on the underlying physical structures
+  - sql makes it hard to do some things: iteration (e.g., machine learning), order-dependent logic, arbitrary code, etc.
+  
+= Class structure
+Every class will have
+ - 20-30 minutes of overview
+ - 20-30 minutes of discussion on readings in recent papers from the research community
+ - 20-30 minutes of doing/reflecting on labs/exercises
+
+Grading will be
+  - 1/3 class participation, pending seeing how large this class is :)
+  - 1/3 labs, not meticulously graded, but show you did work
+  - 1/3 team project on something you were inspired to do, ideally related to your personal research
+  - You can all get A's, this isn't adversarial, etc.
