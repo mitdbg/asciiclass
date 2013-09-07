@@ -115,7 +115,7 @@ from the JSON blobs inside `twitter.json`.
 
 To access the `lab2` database, type
 
-   mongo lab2
+    mongo lab2
 
 Refer to Mongo's detailed [query language documentation](http://docs.mongodb.org/manual/reference/method/db.collection.find/#db.collection.find) for help.
 
