@@ -11,9 +11,13 @@ You will the a dataset of Tweeets encoded in multiple ways to compute
 some summary information and reflect on the pros and cons of each
 approach.
 
-To start, go to lab 2:
+To start, go to the AWS console and start your EC2 instance.  SSH to it, and go to lab 2:
 
     cd asciiclass/labs/lab2
+
+Update the contents of lab2:
+
+    git pull
 
 # Step 1: Analysis on JSON
 
@@ -87,13 +91,39 @@ and [postgresql's documentation](http://www.postgresql.org/docs/).
 
 ### Analyses
 
-Now perform the same analyses as step 1
+Now perform the same analyses as in step 1, but in the sqlite-encoded data.
 
 ### Questions
 
 1. How did these analyses compare with step 1 and 2?
 2. Read the schema and protocol buffer definition files.  What strikes you as some main
    differences between the two?  Similarities?
-3. What may be some querios that would be easier with protocol buffers or JSON encoded files?
+3. What may be some queries that would be easier with protocol buffers or JSON encoded files?
 4. In what cases does importing the data into a database make sense?
 
+# Step 4: Analyses in MongoDB
+
+### Setup
+
+In this step, we will import and query the json data we've collected
+in MongoDB.  First, let's get the data into Mongo:
+
+    mongoimport -d lab2 -c tweets twitter.json
+
+This will, in the database `lab2`, create a collection called `tweets`
+from the JSON blobs inside `twitter.json`.
+
+To access the `lab2` database, type
+
+   mongo lab2
+
+Refer to Mongo's detailed [query language documentation](http://docs.mongodb.org/manual/reference/method/db.collection.find/#db.collection.find) for help.
+
+### Analyses
+
+Now perform the same analyses as in step 1, but on the Mongo-encoded data.
+
+# Step 5: Reflection
+
+1. In terms of lines of code, when did various approaches shine?  Think about the challenges of defining schemas, loading and storing the data, and running queries.
+2. What other measures can we use to compare these different approaches?  Which system is better by those measures?
