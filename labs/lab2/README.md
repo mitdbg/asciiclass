@@ -21,13 +21,13 @@ Then :
 
 ### Setup
 
-In this step, you will write scripts in your favorite language to analyze the json dataset.  
+In this step, you will write scripts in your favorite language to analyze the JSON dataset.  
 
 First decompress the data file:
 
     gzip -d twitter.json.gz
 
-`twitter.json` contains a json-encoded tweet on each line.  Check out (twitter's documentation)[https://dev.twitter.com/docs/platform-objects/tweets] for information about the tweets or simply read the file.
+`twitter.json` contains a JSON-encoded tweet on each line.  Check out (twitter's documentation)[https://dev.twitter.com/docs/platform-objects/tweets] for information about the tweets or simply read the file.
 
 ### Analyses
 
@@ -112,7 +112,7 @@ Perform the same analyses as in step 1, but in the sqlite-encoded data.
 
 ### Setup
 
-In this step, we will import and query the json data we've collected
+In this step, we will import and query the JSON data we've collected
 in MongoDB.  First, let's get the data into Mongo:
 
     mongoimport -d lab2 -c tweets twitter.json
