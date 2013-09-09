@@ -47,9 +47,16 @@ Perform the following analyses (using whatever programming langugae or environme
 
 ### Setup
 
-In this step, you will use protocol buffers to perform similar analyses. 
+In this step, you will use protocol buffers to perform similar analyses.
 
-For details about protocol buffers, [read this page](https://developers.google.com/protocol-buffers/docs/reference/overview).
+For details about protocol buffers, [read this
+page](https://developers.google.com/protocol-buffers/docs/reference/overview).
+In essence, it's helpful within a company to know the schema of data
+and messages being stored and transmitted by various services.
+Protocol buffers, Thrift, and Avro are all projects that help define
+schemas and compact/efficient serialization formats for your data.
+None of these tools help you process the data with query languages and
+data processing frameworks: those are built on top of these libraries.
 
 The protocol buffer definitions are found in `twitter.proto` and the data files are in `twitter.pb`.  
 
