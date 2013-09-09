@@ -7,7 +7,7 @@
 The goal of this lab is for you to experiment with working with data
 in various degrees of structure.
 
-You will the a dataset of Tweeets encoded in multiple ways to compute
+You will work with a dataset of Tweets encoded in multiple ways to compute
 some summary information and reflect on the pros and cons of each
 approach.
 
@@ -36,7 +36,7 @@ First decompress the data file:
 
 ### Analyses
 
-Perform the following analyses (using whatever programming langugae or environment you like) and report the results:
+Perform the following analyses (using whatever programming language or environment you like) and report the results:
 
 1. Find the number of deleted messages in the dataset
 1. Find the number of tweets that have a place attribute
