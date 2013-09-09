@@ -15,7 +15,7 @@ from itertools import imap
 from twitter_pb2 import *
 
 tweets = Tweets()
-with file('twitter.data', 'r') as f:
+with file('twitter.json', 'r') as f:
   for line in imap(loads, f):
     tweet = tweets.tweets.add()
     tweet.is_delete = ('delete' in line)
