@@ -20,7 +20,7 @@ CREATE TABLE tweets (
 
 DROP TABLE IF EXISTS coords;
 CREATE TABLE coords (
- tid bigint,
+ tid bigint, -- The ID of the tweet being geolocated
  lat float,
  lon float
 );
@@ -28,7 +28,7 @@ CREATE TABLE coords (
 
 DROP TABLE IF EXISTS places;
 CREATE TABLE places (
- tid bigint,
+ tid bigint, -- The ID of the tweet the place is mentioned in
  url text,
  country text,
  country_code text,
@@ -39,7 +39,7 @@ CREATE TABLE places (
 
 DROP TABLE IF EXISTS place_coords;
 CREATE TABLE place_coords (
- pid text,
+ pid text, -- The ID of the place being geolocated
  lat float,
  lon float
 );
