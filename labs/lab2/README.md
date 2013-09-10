@@ -69,8 +69,12 @@ include all fields: we serialized only the subset of fields that are
 necessary for answering the questions.
 
 *Answer the four questions from Step 1 using protocol buffers.  You
- can write code in your favorite programming language that generates
- the answers from the protocol buffer-encoded data.*
+will have to write some code to process the protocol buffer-encoded
+data.  There are [official C++/Java/Python
+libraries](https://developers.google.com/protocol-buffers/docs/reference/other)
+you can use, as well as [other language implementations in the
+third-party
+listings](https://code.google.com/p/protobuf/wiki/ThirdPartyAddOns).*
 
 # Step 3: Analyses on database records
 
