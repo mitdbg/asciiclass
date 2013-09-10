@@ -3,7 +3,7 @@
 The goal of this lab is for you to experiment with working with data
 in various degrees of structure.
 
-You will the a dataset of Tweeets encoded in multiple ways to compute
+You will work with a dataset of Tweets encoded in multiple ways to compute
 some summary information and reflect on the pros and cons of each
 approach.
 
@@ -21,17 +21,17 @@ Then :
 
 ### Setup
 
-In this step, you will write scripts in your favorite language to analyze the json dataset.  
+In this step, you will write scripts in your favorite language to analyze the JSON dataset.  
 
 First decompress the data file:
 
     gzip -d twitter.json.gz
 
-`twitter.json` contains a json-encoded tweet on each line.  Check out (twitter's documentation)[https://dev.twitter.com/docs/platform-objects/tweets] for information about the tweets or simply read the file.
+`twitter.json` contains a JSON-encoded tweet on each line.  Check out (twitter's documentation)[https://dev.twitter.com/docs/platform-objects/tweets] for information about the tweets or simply read the file.
 
 ### Analyses
 
-Perform the following analyses (using whatever programming langugae or environment you like) and report the results:
+Perform the following analyses (using whatever programming language or environment you like) and report the results:
 
 1. Find the number of deleted messages in the dataset
 1. Find the number of tweets that are replies to another tweet in this dataset
@@ -119,7 +119,7 @@ Perform the same analyses as in step 1, but in the sqlite-encoded data.
 
 ### Setup
 
-In this step, we will import and query the json data we've collected
+In this step, we will import and query the JSON data we've collected
 in MongoDB.  First, let's get the data into Mongo:
 
     mongoimport -d lab2 -c tweets twitter.json
