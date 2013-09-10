@@ -129,6 +129,7 @@ Refer to Mongo's detailed [query language documentation](http://docs.mongodb.org
 1. What fields in the original JSON structure would be difficult to convert to relational database schemas?
 1. In terms of lines of code, when did various approaches shine?  Think about the challenges of defining schemas, loading and storing the data, and running queries.
 1. What other metrics (e.g., time to implement, code redundancy, etc.) can we use to compare these different approaches?  Which system is better by those measures?
+1. How long did this lab take you?  We want to make sure to target future labs to not take too much of your time.
 
 # Handing in your work
 
