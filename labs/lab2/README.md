@@ -17,7 +17,7 @@ Then :
 
     cd lab2
 
-# Step 1: Check out the data in JSON
+# Step 1: Look at some JSON-encoded Tweets
 
 First decompress the Tweets data file:
 
@@ -29,12 +29,12 @@ for information about the tweets or simply read the file.  Take a look
 at this file.  *You won't be using it directly, but we've written some
 scripts to process it for use in future steps.*
 
-We're going to have you perform the same analyses in three ways: using
-Protocol Buffers, using a relational database called SQLite, and using
-MongoDB.
+By reading `twitter.json`, you've completed Step 1!
 
-On each of the three systems, you're going to answer the following
-four questions:
+In the following steps, you will use three systems to perform data
+analysis: Protocol Buffers, a relational database called SQLite, and
+MongoDB.  Using each of the three systems, you're going to answer the
+following four questions:
 
 1. Find the number of deleted messages in the dataset
 1. Find the number of tweets that are replies to another tweet in this dataset
