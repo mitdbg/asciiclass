@@ -19,4 +19,4 @@ awk 'BEGIN{
     n=split($6,PARTS,"\"")
     print $1"|"MKTIME"|"PARTS[2]"|"$7"|"$9"|"NF
 
-}' access_log-20121229
+}' http-log.txt
