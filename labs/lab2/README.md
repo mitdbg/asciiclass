@@ -120,7 +120,7 @@ Refer to Mongo's detailed [query language documentation](http://docs.mongodb.org
 1. Read the schema and protocol buffer definition files.  What are the main differences between the two?  Are there any similarities?
 1. Describe one question that would be easier to answer with protocol buffers than via a SQL query.
 1. Describe one question that would be easier to answer with MongoDB than via a SQL query.
-1. Describe one question that would be easier to answer via a SQL query than using Mongo
+1. Describe one question that would be easier to answer via a SQL query than using MongoDB.
 1. What fields in the original JSON structure would be difficult to convert to relational database schemas?
 1. In terms of lines of code, when did various approaches shine?  Think about the challenges of defining schemas, loading and storing the data, and running queries.
 1. What other metrics (e.g., time to implement, code redundancy, etc.) can we use to compare these different approaches?  Which system is better by those measures?
