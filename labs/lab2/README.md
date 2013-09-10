@@ -45,7 +45,8 @@ following four questions:
 
 In this step, you will use protocol buffers to perform the analyses.
 
-For details about protocol buffers, [read this page](https://developers.google.com/protocol-buffers/docs/reference/overview).
+For details about protocol buffers, [read this
+page](https://developers.google.com/protocol-buffers/docs/overview).
 In essence, it's helpful within a company to know the schema of data
 and messages being stored and transmitted by various services.
 Protocol buffers, Thrift, and Avro are all projects that help define
