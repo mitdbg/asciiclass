@@ -73,7 +73,7 @@ necessary for answering the questions.
 copy of your code and the answers. You will have to write some code to
 process the protocol buffer-encoded data.  There are [official
 C++/Java/Python
-libraries](https://developers.google.com/protocol-buffers/docs/reference/other)
+libraries](https://developers.google.com/protocol-buffers/docs/reference/overview)
 you can use, as well as [other language implementations in the
 third-party
 listings](https://code.google.com/p/protobuf/wiki/ThirdPartyAddOns).*
