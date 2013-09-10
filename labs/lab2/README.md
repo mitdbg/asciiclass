@@ -68,7 +68,9 @@ not need to re-create the file.  Note that this script does not
 include all fields: we serialized only the subset of fields that are
 necessary for answering the questions.
 
-*Answer the four questions from Step 1 using protocol buffers.*
+*Answer the four questions from Step 1 using protocol buffers.  You
+ can write code in your favorite programming language that generates
+ the answers from the protocol buffer-encoded data.*
 
 # Step 3: Analyses on database records
 
@@ -108,27 +110,21 @@ Refer to Mongo's detailed [query language documentation](http://docs.mongodb.org
 
 # Step 5: Reflection
 
-1. Briefly describe your approach for performing these analyses.
-1. Briefly reflect on the difficulty of performing these analyses in terms of time taken, code redundancy, or anything else of interest.
-
-1. What were the main reasons that made the analyses easier than using the JSON dataset?
-1. Can you describe a case where directly operating on the JSON dataset would be easier than protocol buffers?
-
-1. How did these analyses compare with step 1 and 2?
 1. Read the schema and protocol buffer definition files.  What are the main differences between the two?  Are there any similarities?
-1. Describe one question that would be easier to answer with protocol buffers or JSON encoded files than via a SQL query.
-1. In what cases does importing the data into a database make sense?
+1. Describe one question that would be easier to answer with protocol buffers than via a SQL query.
+1. Describe one question that would be easier to answer with MongoDB than via a SQL query.
+1. In what cases does importing the data into a relational database make sense?
 1. What fields in the original JSON structure would be difficult to convert to relational database schemas?
-
 1. In terms of lines of code, when did various approaches shine?  Think about the challenges of defining schemas, loading and storing the data, and running queries.
-1. What other measures can we use to compare these different approaches?  Which system is better by those measures?
+1. What other metrics (e.g., time to implement, code redundancy, etc.) can we use to compare these different approaches?  Which system is better by those measures?
 
 # Handing in your work
 
-You should create a text file with your name, the results of the six
-analyses, and your answers to the questions in Steps 1, 2, 3, 4, and
-5.  Where possible, show the query you used (describe it at a high
-level if the code/query takes up more than a few lines).  Upload it to
+You should create a text file with your name, the results of the four
+analyses from Step 1 as run on the three ysstems in Steps 2, 3, and 4,
+and brief responses to the reflection questions in Step 5.  Where
+possible, show the query you used (describe it at a high level if the
+code/query takes up more than a few lines).  Upload your writeup to
 the [course Stellar
 site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab2"
 assignment.
