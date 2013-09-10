@@ -1,5 +1,9 @@
 # Lab 2
 
+*Assigned: September 10, 2013*
+
+*Due: September 17, 2013, 12:59 PM (just before class)*
+
 The goal of this lab is for you to experiment with working with data
 in various degrees of structure.
 
