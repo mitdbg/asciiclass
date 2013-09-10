@@ -68,7 +68,7 @@ not need to re-create the file.  Note that this script does not
 include all fields: we serialized only the subset of fields that are
 necessary for answering the questions.
 
-*Answer the four questions from Step 1 using protocol buffers.  You
+*Perform the four analyses from Step 1 using protocol buffers.  You
 will have to write some code to process the protocol buffer-encoded
 data.  There are [official C++/Java/Python
 libraries](https://developers.google.com/protocol-buffers/docs/reference/other)
@@ -92,7 +92,7 @@ Start a sqlite3 prompt by typing:
 For SQL help, refer to the fantastic [sqlite documentation](http://www.sqlite.org/docs.html)
 and [postgresql's documentation](http://www.postgresql.org/docs/).
 
-*Perform the Step 1 analyses on the sqlite-encoded data.*
+*Perform the four analyses listed in Step 1 using sqlite.*
 
 # Step 4: Analyses in MongoDB
 
@@ -110,7 +110,7 @@ To access the `lab2` database, type
 
 Refer to Mongo's detailed [query language documentation](http://docs.mongodb.org/manual/reference/method/db.collection.find/#db.collection.find) for help.
 
-*Perform the Step 1 analyses on the Mongo-encoded data.*
+*Perform the four analyses listed in Step 1 using MongoDB.*
 
 # Step 5: Reflection
 
