@@ -19,15 +19,12 @@ Then :
 
 # Step 1: Check out the data in JSON
 
-### Setup
-
 First decompress the Tweets data file:
 
     gzip -d twitter.json.gz
 
 `twitter.json` contains a JSON-encoded tweet on each line.  Check out
-(twitter's
-documentation)[https://dev.twitter.com/docs/platform-objects/tweets]
+[twitter's documentation](https://dev.twitter.com/docs/platform-objects/tweets)
 for information about the tweets or simply read the file.  Take a look
 at this file.  *You won't be using it directly, but we've written some
 scripts to process it for use in future steps.*
@@ -48,8 +45,7 @@ four questions:
 
 In this step, you will use protocol buffers to perform the analyses.
 
-For details about protocol buffers, [read this
-page](https://developers.google.com/protocol-buffers/docs/reference/overview).
+For details about protocol buffers, [read this page](https://developers.google.com/protocol-buffers/docs/reference/overview).
 In essence, it's helpful within a company to know the schema of data
 and messages being stored and transmitted by various services.
 Protocol buffers, Thrift, and Avro are all projects that help define
