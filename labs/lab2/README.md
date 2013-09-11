@@ -126,6 +126,9 @@ Refer to Mongo's detailed [query language documentation](http://docs.mongodb.org
 1. In terms of lines of code, when did various approaches shine?  Think about the challenges of defining schemas, loading and storing the data, and running queries.
 1. What other metrics (e.g., time to implement, code redundancy, etc.) can we use to compare these different approaches?  Which system is better by those measures?
 
+
+
+
 # Handing in your work
 
 You should create a text file with your name, the results of the four
@@ -136,3 +139,19 @@ code/query takes up more than a few lines).  Upload your writeup to
 the [course Stellar
 site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab2"
 assignment.
+
+
+
+### Feedback (optional, but valuable)
+
+If you have any comments about this lab, or any thoughts about the
+class so far, we would greatly appreciate them.  Your comments will
+be strictly used to improve the rest of the labs and classes and have
+no impact on your grade. 
+
+Some questions that would be helpful:
+
+* Is the lab too difficult or too easy?  
+* Did you look forward to any exercise that the lab did not cover?
+* Which parts of the lab were interesting or valuable towards understanding the material?
+* How is the pace of the course so far?
