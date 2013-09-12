@@ -1,0 +1,75 @@
+Alternative data models
+
+= Reminder of where we are
+Raw data -> Structured data -> Integration -> Storage -> Analytics -> Viz/output
+
+Why do we want to structure raw data?
+ - efficiency: preprocess the data into a format that's more conducive to us computing things on it later.  depends on you knowing what you're doing to do to the data later on.
+   -> storing data in binary representation often helps avoid re-splitting data
+   -> might be more memory-efficient
+ - ease of analysis/processing: makes it easier to write tools that operate on the data (sql, mapreduce, etc.), since it's in an expected format.  removing irregularity from the data also allows systems to summarize it so you don't have to look at it document-by-document.
+ - consistency: programmers can assume that every object has the same fields, etc.  A lot less if/case statements to paper over the structure.  gives you a documentation of the structure and makes it easier to exchange the data with other people/services.
+ 
+Student makes a point: it's likely the case that structuring is an iterative process.
+
+= Example: log files
+Apache stores web accesses in log files.  Fields, like the request type, path time, etc., are separated by a variable number of spaces, and each log entry has somewhat differing fields.
+
+To process this data, you likely want to write a script to generate a .csv file, which you can open in excel/a relational DB.
+
+<Sam shows an .awk script that transforms apache logs into .csv files line-by-line>
+
+If you then load this .csv file into sqlite, and then you can run a one-liner to see the most commonly accessed file.
+
+Student question: why not just store apache logs in a structured form in a database?
+ - performance hit of writing to a DB over writing to a file
+ - hard to agree on a format
+ - everyone has a filesystem, but you don't want to assume they all have a database waiting to get data
+ - filesystems have nice support for doing things like tailing a file, log rotation, etc.
+
+= Stonebraker "What goes around comes around paper"
+
+What do data models offer above and beyond .csv files?
+  - access language: relational model has things like sql
+  - relationships: how do different types of data relate to one another (e.g., employees in a department)?
+  - constraints/consistency: how do you enforce certain things that are true about the data (e.g., parents older than kids, etc.)
+
+Three models, that mostly differ by how items relate to one-another
+  - hierarchical model (IMS): every object must have a parent.  can't refer to child w/o referring to parent.
+  - network model (Codasyl): a graph of objects and pointers between them
+  - relational model
+
+Hardships in hierarchical data: have to replicate data---what if an employee has a department and a boss---have to repeat their information to denote both relationships.
+
+<we do a schema design exercise: model bike shops to store their contact information and relationships between them>
+Stores sell multiple parts, and multiple stores sell a part (a many-to-many relationship).  In the hierarchical model, you would either have to repeat stores for each part, or parts for each store.  This raises two problems:
+  - you use more space to repeat data
+  - you have to update/delete data from multiple places (update/delete anomalies)
+
+How to represent the data as a network?
+  - Graph vertices for each part/store/supply.
+  - Provide pointers between parts and stores, etc.
+  - CODASYL programming model: follow a child pointer of a parent with parent.childptr.  Can have multiple cursors open at a time and iterate through their pointers in various orders.
+  - Your implementations are iterative loops: it's not high-level or declarative.  That's not to say you couldn't have written a declarative language on top of CODASYL, and stuff like xquery and sparql are examples of declarative languages over graph-structured data.
+
+How to represent the data as relations?  Three tables:
+  - parts(part_id, name)
+  - stores(store_id, address)
+  - supplies(pard_id, store_id, cost)
+
+Network model drawbacks: complexity & lack of data independence (have to loop through data in order of pointers)
+Relational model drawbacks: people didn't know if you could take relational model (theory), throw a declarative language on top of it, and provide a high-performance implementation.
+
+= Data independence
+Data independence: The idea that you can change the representation of data w/o changing programs that operate on it.
+
+Physical data independence: I can change the layout of data on disk and my programs won't change
+ - index the data
+ - partition/distribute/replicate the data
+ - compress the data
+ - sort the data
+
+How did CODASYL fail data independence?  For each set of objects (e.g., parts or stores), you had to specify whether your index of the objects would be hash-based or sort-based.  They change iteration order.  They expose different access methods.  If you change the indexing technique, your programs broke.
+
+Logical data independence: I should be able to change the schema without changing my model.  Add a field.  Delete a field.  Etc..
+  - This is accomplished using views in sql
