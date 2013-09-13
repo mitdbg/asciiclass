@@ -73,18 +73,18 @@ Some tips:
 
 # Grep, Sed & Awk
 
-The set of three UNIX tools, _sed_, _awk_, and _grep_, can be very useful for quickly cleaning up and transforming data for further analysis
+The set of three UNIX tools, `sed`, `awk`, and `grep`, can be very useful for quickly cleaning up and transforming data for further analysis
 (and have been around since the inception of UNIX). 
-In conjunction with other unix utilities like _sort_, _uniq_, _tail_, _head_, etc., you can accomplish many simple data parsing and cleaning 
+In conjunction with other unix utilities like `sort`, `uniq`, `tail`, `head`, etc., you can accomplish many simple data parsing and cleaning 
 tasks with these tools. 
 You are encouraged to play with these tools and familiarize yourselves with the basic usage of these tools. However, there is no explicit 
 deliverable in this lab.
 
-As an example, the following sequence of commands can be used to answer the third question from the previous lab ("Find the five uids that have tweeted the most").
+As an example, the following sequence of commands can be used to answer the third question from the (lab 2)[../lab2/] ("Find the five uids that have tweeted the most").
 
 	grep "created\_at" twitter.json | sed 's/"user":{"id":\([0-9]*\).*/XXXXX\1/' | sed 's/.*XXXXX\([0-9]*\)$/\1/' | sort | uniq -c | sort -n | tail -5
 
-The first command (_grep_) discards the deleted tweets, the _sed_ commands extract the first "user-id" from each line, _sort_ sorts the user ids, and _uniq -c_ counts the unique entries (i.e., user ids). The final _sort -n | tail -5_ return the top 5 uids.
+The first command (`grep`) discards the deleted tweets, the _sed_ commands extract the first "user-id" from each line, _sort_ sorts the user ids, and _uniq -c_ counts the unique entries (i.e., user ids). The final _sort -n | tail -5_ return the top 5 uids.
 Note that, combining the two _sed_ commands as follows does not do the right thing -- we will let you figure out why.
 
 	grep "created\_at" twitter.json | sed 's/.*"user":{"id":\([0-9]*\).*/\1/' | sort | uniq -c | sort -n | tail -5"
@@ -101,8 +101,8 @@ or equivalently (using UNIX pipelining):
 
 	cat filename | grep 'regexp'
 
-The output contains only those lines from the file that match the regular expression. Two options to grep are useful: _grep -v_ will output those lines that
-_do not_ match the regular expression, and _grep -i_ will ignore case while matching. See the manual (or online resources) for more details.
+The output contains only those lines from the file that match the regular expression. Two options to grep are useful: `grep -v` will output those lines that
+*do not* match the regular expression, and `grep -i` will ignore case while matching. See the manual (or online resources) for more details.
 
 ## sed
 Sed stands for _stream editor_. Basic syntax for _sed_ is:
@@ -116,7 +116,7 @@ extracts the user id, which is available to be used in the _replacement_ as \1.
 
 ## awk 
 
-Finally, _awk_ is a powerful scripting language (not unlike perl). The basic syntax of _awk_ is: 
+Finally, `awk` is a powerful scripting language (not unlike perl). The basic syntax of `awk` is: 
 
 	awk -F',' 'BEGIN{commands} /regexp1/ {command1} /regexp2/ {command2} END{commands}' 
 
