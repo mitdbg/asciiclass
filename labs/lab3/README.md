@@ -136,6 +136,7 @@ A few examples to give you a flavor of the tools and what one can do with them.
 
     	cat labor.csv | awk '/^Series Id:/ {print combined; combined = $0} 
                             !/^Series Id:/ {combined = combined", "$0;} '
+    	                    END {print combined}'
 
 1. On the crime data, the following command does _fill_ (first row of output: "Alabama, 2004, 4029.3".
 
