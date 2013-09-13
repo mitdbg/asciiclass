@@ -36,25 +36,25 @@ Go to the [data wrangler website](http://vis.stanford.edu/wrangler/app/).  Load 
 
 1. For the synsets data set, use the data wrangler tool to generate a list of word-meaning pairs. The output should look like:
 
-    'hood,(slang) a neighborhood
-    1530s,the decade from 1530 to 1539
-    ...
-    angstrom,a metric unit of length equal to one ten billionth of a meter (or 0.0001 micron)
-    angstrom, used to specify wavelengths of electromagnetic radiation
-    angstrom\_unit,a metric unit of length equal to one ten billionth of a meter (or 0.0001 micron)
-    angstrom\_unit, used to specify wavelengths of electromagnetic radiation
-    ...
+	'hood,(slang) a neighborhood
+	1530s,the decade from 1530 to 1539
+	...
+	angstrom,a metric unit of length equal to one ten billionth of a meter (or 0.0001 micron)
+	angstrom, used to specify wavelengths of electromagnetic radiation
+	angstrom\_unit,a metric unit of length equal to one ten billionth of a meter (or 0.0001 micron)
+	angstrom\_unit, used to specify wavelengths of electromagnetic radiation
+	...
 
 2. For the FIFA dataset, use the tool to generate output as follows.
 
-    Brazil, 1962, 1
-    Brazil, 1970, 1
-    Brazil, 1994, 1
-    Brazil, 2002, 1
-    Brazil, 1958, 1
-    Brazil, 1998, 2
-    Brazil, 1950, 2
-    ...
+	Brazil, 1962, 1
+	Brazil, 1970, 1
+	Brazil, 1994, 1
+	Brazil, 2002, 1
+	Brazil, 1958, 1
+	Brazil, 1998, 2
+	Brazil, 1950, 2
+	...
 
 i.e., each line in the output contains a country, a year, and the position of the county in that year (if within top 4).
 
