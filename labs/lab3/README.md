@@ -133,15 +133,19 @@ The above tools can do many of the things that Data Wrangler enables you to do. 
 A few examples to give you a flavor of the tools and what one can do with them.
 
 1. _wrap_ on labor.csv (i.e., merge consecutive groups of lines referring to the same record)
+
     	cat labor.csv | awk '/^Series Id:/ {print combined; combined = $0} !/^Series Id:/ {combined = combined", "$0;} '
 
 1. On the crime data, the following command does _fill_ (first row of output: "Alabama, 2004, 4029.3".
+
     	cat crime.txt | grep -v '^,$' | awk '/^[A-Z]/ {state = $4} !/^[A-Z]/ {print state, $0}'
     
 1. Wrangle the crimes data as done in the Wrangler demo. The following works assuming perfectly homogenous data (as the provided dataset is).
+
     	cat crime.txt | grep -v '^,$' | sed 's/Reported crime in //; s/[0-9]\*,//' | awk 'BEGIN {printf "State, 2004, 2005, 2006, 2007, 2008"} /^[A-Z]/ {print c; c=$0} !/^[A-Z]/ {c=c", "$0;} END {print c}'
 
 1. Same as above but allows the data to contain incomplete information (e.g., some years may be missing).
+
     	cat crime.txt | grep -v '^,$' | sed 's/Reported crime in //; s/[0-9]\*,//' | awk -F',' '/^[A-Z]/ {if(state) {printf(state); for(i = 2004; i &lt= 2008; i++) {if(array[i]) {printf("%s,", array[i])} else {printf("0,")}}; printf("\n");} state=$0; delete array} !/^[A-Z]/ {array[$1] = $2}'
     
 ## Tasks:
