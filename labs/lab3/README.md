@@ -84,6 +84,11 @@ As an example, the following sequence of commands can be used to answer the thir
 
 	grep "created\_at" twitter.json | sed 's/"user":{"id":\([0-9]\*\).\*/XXXXX\1/' | sed 's/.\*XXXXX\([0-9]\*\)$/\1/' | sort | uniq -c | sort -n | tail -5
 
+The first command (_grep_) discards the deleted tweets, the _sed_ commands extract the first "user-id" from each line, _sort_ sorts the user ids, and _uniq -c_ counts the unique entries (i.e., user ids). The final _sort -n | tail -5_ return the top 5 uids.
+Note that, combining the two _sed_ commands as follows does not work -- we will let you figure out why.
+
+	grep "created\_at" twitter.json | sed 's/.\*"user":{"id":\([0-9]\*\).\*/\1/' | sort | uniq -c | sort -n | tail -5"
+
 To get into some details:
 
 ## grep
@@ -105,15 +110,9 @@ Sed stands for _stream editor_. Basic syntax for _sed_ is:
 	sed 's/regexp/replacement/g' filename
 
 For each line in the intput, the portion of the line that matches _regexp_ (if any) is replaced with _replacement_. Sed is quite powerful within the limits of
-operating on single line at a time. You can use \( \) to refer to parts of the pattern match. In the first sed command above, the sub-expression within \( \)
-extracts the user id, which is available to be used in the _replacement_ as \1. If the _regexp_ contains multiple \( \), the subexpression matches are available
-as \1, \2, and so on.
+operating on single line at a time. You can use \\( \\) to refer to parts of the pattern match. In the first sed command above, the sub-expression within \\( \\)
+extracts the user id, which is available to be used in the _replacement_ as \1. 
 
-In the above example, the first command (_grep_) discards the deleted tweets, the _sed_ commands extract the first "user-id" from each line, _sort_ sorts the user ids, and _uniq -c_ counts the unique entries (i.e., user ids). The final _sort -n | tail -5_ return the top 5 uids.
-
-Note that, combining the two _sed_ commands as follows does not work -- we will let you figure out why.
-
-	grep "created\_at" twitter.json | sed 's/.\*"user":{"id":\([0-9]\*\).\*/\1/' | sort | uniq -c | sort -n | tail -5"
 
 ## awk 
 
@@ -134,16 +133,16 @@ The above tools can do many of the things that Data Wrangler enables you to do. 
 A few examples to give you a flavor of the tools and what one can do with them.
 
 1. _wrap_ on labor.csv (i.e., merge consecutive groups of lines referring to the same record)
-	cat labor.csv | awk '/^Series Id:/ {print combined; combined = $0} !/^Series Id:/ {combined = combined", "$0;} '
+    	cat labor.csv | awk '/^Series Id:/ {print combined; combined = $0} !/^Series Id:/ {combined = combined", "$0;} '
 
 1. On the crime data, the following command does _fill_ (first row of output: "Alabama, 2004, 4029.3".
-	cat crime.txt | grep -v '^,$' | awk '/^[A-Z]/ {state = $4} !/^[A-Z]/ {print state, $0}'
-
+    	cat crime.txt | grep -v '^,$' | awk '/^[A-Z]/ {state = $4} !/^[A-Z]/ {print state, $0}'
+    
 1. Wrangle the crimes data as done in the Wrangler demo. The following works assuming perfectly homogenous data (as the provided dataset is).
-	cat crime.txt | grep -v '^,$' | sed 's/Reported crime in //; s/[0-9]\*,//' | awk 'BEGIN {printf "State, 2004, 2005, 2006, 2007, 2008"} /^[A-Z]/ {print c; c=$0} !/^[A-Z]/ {c=c", "$0;} END {print c}'
+    	cat crime.txt | grep -v '^,$' | sed 's/Reported crime in //; s/[0-9]\*,//' | awk 'BEGIN {printf "State, 2004, 2005, 2006, 2007, 2008"} /^[A-Z]/ {print c; c=$0} !/^[A-Z]/ {c=c", "$0;} END {print c}'
 
 1. Same as above but allows the data to contain incomplete information (e.g., some years may be missing).
-	cat crime.txt | grep -v '^,$' | sed 's/Reported crime in //; s/[0-9]\*,//' | awk -F',' '/^[A-Z]/ {if(state) {printf(state); for(i = 2004; i &lt= 2008; i++) {if(array[i]) {printf("%s,", array[i])} else {printf("0,")}}; printf("\n");} state=$0; delete array} !/^[A-Z]/ {array[$1] = $2}'
+    	cat crime.txt | grep -v '^,$' | sed 's/Reported crime in //; s/[0-9]\*,//' | awk -F',' '/^[A-Z]/ {if(state) {printf(state); for(i = 2004; i &lt= 2008; i++) {if(array[i]) {printf("%s,", array[i])} else {printf("0,")}}; printf("\n");} state=$0; delete array} !/^[A-Z]/ {array[$1] = $2}'
     
 ## Tasks:
 
