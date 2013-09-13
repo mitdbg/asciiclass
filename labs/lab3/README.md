@@ -23,7 +23,7 @@ The _lab3_ directory contains two datasets (in addition to the datasets used in 
 
 1. A dataset of synonyms and their meanings (_synsets_). Each line contains one synset with the following format:
 
-    ID, <synonyms separated by spaces>, <different meanings separated by semicolons>
+    ID, &lt;synonyms separated by spaces&gt;, &lt;different meanings separated by semicolons&gt;
 
 1. The second dataset is a snippet of the following Wikipedia webpage on [FIFA (Soccer) World Cup](http://en.wikipedia.org/wiki/FIFA_World_Cup).
 Specifically it is the source for the table toward the end, that lists the teams reaching the top four. 
@@ -32,7 +32,8 @@ Specifically it is the source for the table toward the end, that lists the teams
 
 Go to the [data wrangler website](http://vis.stanford.edu/wrangler/app/).  Load each of the datasets (we recommend a small subset -- 100~ lines) into data wrangler and try playing with the tool.
 
-Tasks:
+## Tasks:
+
 1. For the synsets data set, use the data wrangler tool to generate a list of word-meaning pairs. The output should look like:
 
     'hood,(slang) a neighborhood
@@ -73,8 +74,8 @@ Some tips:
 # Grep, Sed & Awk
 
 The set of three UNIX tools, _sed_, _awk_, and _grep_, can be very useful for quickly cleaning up and transforming data for further analysis
-(and have been around essentially since the inception of UNIX). 
-In conjunction with some of the other unix utilities like _sort_, _uniq_, _tail_, _head_, etc., you can accomplish many simple data parsing and cleaning 
+(and have been around since the inception of UNIX). 
+In conjunction with other unix utilities like _sort_, _uniq_, _tail_, _head_, etc., you can accomplish many simple data parsing and cleaning 
 tasks with these tools. 
 You are encouraged to play with these tools and familiarize yourselves with the basic usage of these tools. However, there is no explicit 
 deliverable in this lab.
@@ -93,7 +94,7 @@ The basic syntax for _grep_ is:
 
 or equivalently (using UNIX pipelining):
 
-	cat filename | grep 'regular-expression' 
+	cat filename | grep 'regexp'
 
 The output contains only those lines from the file that match the regular expression. Two options to grep are useful: _grep -v_ will output those lines that
 _do not_ match the regular expression, and _grep -i_ will ignore case while matching. See the manual (or online resources) for more details.
@@ -103,7 +104,7 @@ Sed stands for _stream editor_. Basic syntax for _sed_ is:
 
 	sed 's/regexp/replacement/g' filename
 
-For each line in the intput, the portion of the line that matches _regexp_ (if any) is replaced by _replacement_. Sed is quite powerful within the limits of
+For each line in the intput, the portion of the line that matches _regexp_ (if any) is replaced with _replacement_. Sed is quite powerful within the limits of
 operating on single line at a time. You can use \( \) to refer to parts of the pattern match. In the first sed command above, the sub-expression within \( \)
 extracts the user id, which is available to be used in the _replacement_ as \1. If the _regexp_ contains multiple \( \), the subexpression matches are available
 as \1, \2, and so on.
@@ -118,33 +119,38 @@ Note that, combining the two _sed_ commands as follows does not work -- we will 
 
 Finally, _awk_ is a powerful scripting language (not unlike perl). The basic syntax of _awk_ is: 
 
-	awk -F',' '/regexp1/ {command1} /regexp2/ {command2}' 
+	awk -F',' 'BEGIN{commands} /regexp1/ {command1} /regexp2/ {command2} END{commands}' 
 
 For each line, the regular expressions are matched in order, and if there is a match, the corresponding command is executed (multiple commands may be executed
-for the same line). The _-F','_ specifies that the lines should be _split_ into fields using separate _,_, and those fields are available to the regular
-expressions and the commands as $1, $2, ... See the manual or online resources for further details. 
+for the same line). BEGIN and END are both optional. The _-F','_ specifies that the lines should be _split_ into fields using the separator _,_, and those fields are available to the regular
+expressions and the commands as $1, $2, etc. See the manual or online resources for further details. 
 
 ## Comparing to Data Wrangler
 
-The above tools can do many of the things that Data Wrangler enables you to do. Most of the _map_ operations in Data Wrangler directory map to the tools above,
-simple _wraps_ can be done using _awk_.
+The above tools can do many of the things that Data Wrangler enables you to do. E.g., most of the _map_ operations in Data Wrangler directly map to the tools above.
 
 ## Examples 
 
 A few examples to give you a flavor of the tools and what one can do with them.
 
 1. _wrap_ on labor.csv (i.e., merge consecutive groups of lines referring to the same record)
-
 	cat labor.csv | awk '/^Series Id:/ {print combined; combined = $0} !/^Series Id:/ {combined = combined", "$0;} '
 
-1. Wrangle the crimes data as done in the demo. The following works assuming perfectly homogenous data (as the provided dataset is).
+1. On the crime data, the following command does _fill_ (first row of output: "Alabama, 2004, 4029.3".
+	cat crime.txt | grep -v '^,$' | awk '/^[A-Z]/ {state = $4} !/^[A-Z]/ {print state, $0}'
 
+1. Wrangle the crimes data as done in the Wrangler demo. The following works assuming perfectly homogenous data (as the provided dataset is).
 	cat crime.txt | grep -v '^,$' | sed 's/Reported crime in //; s/[0-9]\*,//' | awk 'BEGIN {printf "State, 2004, 2005, 2006, 2007, 2008"} /^[A-Z]/ {print c; c=$0} !/^[A-Z]/ {c=c", "$0;} END {print c}'
 
 1. Same as above but allows the data to contain incomplete information (e.g., some years may be missing).
-
 	cat crime.txt | grep -v '^,$' | sed 's/Reported crime in //; s/[0-9]\*,//' | awk -F',' '/^[A-Z]/ {if(state) {printf(state); for(i = 2004; i &lt= 2008; i++) {if(array[i]) {printf("%s,", array[i])} else {printf("0,")}}; printf("\n");} state=$0; delete array} !/^[A-Z]/ {array[$1] = $2}'
+    
+## Tasks:
 
+Perform the above cleaning tasks using these tools. QUESTION: Should we provide a portion of the command for the second one?
+
+
+NOT EDITED BEYOND THIS
 
 2. use sed/awk to extract out the descriptions of the events, the tags, and the hours
 3. what's the most popular 1/2-grams?
