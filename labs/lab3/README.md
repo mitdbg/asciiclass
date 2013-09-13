@@ -19,22 +19,22 @@ Then :
 
     cd lab3
 
-The _lab3_ directory contains two datasets (in addition to the datasets used in class):
+The `lab3` directory contains two datasets (in addition to the datasets used in class):
 
-1. A dataset of synonyms and their meanings (_synsets_). Each line contains one synset with the following format:
+1. A dataset of synonyms and their meanings (`synsets.txt`). Each line contains one synset with the following format:
 
     ID, &lt;synonyms separated by spaces&gt;, &lt;different meanings separated by semicolons&gt;
 
-1. The second dataset is a snippet of the following Wikipedia webpage on [FIFA (Soccer) World Cup](http://en.wikipedia.org/wiki/FIFA_World_Cup).
+1. The second dataset (`worldcup.txt`) is a snippet of the following Wikipedia webpage on [FIFA (Soccer) World Cup](http://en.wikipedia.org/wiki/FIFA_World_Cup).
 Specifically it is the source for the table toward the end, that lists the teams reaching the top four. 
 
 # Wrangler
 
-Go to the [data wrangler website](http://vis.stanford.edu/wrangler/app/).  Load each of the datasets (we recommend a small subset -- 100~ lines) into data wrangler and try playing with the tool.
+Go to the [Data Wrangler website](http://vis.stanford.edu/wrangler/app/).  Load each of the datasets (we recommend a small subset -- 100~ lines) into Data Wrangler and try playing with the tool.
 
 ## Tasks:
 
-1. For the synsets data set, use the data wrangler tool to generate a list of word-meaning pairs. The output should look like:
+1. For the synsets data set, use the Data Wrangler tool to generate a list of word-meaning pairs. The output should look like:
 
         'hood,(slang) a neighborhood
         1530s,the decade from 1530 to 1539
@@ -84,8 +84,8 @@ As an example, the following sequence of commands can be used to answer the thir
 
 	grep "created\_at" twitter.json | sed 's/"user":{"id":\([0-9]*\).*/XXXXX\1/' | sed 's/.*XXXXX\([0-9]*\)$/\1/' | sort | uniq -c | sort -n | tail -5
 
-The first command (`grep`) discards the deleted tweets, the _sed_ commands extract the first "user-id" from each line, _sort_ sorts the user ids, and _uniq -c_ counts the unique entries (i.e., user ids). The final _sort -n | tail -5_ return the top 5 uids.
-Note that, combining the two _sed_ commands as follows does not do the right thing -- we will let you figure out why.
+The first command (`grep`) discards the deleted tweets, the `sed` commands extract the first "user-id" from each line, `sort` sorts the user ids, and `uniq -c` counts the unique entries (i.e., user ids). The final `sort -n | tail -5` return the top 5 uids.
+Note that, combining the two `sed` commands as follows does not do the right thing -- we will let you figure out why.
 
 	grep "created\_at" twitter.json | sed 's/.*"user":{"id":\([0-9]*\).*/\1/' | sort | uniq -c | sort -n | tail -5"
 
@@ -93,7 +93,7 @@ To get into some details:
 
 ## grep
 
-The basic syntax for _grep_ is: 
+The basic syntax for `grep` is: 
 
 	 grep 'regexp' filename
 
@@ -102,10 +102,10 @@ or equivalently (using UNIX pipelining):
 	cat filename | grep 'regexp'
 
 The output contains only those lines from the file that match the regular expression. Two options to grep are useful: `grep -v` will output those lines that
-*do not* match the regular expression, and `grep -i` will ignore case while matching. See the manual (or online resources) for more details.
+*do not* match the regular expression, and `grep -i` will ignore case while matching. See the manual (`man grep`) (or online resources) for more details.
 
 ## sed
-Sed stands for _stream editor_. Basic syntax for _sed_ is:
+Sed stands for _stream editor_. Basic syntax for `sed` is:
 
 	sed 's/regexp/replacement/g' filename
 
@@ -121,7 +121,7 @@ Finally, `awk` is a powerful scripting language (not unlike perl). The basic syn
 	awk -F',' 'BEGIN{commands} /regexp1/ {command1} /regexp2/ {command2} END{commands}' 
 
 For each line, the regular expressions are matched in order, and if there is a match, the corresponding command is executed (multiple commands may be executed
-for the same line). BEGIN and END are both optional. The _-F','_ specifies that the lines should be _split_ into fields using the separator _,_, and those fields are available to the regular
+for the same line). BEGIN and END are both optional. The `-F','` specifies that the lines should be _split_ into fields using the separator _,_, and those fields are available to the regular
 expressions and the commands as $1, $2, etc. See the manual or online resources for further details. 
 
 ## Comparing to Data Wrangler
@@ -163,8 +163,8 @@ A few examples to give you a flavor of the tools and what one can do with them.
                                      delete array} 
                           !/^[A-Z]/ {array[$1] = $2}'
 
-We provided the last example to show how powerful _awk_ can be. However if you need to write a long command like that, you are better
-off using a proper scripting language like _perl_ or _python_.
+We provided the last example to show how powerful `awk` can be. However if you need to write a long command like that, you may be better
+off using a proper scripting language like `perl` or `python`.
     
 ## Tasks:
 
