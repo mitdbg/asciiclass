@@ -20,11 +20,12 @@ Then :
     cd lab3
 
 The _lab3_ directory contains two datasets (in addition to the datasets used in class):
+
 1. A dataset of synonyms and their meanings (_synsets_). Each line contains one synset with the following format:
 
     ID, <synonyms separated by spaces>, <different meanings separated by semicolons>
 
-2. The second dataset is a snippet of the following Wikipedia webpage on [FIFA (Soccer) World Cup](http://en.wikipedia.org/wiki/FIFA_World_Cup).
+1. The second dataset is a snippet of the following Wikipedia webpage on [FIFA (Soccer) World Cup](http://en.wikipedia.org/wiki/FIFA_World_Cup).
 Specifically it is the source for the table toward the end, that lists the teams reaching the top four. 
 
 # Wrangler
@@ -33,24 +34,27 @@ Go to the [data wrangler website](http://vis.stanford.edu/wrangler/app/).  Load 
 
 Tasks:
 1. For the synsets data set, use the data wrangler tool to generate a list of word-meaning pairs. The output should look like:
-> 'hood,(slang) a neighborhood
-> 1530s,the decade from 1530 to 1539
-> ...
-> angstrom,a metric unit of length equal to one ten billionth of a meter (or 0.0001 micron)
-> angstrom, used to specify wavelengths of electromagnetic radiation
-> angstrom\_unit,a metric unit of length equal to one ten billionth of a meter (or 0.0001 micron)
-> angstrom\_unit, used to specify wavelengths of electromagnetic radiation
-> ...
+
+    'hood,(slang) a neighborhood
+    1530s,the decade from 1530 to 1539
+    ...
+    angstrom,a metric unit of length equal to one ten billionth of a meter (or 0.0001 micron)
+    angstrom, used to specify wavelengths of electromagnetic radiation
+    angstrom\_unit,a metric unit of length equal to one ten billionth of a meter (or 0.0001 micron)
+    angstrom\_unit, used to specify wavelengths of electromagnetic radiation
+    ...
 
 2. For the FIFA dataset, use the tool to generate output as follows.
-> Brazil, 1962, 1
-> Brazil, 1970, 1
-> Brazil, 1994, 1
-> Brazil, 2002, 1
-> Brazil, 1958, 1
-> Brazil, 1998, 2
-> Brazil, 1950, 2
-> ...
+
+    Brazil, 1962, 1
+    Brazil, 1970, 1
+    Brazil, 1994, 1
+    Brazil, 2002, 1
+    Brazil, 1958, 1
+    Brazil, 1998, 2
+    Brazil, 1950, 2
+    ...
+
 i.e., each line in the output contains a country, a year, and the position of the county in that year (if within top 4).
 
 
@@ -77,22 +81,28 @@ deliverable in this lab.
 
 As an example, the following sequence of commands can be used to answer the third question from the previous lab ("Find the five uids that have tweeted the most").
 
-> grep "created\_at" twitter.json | sed 's/"user":{"id":\([0-9]\*\).\*/XXXXX\1/' | sed 's/.\*XXXXX\([0-9]\*\)$/\1/' | sort | uniq -c | sort -n | tail -5
+	grep "created\_at" twitter.json | sed 's/"user":{"id":\([0-9]\*\).\*/XXXXX\1/' | sed 's/.\*XXXXX\([0-9]\*\)$/\1/' | sort | uniq -c | sort -n | tail -5
 
 To get into some details:
 
 ## grep
 
 The basic syntax for _grep_ is: 
-> grep 'regexp' filename
+
+	 grep 'regexp' filename
+
 or equivalently (using UNIX pipelining):
-> cat filename | grep 'regular-expression' 
+
+	cat filename | grep 'regular-expression' 
+
 The output contains only those lines from the file that match the regular expression. Two options to grep are useful: _grep -v_ will output those lines that
-    _do not_ match the regular expression, and _grep -i_ will ignore case while matching. See the manual (or online resources) for more details.
+_do not_ match the regular expression, and _grep -i_ will ignore case while matching. See the manual (or online resources) for more details.
 
 ## sed
 Sed stands for _stream editor_. Basic syntax for _sed_ is:
-> sed 's/regexp/replacement/g' filename
+
+	sed 's/regexp/replacement/g' filename
+
 For each line in the intput, the portion of the line that matches _regexp_ (if any) is replaced by _replacement_. Sed is quite powerful within the limits of
 operating on single line at a time. You can use \( \) to refer to parts of the pattern match. In the first sed command above, the sub-expression within \( \)
 extracts the user id, which is available to be used in the _replacement_ as \1. If the _regexp_ contains multiple \( \), the subexpression matches are available
@@ -102,13 +112,13 @@ In the above example, the first command (_grep_) discards the deleted tweets, th
 
 Note that, combining the two _sed_ commands as follows does not work -- we will let you figure out why.
 
-> grep "created\_at" twitter.json | sed 's/.\*"user":{"id":\([0-9]\*\).\*/\1/' | sort | uniq -c | sort -n | tail -5"
+	grep "created\_at" twitter.json | sed 's/.\*"user":{"id":\([0-9]\*\).\*/\1/' | sort | uniq -c | sort -n | tail -5"
 
 ## awk 
 
 Finally, _awk_ is a powerful scripting language (not unlike perl). The basic syntax of _awk_ is: 
 
-> awk -F',' '/regexp1/ {command1} /regexp2/ {command2}' 
+	awk -F',' '/regexp1/ {command1} /regexp2/ {command2}' 
 
 For each line, the regular expressions are matched in order, and if there is a match, the corresponding command is executed (multiple commands may be executed
 for the same line). The _-F','_ specifies that the lines should be _split_ into fields using separate _,_, and those fields are available to the regular
@@ -124,20 +134,17 @@ simple _wraps_ can be done using _awk_.
 A few examples to give you a flavor of the tools and what one can do with them.
 
 1. _wrap_ on labor.csv (i.e., merge consecutive groups of lines referring to the same record)
-> cat labor.csv | awk '/^Series Id:/ {print combined; combined = $0} !/^Series Id:/ {combined = combined", "$0;} '
+
+	cat labor.csv | awk '/^Series Id:/ {print combined; combined = $0} !/^Series Id:/ {combined = combined", "$0;} '
 
 1. Wrangle the crimes data as done in the demo. The following works assuming perfectly homogenous data (as the provided dataset is).
 
-cat crime.txt | grep -v '^,$' | sed 's/Reported crime in //; s/[0-9]\*,//' | awk 'BEGIN {printf "State, 2004, 2005, 2006, 2007, 2008"} /^[A-Z]/ {print c; c=$0} !/^[A-Z]/ {c=c", "$0;} END {print c}'
+	cat crime.txt | grep -v '^,$' | sed 's/Reported crime in //; s/[0-9]\*,//' | awk 'BEGIN {printf "State, 2004, 2005, 2006, 2007, 2008"} /^[A-Z]/ {print c; c=$0} !/^[A-Z]/ {c=c", "$0;} END {print c}'
 
 1. Same as above but allows the data to contain incomplete information (e.g., some years may be missing).
 
-cat crime.txt | grep -v '^,$' | sed 's/Reported crime in //; s/[0-9]\*,//' | awk -F',' '/^[A-Z]/ {if(state) {printf(state); for(i = 2004; i &lt= 2008; i++) {if(array[i]) {printf("%s,", array[i])} else {printf("0,")}}; printf("\n");} state=$0; delete array} !/^[A-Z]/ {array[$1] = $2}'
+	cat crime.txt | grep -v '^,$' | sed 's/Reported crime in //; s/[0-9]\*,//' | awk -F',' '/^[A-Z]/ {if(state) {printf(state); for(i = 2004; i &lt= 2008; i++) {if(array[i]) {printf("%s,", array[i])} else {printf("0,")}}; printf("\n");} state=$0; delete array} !/^[A-Z]/ {array[$1] = $2}'
 
-
-
-
-## Sed
 
 2. use sed/awk to extract out the descriptions of the events, the tags, and the hours
 3. what's the most popular 1/2-grams?
