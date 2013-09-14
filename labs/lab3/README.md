@@ -122,7 +122,7 @@ Finally, `awk` is a powerful scripting language (not unlike perl). The basic syn
 
 For each line, the regular expressions are matched in order, and if there is a match, the corresponding command is executed (multiple commands may be executed
 for the same line). BEGIN and END are both optional. The `-F','` specifies that the lines should be _split_ into fields using the separator _,_, and those fields are available to the regular
-expressions and the commands as $1, $2, etc. See the manual or online resources for further details. 
+expressions and the commands as $1, $2, etc. See the manual (`man awk`) or online resources for further details. 
 
 ## Comparing to Data Wrangler
 
@@ -132,27 +132,28 @@ The above tools can do many of the things that Data Wrangler enables you to do. 
 
 A few examples to give you a flavor of the tools and what one can do with them.
 
-1. _wrap_ on labor.csv (i.e., merge consecutive groups of lines referring to the same record)
+1. Perform the equivalent of _wrap_ on `labor.csv` (i.e., merge consecutive groups of lines referring to the same record)
 
     	cat labor.csv | awk '/^Series Id:/ {print combined; combined = $0} 
                             !/^Series Id:/ {combined = combined", "$0;} '
     	                    END {print combined}'
 
-1. On the crime data, the following command does _fill_ (first row of output: "Alabama, 2004, 4029.3".
+1. On  `crime-clean.txt`, the following command does a _fill_ (first row of output: "Alabama, 2004, 4029.3".
 
-    	cat crime.txt | grep -v '^,$' | awk '/^[A-Z]/ {state = $4} !/^[A-Z]/ {print state, $0}'
+    	cat crime-clean.txt | grep -v '^,$' | awk '/^[A-Z]/ {state = $4} !/^[A-Z]/ {print state, $0}'
     
-1. Wrangle the crimes data as done in the Wrangler demo. The following works assuming perfectly homogenous data (as the provided dataset is).
+1. On `crime-clean.txt`, the following script cleans the data as was done on the wrangler demo in class. The following works assuming perfectly homogenous data (as the provided dataset is).
 
-    	cat crime.txt | grep -v '^,$' | sed 's/,$//g; s/Reported crime in //; s/[0-9]*,//' | 
+    	cat crime-clean.txt | grep -v '^,$' | sed 's/,$//g; s/Reported crime in //; s/[0-9]*,//' | 
             awk -F',' 'BEGIN {printf "State, 2004, 2005, 2006, 2007, 2008"} 
                 /^[A-Z]/ {print c; c=$0} 
                 !/^[A-Z]/ {c=c", "$0;} 
                 END {print c}'
 
-1. Same as above but allows the data to contain incomplete information (e.g., some years may be missing).
+1. On `crime-unclean.txt` the follow script perfroms the same cleaning as above, but
+allows incomplete information (e.g., some years may be missing).
 
-    	cat crime.txt | grep -v '^,$' | sed 's/Reported crime in //;' | 
+    	cat crime-unclean.txt | grep -v '^,$' | sed 's/Reported crime in //;' | 
                 awk -F',' 'BEGIN {printf "State, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008"} 
                            /^[A-Z]/ || /^$/ {if(state) {
                                         printf(state); 
