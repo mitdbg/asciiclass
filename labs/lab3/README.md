@@ -121,7 +121,7 @@ Finally, `awk` is a powerful scripting language (not unlike perl). The basic syn
 	awk -F',' 'BEGIN{commands} /regexp1/ {command1} /regexp2/ {command2} END{commands}' 
 
 For each line, the regular expressions are matched in order, and if there is a match, the corresponding command is executed (multiple commands may be executed
-for the same line). BEGIN and END are both optional. The `-F','` specifies that the lines should be _split_ into fields using the separator _,_, and those fields are available to the regular
+for the same line). BEGIN and END are both optional. The `-F','` specifies that the lines should be _split_ into fields using the separator "`,`", and those fields are available to the regular
 expressions and the commands as $1, $2, etc. See the manual or online resources for further details. 
 
 ## Comparing to Data Wrangler
