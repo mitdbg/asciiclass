@@ -193,3 +193,21 @@ You should create a text file with your name, XXX.  Upload it to the [course Ste
 Now you're almost done!  Go read the assigned paper(s) for today.
 
 You can always feel free to email us with questions at [6885staff@mit.edu](mailto:6885staff@mit.edu).
+
+
+
+
+### Feedback (optional, but valuable)
+
+If you have any comments about this lab, or any thoughts about the
+class so far, we would greatly appreciate them.  Your comments will
+be strictly used to improve the rest of the labs and classes and have
+no impact on your grade. 
+
+Some questions that would be helpful:
+
+* Is the lab too difficult or too easy?  
+* Did you look forward to any exercise that the lab did not cover?
+* Which parts of the lab were interesting or valuable towards understanding the material?
+* How is the pace of the course so far?
+
