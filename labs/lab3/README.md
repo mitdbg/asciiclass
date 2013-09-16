@@ -160,9 +160,11 @@ A few examples to give you a flavor of the tools and what one can do with them.
 
     	cat crime.txt | grep -v '^,$' | sed 's/,$//g; s/Reported crime in //; s/[0-9]*,//' | 
             awk -F',' 'BEGIN {printf "State, 2004, 2005, 2006, 2007, 2008"} 
-                /^[A-Z]/ {print c; c=$0} 
-                !/^[A-Z]/ {c=c", "$0;} 
+                /^[A-Z]/ {print c; c=$0}  
+                !/^[A-Z]/ {c=c", "$0;}    
                 END {print c}'
+
+
 
 1. Same as above but allows the data to contain incomplete information (e.g., some years may be missing).
 
