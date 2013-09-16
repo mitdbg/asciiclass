@@ -26,7 +26,7 @@ The `lab3` directory contains two datasets (in addition to the datasets used in 
     ID, &lt;synonyms separated by spaces&gt;, &lt;different meanings separated by semicolons&gt;
 
 1. The second dataset (`worldcup.txt`) is a snippet of the following Wikipedia webpage on [FIFA (Soccer) World Cup](http://en.wikipedia.org/wiki/FIFA_World_Cup).
-Specifically it is somewhat cleaned-up source for the table toward the end, that lists the teams reaching the top four. 
+Specifically it is a partially cleaned-up wiki source for the table toward the end of the page that lists teams finishing in the top 4. 
 
 
 # Wrangler
