@@ -1,10 +1,10 @@
 # Lab 3
 
-*Assigned: sometime*
+*Assigned: Tuesday, September 17*
 
-*Due: Sometime (just before class)*
+*Due: Thursday, September 19th, 12:59 PM (just before class)*
 
-In this lab, you will use various types of tools -- from low-level tools like sed and awk to high-level tools like Data Wrangler -- to perform data parsing and extraction from data encoded into a text file.  The goal of this lab is simply to gain experience with these tools and compare and contrast their usage.
+In this lab, you will use various types of tools -- from command line tools like `sed` and `awk` to high-level tools like Data Wrangler -- to perform data parsing and extraction from data encoded into a text file.  The goal of this lab is simply to gain experience with these tools and compare and contrast their usage.
 
 
 # Setup
@@ -31,7 +31,7 @@ Specifically it is a partially cleaned-up wiki source for the table toward the e
 
 # Wrangler
 
-Go to the [Data Wrangler website](http://vis.stanford.edu/wrangler/app/).  Load each of the datasets (we recommend a small subset -- 100~ lines) into Data Wrangler and try playing with the tool.
+Go to the [Data Wrangler website](http://vis.stanford.edu/wrangler/app/).  Load both of the datasets (we recommend cutting out a small subset -- 100~ lines) into Data Wrangler and try playing with the tool.
 
 Some tips using Wrangler:
 
@@ -57,9 +57,16 @@ Generate a list of word-meaning pairs. The output should look like:
         angstrom\_unit, used to specify wavelengths of electromagnetic radiation
         ...
 
+The `synsets.txt` file is too large to load into the Wrangler GUI, so you need to use the GUI to wrangle a subset of the data, then run a command line script on the complete data set.
+
+To run the script, you will need to install the python data wrangler libraries, which can be obtained by typing:
+
+        sudo easy_install datawrangler
+
 #### Questions
 
-1. How many unique words are there in the dataset?
+1. Export the Python version of the wrangler script and save it to a file.  
+1. Use the script to clean the data, then determine how many unique words there are in the dataset.
 
 ### worldcup.txt
 
@@ -77,13 +84,13 @@ Use the tool to generate output as follows, i.e., each line in the output contai
 It may help to 
 
 1. Skip the first 20 or so rows of table headers and other text, so that the data wrangler works with are "record text".  
-2. delete the rows that are clearly HTML formatting content
-3. extract the relevant data from the remaining column into new columns
-4. use the fill operation
+2. Delete the rows that are clearly HTML formatting content
+3. Extract the relevant data from the remaining column into new columns
+4. Use the fill operation
 
 #### Questions
 
-1. In the dataset, how often has each country won the world cup?
+1. According to the dataset, how often has each country won the world cup?
 
 
 
@@ -178,8 +185,8 @@ allows incomplete information (e.g., some years may be missing).
                                      delete array} 
                           !/^[A-Z]/ {array[$1] = $2}'
 
-We provided the last example to show how powerful `awk` can be. However if you need to write a long command like that, you may be better
-off using a proper scripting language like `perl` or `python`.
+We provided the last example to show how powerful `awk` can be. However if you need to write a long command like this, you may be better
+off using a proper scripting language like `perl` or `python`!
 
     
 ## Tasks:
@@ -200,33 +207,14 @@ Perform the above cleaning tasks using these tools.   No need to re-answer the q
 2. From your experience, briefly discuss the pro and cons between using Data Wrangler as compared to lower levels tools like sed/awk?
 3. What additional operations would have made using Data Wrangler "easier"?
 
-<!--
-NOT EDITED BEYOND THIS
-
-2. use sed/awk to extract out the descriptions of the events, the tags, and the hours
-3. what's the most popular 1/2-grams?
-4. what are the most popular hours?  for partying?
-
-
-### Questions
-
-1. What does fold/un-fold do?
-
-**Handing in your work**:
-=======
-### Comparing to Data Wrangler
-
-The above tools can do many of the things that Data Wrangler enables you to do. E.g., most of the _map_ operations in Data Wrangler directly map to the tools above.
-
--->
 
 # Handing in your work
 
-Answer the questions above in a text file with your name.  Upload it to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab3" assignment.
+Answer the questions above in a text file called "lab3-lastname", where lastname is your last name.  Make sure the text file also has your complete name.   Save your Wrangler and command line scripts as separate files and create a zip file or tarball with all three files.   Upload it to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab3" assignment.
 
 Now you're almost done!  Go read the assigned paper(s) for today.
 
-You can always feel free to email us with questions at [6885staff@mit.edu](mailto:6885staff@mit.edu) or use piazza.
+You can always feel free to conta us with questions on Piazza.
 
 ### Feedback (optional, but valuable)
 
