@@ -214,7 +214,7 @@ Answer the questions above in a text file called "lab3-lastname", where lastname
 
 Now you're almost done!  Go read the assigned paper(s) for today.
 
-You can always feel free to conta us with questions on Piazza.
+You can always feel free to contact us with questions on [Piazza](https://piazza.com/class/hl6u4m7ft8n373).
 
 ### Feedback (optional, but valuable)
 
