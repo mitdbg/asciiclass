@@ -26,7 +26,7 @@ The `lab3` directory contains two datasets (in addition to the datasets used in 
     ID, &lt;synonyms separated by spaces&gt;, &lt;different meanings separated by semicolons&gt;
 
 1. The second dataset (`worldcup.txt`) is a snippet of the following Wikipedia webpage on [FIFA (Soccer) World Cup](http://en.wikipedia.org/wiki/FIFA_World_Cup).
-Specifically it is the source for the table toward the end, that lists the teams reaching the top four. 
+Specifically it is somewhat cleaned-up source for the table toward the end, that lists the teams reaching the top four. 
 
 
 # Wrangler
@@ -185,6 +185,14 @@ off using a proper scripting language like `perl` or `python`.
     
 ## Tasks:
 
+Perform the above cleaning tasks using these tools. Hints:
+
+1. Use the "split" function, and "for loop" constructs (e.g., [here](http://www.math.utah.edu/docs/info/gawk_12.html)).
+
+2. For World Cup data, start with this command that cleans up the data a little bit.
+
+        cat worldcup.txt | sed 's/\[\[\([0-9]*\)[^]]*\]\]/\1/g; s/.*fb|\([A-Za-z]*\)}}/\1/g; s/<sup><\/sup>//g; s/|bgcolor[^|]*//g; s/|align=center[^|]*//g'
+
 Perform the above cleaning tasks using these tools.   No need to re-answer the questions in the Wrangler section, but recompute them to ensure your answers are consistent.
 
 #### Questions
@@ -201,12 +209,17 @@ NOT EDITED BEYOND THIS
 4. what are the most popular hours?  for partying?
 
 
+### Questions
+
+1. What does fold/un-fold do?
+
+**Handing in your work**:
+=======
 ### Comparing to Data Wrangler
 
 The above tools can do many of the things that Data Wrangler enables you to do. E.g., most of the _map_ operations in Data Wrangler directly map to the tools above.
 
 -->
-
 
 # Handing in your work
 
@@ -215,8 +228,6 @@ Answer the questions above in a text file with your name.  Upload it to the [cou
 Now you're almost done!  Go read the assigned paper(s) for today.
 
 You can always feel free to email us with questions at [6885staff@mit.edu](mailto:6885staff@mit.edu) or use piazza.
-
-
 
 ### Feedback (optional, but valuable)
 
