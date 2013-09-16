@@ -15,7 +15,7 @@ First, you need to check out/update the files for lab3:
     cd asciiclass/labs/
     git pull
 
-Then :
+Then:
 
     cd lab3
 
@@ -28,13 +28,25 @@ The `lab3` directory contains two datasets (in addition to the datasets used in 
 1. The second dataset (`worldcup.txt`) is a snippet of the following Wikipedia webpage on [FIFA (Soccer) World Cup](http://en.wikipedia.org/wiki/FIFA_World_Cup).
 Specifically it is somewhat cleaned-up source for the table toward the end, that lists the teams reaching the top four. 
 
+
 # Wrangler
 
 Go to the [Data Wrangler website](http://vis.stanford.edu/wrangler/app/).  Load each of the datasets (we recommend a small subset -- 100~ lines) into Data Wrangler and try playing with the tool.
 
+Some tips using Wrangler:
+
+* Wrangler responds to mouse highlights and clicks on the displayed table cells by suggesting operations on the left sidebar.  
+* Hovering over each element shows the result in the table view.  
+* Clicking adds the operation.  
+* Clear the sidebar by clicking the colored row above the schema row
+
 ## Tasks:
 
-1. For the synsets data set, use the Data Wrangler tool to generate a list of word-meaning pairs. The output should look like:
+Use Data Wrangler for the following two datasets.  
+
+### synsets.txt
+
+Generate a list of word-meaning pairs. The output should look like:
 
         'hood,(slang) a neighborhood
         1530s,the decade from 1530 to 1539
@@ -45,7 +57,13 @@ Go to the [Data Wrangler website](http://vis.stanford.edu/wrangler/app/).  Load 
         angstrom\_unit, used to specify wavelengths of electromagnetic radiation
         ...
 
-2. For the FIFA dataset, use the tool to generate output as follows.
+#### Questions
+
+1. How many unique words are there in the dataset?
+
+### worldcup.txt
+
+Use the tool to generate output as follows, i.e., each line in the output contains a country, a year, and the position of the county in that year (if within top 4).
 
         Brazil, 1962, 1
         Brazil, 1970, 1
@@ -56,20 +74,18 @@ Go to the [Data Wrangler website](http://vis.stanford.edu/wrangler/app/).  Load 
         Brazil, 1950, 2
         ...
 
-i.e., each line in the output contains a country, a year, and the position of the county in that year (if within top 4).
+It may help to 
+
+1. Skip the first 20 or so rows of table headers and other text, so that the data wrangler works with are "record text".  
+2. delete the rows that are clearly HTML formatting content
+3. extract the relevant data from the remaining column into new columns
+4. use the fill operation
+
+#### Questions
+
+1. In the dataset, how often has each country won the world cup?
 
 
-NOT EDITED BEYOND THIS
-
-5. now use wrangler to extract the structured content.  What was easy to do?  What was difficult?
-6. dump the structured content into sqlite3 or postgresql
-1. run some queries on the extracted text to prove you've done it.
-
-
-Some tips:
-
-1. Undo tool
-1. Export tool
 
 # Grep, Sed & Awk
 
@@ -80,7 +96,7 @@ tasks with these tools.
 You are encouraged to play with these tools and familiarize yourselves with the basic usage of these tools. However, there is no explicit 
 deliverable in this lab.
 
-As an example, the following sequence of commands can be used to answer the third question from the (lab 2)[../lab2/] ("Find the five uids that have tweeted the most").
+As an example, the following sequence of commands can be used to answer the third question from the [lab 2](../lab2/) ("Find the five uids that have tweeted the most").
 
 	grep "created\_at" twitter.json | sed 's/"user":{"id":\([0-9]*\).*/XXXXX\1/' | sed 's/.*XXXXX\([0-9]*\)$/\1/' | sort | uniq -c | sort -n | tail -5
 
@@ -124,9 +140,7 @@ For each line, the regular expressions are matched in order, and if there is a m
 for the same line). BEGIN and END are both optional. The `-F','` specifies that the lines should be _split_ into fields using the separator "`,`", and those fields are available to the regular
 expressions and the commands as $1, $2, etc. See the manual or online resources for further details. 
 
-## Comparing to Data Wrangler
 
-The above tools can do many of the things that Data Wrangler enables you to do. E.g., most of the _map_ operations in Data Wrangler directly map to the tools above.
 
 ## Examples 
 
@@ -165,6 +179,7 @@ A few examples to give you a flavor of the tools and what one can do with them.
 
 We provided the last example to show how powerful `awk` can be. However if you need to write a long command like that, you may be better
 off using a proper scripting language like `perl` or `python`.
+
     
 ## Tasks:
 
@@ -176,7 +191,16 @@ Perform the above cleaning tasks using these tools. Hints:
 
         cat worldcup.txt | sed 's/\[\[\([0-9]*\)[^]]*\]\]/\1/g; s/.*fb|\([A-Za-z]*\)}}/\1/g; s/<sup><\/sup>//g; s/|bgcolor[^|]*//g; s/|align=center[^|]*//g'
 
-DELETE BEYOND THIS
+Perform the above cleaning tasks using these tools.   No need to re-answer the questions in the Wrangler section, but recompute them to ensure your answers are consistent.
+
+#### Questions
+
+1. Submit the scripts you wrote to perform the cleaning tasks.
+2. From your experience, briefly discuss the pro and cons between using Data Wrangler as compared to lower levels tools like sed/awk?
+3. What additional operations would have made using Data Wrangler "easier"?
+
+<!--
+NOT EDITED BEYOND THIS
 
 2. use sed/awk to extract out the descriptions of the events, the tags, and the hours
 3. what's the most popular 1/2-grams?
@@ -188,15 +212,20 @@ DELETE BEYOND THIS
 1. What does fold/un-fold do?
 
 **Handing in your work**:
+=======
+### Comparing to Data Wrangler
 
-Your task is to write a query that XXXX.
+The above tools can do many of the things that Data Wrangler enables you to do. E.g., most of the _map_ operations in Data Wrangler directly map to the tools above.
 
-You should create a text file with your name, XXX.  Upload it to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab3" assignment.
+-->
+
+# Handing in your work
+
+Answer the questions above in a text file with your name.  Upload it to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab3" assignment.
 
 Now you're almost done!  Go read the assigned paper(s) for today.
 
-You can always feel free to email us with questions at [6885staff@mit.edu](mailto:6885staff@mit.edu).
-
+You can always feel free to email us with questions at [6885staff@mit.edu](mailto:6885staff@mit.edu) or use piazza.
 
 ### Feedback (optional, but valuable)
 
