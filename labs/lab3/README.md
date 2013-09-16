@@ -26,7 +26,7 @@ The `lab3` directory contains two datasets (in addition to the datasets used in 
     ID, &lt;synonyms separated by spaces&gt;, &lt;different meanings separated by semicolons&gt;
 
 1. The second dataset (`worldcup.txt`) is a snippet of the following Wikipedia webpage on [FIFA (Soccer) World Cup](http://en.wikipedia.org/wiki/FIFA_World_Cup).
-Specifically it is the source for the table toward the end, that lists the teams reaching the top four. 
+Specifically it is somewhat cleaned-up source for the table toward the end, that lists the teams reaching the top four. 
 
 # Wrangler
 
@@ -168,21 +168,24 @@ off using a proper scripting language like `perl` or `python`.
     
 ## Tasks:
 
-Perform the above cleaning tasks using these tools. QUESTION: Should we provide a portion of the command for the second one?
+Perform the above cleaning tasks using these tools. Hints:
 
+1. Use the "split" function, and "for loop" constructs (e.g., [here](http://www.math.utah.edu/docs/info/gawk_12.html)).
 
-NOT EDITED BEYOND THIS
+2. For World Cup data, start with this command that cleans up the data a little bit.
+
+        cat worldcup.txt | sed 's/\[\[\([0-9]*\)[^]]*\]\]/\1/g; s/.*fb|\([A-Za-z]*\)}}/\1/g; s/<sup><\/sup>//g; s/|bgcolor[^|]*//g; s/|align=center[^|]*//g'
+
+DELETE BEYOND THIS
 
 2. use sed/awk to extract out the descriptions of the events, the tags, and the hours
 3. what's the most popular 1/2-grams?
 4. what are the most popular hours?  for partying?
 
 
-
 ### Questions
 
 1. What does fold/un-fold do?
-
 
 **Handing in your work**:
 
@@ -193,8 +196,6 @@ You should create a text file with your name, XXX.  Upload it to the [course Ste
 Now you're almost done!  Go read the assigned paper(s) for today.
 
 You can always feel free to email us with questions at [6885staff@mit.edu](mailto:6885staff@mit.edu).
-
-
 
 
 ### Feedback (optional, but valuable)
