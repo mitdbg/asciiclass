@@ -142,7 +142,7 @@ A few examples to give you a flavor of the tools and what one can do with them.
 
     	cat crime-clean.txt | grep -v '^,$' | awk '/^[A-Z]/ {state = $4} !/^[A-Z]/ {print state, $0}'
     
-1. On `crime-clean.txt`, the following script cleans the data as was done on the wrangler demo in class. The following works assuming perfectly homogenous data (as the provided dataset is).
+1. On `crime-clean.txt`, the following script cleans the data as was done in the Wrangler demo in class. The following works assuming perfectly homogenous data (as the example on the Wrangler wbesite is).
 
     	cat crime-clean.txt | grep -v '^,$' | sed 's/,$//g; s/Reported crime in //; s/[0-9]*,//' | 
             awk -F',' 'BEGIN {printf "State, 2004, 2005, 2006, 2007, 2008"} 
