@@ -1,0 +1,219 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww12540\viewh16140\viewkind1
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\b\fs24 \cf0 6.885 Lecture 1 -- 9/5/2013\
+\
+What is this course about?
+\b0 \
+A survey of systems, tools, algorithms, tips, tricks, etc to help make sense out of data.\
+\
+Key concepts:\
+\
+- extracting structure\
+\
+- getting data sets to conform with each other ("data integration")\
+\
+- different computational frameworks\
+	-	 with differing performance and scalability characteristics\
+	-	and designed with different types of data in mind\
+\
+- basic stats and machine learning\
+	- at scale\
+\
+- visualization techniques\
+	- when data is large, needs to be interacted with, etc\
+\
+
+\b "ASCII to Answers" Pipeline\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc
+
+\b0 \cf0 {{\NeXTGraphic Pasted Graphic 1.pdf \width3060 \height5800
+}¬}
+\b \
+
+\b0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 One Size Doesn't Fit All\
+\
+
+\b0 Recent years have seen a proliferation of tools for processing data\
+\
+\
+\ul SQL-based systems\
+\ulnone Pig\
+DB2\
+Vertica\
+Hive\
+Impala\
+\
+NewSQL Systems\
+Text databases\
+Time series databases\
+Graph databases\
+Map Reduce/Hadoop\
+\
+Text/ Semistructured databases (e.g., Mongo, XML databases)\
+
+\b \
+
+\b0 \ul NoSQL / KV Stores\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ulnone Accumulo\
+Hbase\
+Cassandra\
+memcache\
+\
+\ul Visualization Systems\
+\ulnone d3\
+ggplot2\
+...\
+
+\b \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 \ul \ulc0 Programming Languages\
+\ulnone Excel \
+SAS\
+SPSS\
+R\
+Matlab\
+Julia\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 \
+
+\b0 Computing infrastructures, Mobile platforms, \'85\
+
+\b \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 Some Use Cases\
+\
+\
+\
+\
+\
+\
+
+\b0 \ul MapD Demo\
+\ulnone \
+Raw				Processed			Integration\
+--------				-----------			----------\
+Tweets -> 			TweetId, WordID		? (restaurants, locations
+\b \
+
+\b0 (text, sender, lat, lon)						people, \'85)\
+\
+
+\b \
+
+\b0 Storage			Querying			Visualization\
+----------			---------				----------\
+GPU + RAM + Disk		Custom sequential scan + 	Heatmaps make painting lots\
+
+\b 				
+\b0 Group by engine			of points possible
+\b \
+								
+\b0 Other aggregation techniques\
+
+\b \
+\
+
+\b0 \ul Google Search Engine\
+\
+\
+Raw\ulnone 				\ul Processed\ulnone 			\ul Integration\ulnone \
+(docid, html text, date,\'85.)	(docid, wordid)		Entity extraction, \
+\ul 				
+\i \ulnone "inverted index"			disambiguation, etc
+\i0 \ul \
+\ulnone 				created via MR or \
+					Percolator\
+\
+\ul Storage\ulnone 			\ul Querying\ulnone 			\ul Visualization\ulnone \
+GFS + BigTable		Search queries		Search page, plus\
+(partitioned distributed store)	mapped into		specialized results\
+					big table requests	for particular domains\
+
+\b \
+\
+Course Organization and Structure\
+\
+
+\b0 Unlike today, we'll try to minimize the time we spend lecturing.  Probably just 20-25 minutes of overview material each day, followed by a discussion of papers and the previous day's labs.\
+\
+Grades are for showing up and participating, trying out the labs, and doing the final project.  Expectation is everyone should get an A.\
+\
+YOU MUST PARTICIPATE.\
+\
+What do you guys want to get out the class?  What topics would you like to cover?
+\b \
+\
+\
+Brief Overview of the Relational Model + SQL\
+\
+
+\b0 We're going to start by talking about different ways to represent structured data.  Then we'll move on to the steps in the pipeline.
+\b \
+\
+
+\b0 Relational model\
+\
+A 
+\i database
+\i0  is a collection of structured records and their relationships\
+\
+Collection of sets (or tables)\
+	- order of rows doesn't  matter\
+	- no duplicate rows\
+	\
+\
+Example:\
+	tweets : \{tweetid, time, text, userid, \'85\}\
+	users : \{userid, name, device, \'85\}		 "schema"\
+\
+Relationships -- e.g., tweets reference userid\
+\
+SQL databases implement this model, and provide a query language for accessing records.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 For example, find tweets of iPhone users:\
+
+\i 	SELECT text FROM tweets, users where tweets.userid = users.userid and userid.device = 'iPhone'\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\i0 \cf0 \
+\
+Why is this better, e.g., than a text file of tweets?\
+\
+Databases offer a plethora of other features we won't talk about now, including:\
+\
+- transactions (ability to make a sequence of operations "atomic", or all-or-nothing, with respect to other concurrent transactions), \
+\
+- recovery/durability (guarantee that committed actions will be present in the database even in the presence of faults), \
+\
+- replication / high availability, \
+etc\
+\
+SQL is a very flexible, (actually turing complete) language, but some concerns:\
+\
+1) How fast will a given query run?\
+\
+2) What do I do if a query isn't fast enough?\
+\
+3) What if my workload changes over time?\
+\
+4) What if my table schema's change over time?\
+\
+5) How do I parallelize SQL?  Does ability lookup by arbitrary attributes make this hard?\
+\
+6) Are there some things that are painful?  How do I find the three most recent tweets a user wrote?\
+\
+7) What about more complicated analytics, e.g., finding the sentiment of tweets, or clustering users by their similarity\
+}

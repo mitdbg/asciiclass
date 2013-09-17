@@ -1,0 +1,157 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww17000\viewh26560\viewkind1
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\b\fs24 \cf0 6.885 Lecture 3  ---- 								9/12/2013  \
+\
+Data Models (con't), Data Wrangling, Intro to Data Integration\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\fs32 \cf0 Data Models\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\fs24 \cf0 \
+
+\b0 Last time, discussed three data models (Network, Hierarchical, and Relational) and their pros and cons.\
+\
+Looked at "bike shop example"\
+\
+(Show slide)\
+\
+Discussed notions of physical and logical data independence?  (What's that?)\
+\
+Ability to change (physical/logical) representation of data without changing programs that operate on it.\
+\
+\ul What else might I want from a data model?
+\b \
+\ulnone \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Efficient loading support\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Support for complex (application specific) data types and operations\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 	Why not just copy data out of database?\
+	"Push code to data"\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 "Data Esperanto"\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Support for "semi-structured" or "schema later"\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Declarative (non-record at a time) access language?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Ordered Sequences? \
+\
+Deep Hierarchies?  Graphs?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b\fs30 \cf0 Unified Logging Infrastructure\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\fs24 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 \ul What is the problem they are trying to solve?\
+\ulnone \
+Need to aggregate logs across many different systems and many different servers to do log analysis (where are failures, how loaded are machines, what content is being accessed, etc.)\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 \ul What does this paper say?\
+\
+\ulnone Not having a schema for log files sucks -- each developer picks their own schema, and it makes doing any kind of analysis basically impossible\
+\
+\ul So what is the soluton?\
+\
+\ulnone Enforce a schema\
+\
+In particular, every event has a "name" -- client:page:section:component:element:action,  and all log records have the format:\
+\
+event: (initiator, name, user, session, ip, timestamp, details)\
+\
+where details holds a set of key-value pairs\
+\
+This is serialized using thrift.  Thrift (like Protocol Buffers) provides a platform independent way to serialize data structures.  Doesn't provide a query language!\
+\
+Note that this is not relational.\
+\
+How do they query -- using "Oink", a variant of Pig!, a declarative data processing system.\
+\
+(Break)\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b\fs32 \cf0 Data Wrangling\
+\
+
+\b0\fs26 Anant Bhardwaj going to present.  Now that we understand why we want to structure data, we are going to talk about how we do it.  Wrangler is a "data cleaning" tool -- that takes data that doesn't conform to a tabular structure, but that has "record oriented" data in it, and turns it into tables.\
+\
+(Show wikipedia movies page)\
+\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Data Integration
+\b0 \
+\
+Main topic for next time.  Once you've got data in a tabular representation, you often need to combine it with other data sets.\
+\
+Examples:\
+\
+- data about people from two different sources (e.g., authors of papers and an official list of MIT professors)\
+\
+OR\
+\
+- data from two organizations that are merging (e.g., payroll and HR creating a unified system, or USAirways and Continental merger)\
+\
+OR\
+\
+- sales record from two different sources, want to compute the net revenue;  taxes in different locations are handled differently (sometimes included in price, e.g., in Europe, sometimes not.)\
+\
+\
+\
+\
+\
+}
