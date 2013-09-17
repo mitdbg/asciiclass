@@ -3,6 +3,9 @@ by Xian Li, Xin Luna Dong, Kenneth Lyons, Weiyi Meng, and Divesh Srivastava
 
 == Multiple sources of data on the deep web
 
+From Mike's talk last time
+  - Aggregating data from different sources on the web is hard.  Let's quantify it!
+
 What is the deep web?
   - We like to think of the web as semistructured, but in practice, much of its HTML comes from structured sources
   - RDBMS -> web application -> HTML/Javascript -> Browser
@@ -118,6 +121,8 @@ Egg - $6           -> ITEM - PRICE
 Crowd workers train machine learning by correcting mistakes, machine learning saves crowd workers time.
 
 We have tons of sources of data, and often the most interesting forms of disambiguation come from humans, rather than our data sources.
+ - Goby integrates 80,000 data sources for event data.
+ - Locu, in the US alone has to worry about 1-3M restaurants, 10-25M local businesses.
 
 Let's talk about two examples.
 
