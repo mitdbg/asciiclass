@@ -1,0 +1,102 @@
+= Data Tamer
+Mike Stonebraker
+
+Things you need to do for data curation
+ - ingest
+ - validate
+ - transform
+ - correct
+ - consolidate (dedup)
+ - visualize information to be integrated
+
+Traditional wisdom on ETL (Extract-Transform-Load systems)
+  - some human(s) define a global schema
+  - assign a programmer to each data source to
+   - understand it
+   - code up a mapping to the global schema
+   - write cleaning routines to tame the crappy data that was stored 20 years ago
+   - run the ETL process
+ - (scales to ~25 data sources before you go crazy)
+ - what if global schema changes over time?
+
+What about the rest of your data sources?
+ - typical enterprise has 5K data sources.
+  - FedEx: ~6K
+  - Verizon: ~12K
+ - web aggregation has an even harder time!
+  - Example: goby integrates 80,000 data sources across the web for event information
+
+Goby example
+ - search for skiing in vermont on goby
+ - three entries for seemingly different Mount Snow, each with different addresses, aggregated from different sources
+
+Why is this so hard?  Why did it get three Mount Snows?
+ - Different sites have different, conflicting information
+ - Mount Snow has >3 locations: mountain, cabins, ski lodge, etc.
+
+How Goby does it
+ - Hire librarians to model the data
+ - Hire people in Argentina ($15/hr instead of $80/hr) to write python scripts to scrape their 80,000 sources
+
+Novartis example
+Traditional ETL system loads customer sales, product data.
+They also have thousands of bench scientists that work in wet labs and take notes in a spreadsheet-like lab notebook.
+ - 8,000 independently constructed spreadsheets/databases
+ - different languages in different countries
+ - each scientist/group has their own schema
+ - but you want to integrate them, since you want to have one place in the company to search what everyone is working on.
+
+Verisk Health example
+Integrates 300 medical insurance sources
+How to integrate data on a single medical office referred to by different insurance sources?
+Hired a company in Cleveland to integrate data by the record, potentially calling doctors' offices to help figure out who is who.
+
+
+= Data Tamer
+All of these examples are ad-hoc and not core to the business of these companies
+Data Tamer helps with these long tail examples
+  - do it better/cheaper/faster than the ad-hoc examples
+  - don't do it perfectly, since no one will pay enough for that
+  - use machine learning and statistics to manage the majority of the work
+  - ask for human help only when automatic algorithms are unsure
+
+Ingestion
+ - Assumes data is in a collection of key-value pairs per object.
+ - Store as semistructured data in postgres
+
+Schema integration
+ - Must be told whether there is a predefined partial or complete global schema (usually there isn't)
+ - Starts integrating to that global schema
+  - uses synonyms, templates, and authoritative tables for help
+  - first couple of sources require asking crowd/humans for answers: is this record equal to that record? is this attribute equal to that attribute?
+  - system gets better over time (active learning)
+ - How to tell automatically if these two things (an attribute name, a value) are the same?
+  - statistical tests (T-test) to see if two columns come from the same distribution
+  - cosine similarity on attribute names
+  - cosine similarity on text data
+ - After asking crowd 100-200 questions, get 90% of matching done automatically.  Cut human work out dramatically.  Crowd answers remaining 10% of questions.
+
+Data Tamer's crowd
+ - Can't use Amazon's MTurk: random person around the world won't know if chemical X = chemical Y
+ - This is expertsourcing, not crowdsourcing
+ - Algorithms adjust their understanding of the hierarchy and who is an expert based on how well they answered questions in the past.
+ - Load-balance to not annoy the experts
+ - Not easy: the IT department is running this effort, but experts don't report to IT.  To motivate people, offer them assorted amounts of internal company money/street credibility.
+
+Interface for schema integration
+ - System gives you a ranked list of all automatically matched elements
+ - Operator moves threshold up and down to say what matches they trust
+ - All matches below the threshold get asked of the crowd
+
+Entity consolidation: how to tell that two sources are describing the same value?
+ - Entity matching on all of the attributes: how many of the values match up?
+ - Weigh each attribute by the value of attribute and distribution
+ - This is a weighted nearest neighbor problem, which is an N^2 problem, which would take too long on 20M records, etc.
+ - Speed it up by heuristically requiring matches to pass a certain threshold, and then doing clustering within thresholds.
+ - Domain-agnostic algorithm is wildly better than Goby's, and a little better than other hand-tuned domain-specific systems.
+
+Semantics matter too
+ - simple stuff like currency conversion
+ - harder stuff like: salary in the US is pre-tax in dollars. salary in France is post-tax, including a lunch allowance.
+
+System can also be used for cleaning purposes: if you deduplicate two records, then anything that's not the same between them is grounds for cleaning.
