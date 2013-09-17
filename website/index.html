@@ -20,6 +20,17 @@ body,tr {
           font-weight: 300;
           background-color: #fdfdfd;
       }
+body tr.current {
+  border: 2px solid rgb(53, 150, 189);
+}
+
+body tr td.nextclass {
+  font-size: 18px;
+  text-align: center;
+  background: rgb(53, 150, 189);
+  border: 2px solid rgb(53, 150, 189);
+  color: white;
+}
 
 body {
   padding-top: 45px;
@@ -58,11 +69,13 @@ a[name] {
                 }
             } while (holiday);
             var now = new Date();
+            spans[i].innerHTML = dayString;
             if (lastClassWasBefore && curClass.getTime() > new Date()) { // this is the next class
-                spans[i].innerHTML = "<a name='schedule'></a>" + dayString + "<p> <b>(This is the next class!)</b>";
+                var tr = $(spans[i]).parent().parent().parent();
+                tr.addClass("current");
+                tr.before("<tr><td class='nextclass' colspan=5><a name='schedule'></a>Next Class!</td></tr>");
                 lastClassWasBefore = false;
-            } else 
-                spans[i].innerHTML = dayString;
+            }
             curClass = new Date(curClass.getTime() + (24 * 60 * 60 * gap * 1000));
             if (gap == 5) { gap = 2; } else { gap = 5; }
         }
