@@ -1,0 +1,200 @@
+= Truth Finding on the Deep Web: Is the Problem Solved?
+by Xian Li, Xin Luna Dong, Kenneth Lyons, Weiyi Meng, and Divesh Srivastava
+
+== Multiple sources of data on the deep web
+
+What is the deep web?
+  - We like to think of the web as semistructured, but in practice, much of its HTML comes from structured sources
+  - RDBMS -> web application -> HTML/Javascript -> Browser
+  - The deep web is the part of the web that provides an interface to this structured data.
+
+Objects in a domain: Flights in the airline industry, or stocks in the finance industry.
+
+Each object has attributes/data items: A flight has a takeoff time, or a duration.
+
+There are many sources for your flight: The Federal Aviation Administration, or the airline's website.
+  - Of all the different sources you'll hear from, there's only one true value for each attribute.
+
+== Two datasets
+
+Stock
+  - Crawled 55 deep web sites for 1000 stocks every day in July (a typical summer internship research project data collection month)
+  - Attributes per source: 3-71.  333 total, 153 unique.  13.7% provided by at least one third of sources.
+  - Picked best 5 sources (presumably by popularity), and majority voted to get best value for each attribute.
+
+Flight
+  - Crawled 38 deep web sources for flight information
+  - Attributes per source: 4-15. 43 total, 15 unique.  40% provided by at least one half of sources.
+  - Gold standard: the three airline websites.
+  
+== Is the extracted data sane?
+
+Data redundancy
+  - Stocks
+    - most sources (90%) provide all stocks.
+    - 80% of sources cover >50% of the attributes.
+  - Flight
+    - 36% of sources cover 90% of the flights.
+    - 28% of sources cover >50% of the attributes.
+
+Attribute value consistency
+  - Measured # values per attribute, entropy of values, deviation from dominant value, how dominant the dominant value is, etc.
+  - What's the point of all of these measures?  Different measures of disagreement---some measure variety of answers, other measure distance of answers.
+  - Stock: only 17% of attributes have same value (37% if you exclude one bad source).  Still, they claim low entropy, low deviation even when values are different.
+  - Finance: 61% of attributes have same value.  Generally lower entropy, deviation, except for departure times.
+
+Why are sources not consistent w/ one-another?
+  - Semantic ambiguity (different understandings of what the same field means)
+  - Instance ambiguity (talking about a different stock)
+  - Out-of-date data (yesterday's data)
+  - Incorrect units (millions, not billions)
+  - Purely erroneous data
+
+Do dominant values work?
+  - Stock: 73% of the data is supported by > 50% of sources.  In those cases, 98% are consistent with the gold standard! (overall it's correct 90.8% of the time)
+  - Flight: 82% have data supported by > 50% of sources.  But only 88% consistent w/ gold. (overall it's correct 86.4% of the time)
+  - Less source support, more inconsistency with gold.
+  
+Are sources accurate?
+  - Stock: avg. accuracy is .96, authoritative sources have .83-.94 agreement with gold
+  - Flight: avg. accuracy is .80, authoritative sources have .94-.98 agreement with gold
+  - Not quite perfect, and sometimes combining sources is more accurate than any one source.
+
+Is data copied?
+  - Yes, in both verticals.
+  - Even more importantly: removing duplicate data can improve accuracy!
+
+== Combining sources: Data Fusion
+
+Compared 15 approaches from the literature to a baseline majority vote-based scheme.
+
+Force all algorithms to outputa fused data value for each attribute, so precision = recall here
+  - precision: fraction of labels the fused algorithm gets correct
+  - recall: fraction of gold standard that is correct
+
+High level
+  - Majority Vote < Best Source < Best Fusion Method
+  - This suggests that knowing the best sources is important, and also that picking fusion methods matters.
+  - Table 9: Vote on Stock->.922, AccuFormatter/AccuSimAttr->.941
+  - Table 9: Vote on Finance->.887, AccuCopy->.987
+  - Learning a Bayesian prior on which source is best is helpful.
+  - Learning which sources copy from one-another is helpful.
+  - The most accurate methods are slowest by a factor of 1000X (Figure 12).
+  - There is no one fusion method that beats the rest.
+  - Fusing small number of good sources > fusing all sources.
+  
+== Takeaways
+
+-> Every source has its own attributes of interest, and its own values for those attributes.
+-> Learning the best source matters.
+-> Combining sources, even with simple majority vote, helps improve accuracy.
+-> You can trade off improved accuracy for algorithmic efficiency.
+-> There is no one best algorithm.
+
+
+
+= Crowdsourcing at Locu: Working with Multiple Uncertain Data Sources
+
+== What Locu does
+
+If you've booked a seat at a restaurant on OpenTable, or looked at a menu on Yelp, FourSquare, TripAdvisor, CitySearch, you've maybe seen "Powered by Locu" below the price list.
+
+Step 1: Crawl web, find merchant website (e.g., restaurant, yoga studio).
+Step 2: Find the thing that looks like a price list (e.g., menu, services list).  May be a flash animation, pdf, image, html table, etc.
+Step 3: Machine learning models classify webpage portions as Junk (e.g., "Stop by for a great meal!"), Menu (e.g., breakfast, lunch, dinner), Menu item (e.g., saag paneer), menu item description, price, etc.
+Step 4: Hundreds of crowd workers from places like oDesk correct any mistakes the machine learning made.
+
+Breakfast          -> MENU
+
+Drinks             -> SECTION
+...
+
+Sandwiches         -> SECTION
+
+Reuben - $9        -> ITEM - PRICE
+Egg - $6           -> ITEM - PRICE
+
+
+Crowd workers train machine learning by correcting mistakes, machine learning saves crowd workers time.
+
+We have tons of sources of data, and often the most interesting forms of disambiguation come from humans, rather than our data sources.
+
+Let's talk about two examples.
+
+== Microtasks for entity disambiguation
+
+Data partners like FourSquare or OpenTable send us venue listings all the time.  "Do you have the menu for Joe's Pizzeria on 135 Main St. with Phone number 6171234567?"
+
+We have their database of listings and our database of listings:
+them: Joe's Pizzeria on 135 Main St. with Phone number 6171234567
+us:   Joe's Pizza    on 134 Main St. with Phone number 6171234567
+
+Step 1: A classifier trained with previous examples compares things like edit distance on strings, distance between addresses, equality of phone numbers, etc..
+  -> YES!  Same venue.   NOT SURE!  They are similar, but unclear.  NO!  These have none of the same values.
+Step 2: For NOT SURE! matches, we send both venue listings to CrowdFlower/Amazon's Mechanical Turk, asking multiple workers to pick "YES!  NOT SURE!  NO!"
+  -> Microtasks: small, well-defined answer to a question.  Pay 1-10 cents per question, get a human response back.
+
+Problem: 30% of answers you get back might be incorrect.
+
+Solution: majority vote---ask 5 workers.
+  Y Y Y Y N -> YES!
+
+Do the math:
+P[being wrong]
+   =
+P[3 Ns] + P[4 Ns] + P[5 Ns]
+   =
+.3*.3*.3*.7*.7 + .3*.3*.3*.3*.7 + .3*.3*.3*.3*.3
+   =
+2%
+
+Can we do better?  Identify bad workers.
+
+Three workers:
+Y Y N
+N N Y
+N N Y
+
+workers 1&2 always agree, worker 3 always disagrees with the crowd.
+
+Iterative algorithm: your quality is proportional to how much you agree w/ the crowd.  Your weight in weighted majority vote is your quality.  Iterate between worker quality and majority vote.
+  -> Panos Ipeirotis et al.: "Quality Management on Amazon Mechanical Turk"
+
+Note: these techniques are not so different from the ones in the paper.
+  - majority vote is your friend
+  - picking sources matters!
+  
+== Hierarchical tasks for data structuring
+Microtasks are crazy pessimistic about the world: pick small, foolproof tasks, and don't trust a human being to complete them correctly.
+One of Locu's most important jobs is hard to solve via Microtasks, too.
+
+Menu structuring (e.g, label menu, menu item, price, etc.)
+  - takes one worker almost no time if we classified the price list correctly.
+But if our menu classifiers don't work, and the place has price lists for breakfast, lunch, dinner, holiday, weekend, and brunch, it might take hours for a worker to type up all of the content in the flash animation.
+
+Problems we encounter
+  - workers take variable time to do work: not microtask
+  - two workers might have slightly different results: can't majority vote
+  - workers make mistakes repeatedly: need to train them
+
+Solution: hierarchy
+ -> Data Entry Specialists (DES): correct machine learning, type up incorrectly classified menus
+ -> Reviewers: spot check DES tasks
+ -> (Reviewers): spot check reviewer tasks.
+
+As a DES's reviews come back better and better, we promote them to reviewer status.  Pay better, pay per hour, etc.
+As a reviewer does a better job reviewing, they review reviewers.
+
+The review process helps us catch mistakes while training up new DES.  We also have cross-cutting roles for managers who did well as reviewers, and now holistically look at workers and suggest how to improve their work (e.g., "go read this documentation on grammar")
+
+Interesting factoid: you can train a regression to predict how badly a task is done by a DES, and whether it needs review.
+
+Benefits
+  - On average, close to 1 worker per task
+  - Workers see upward mobility, not an assembly line
+  - Review improves quality + trains workers
+
+== Takeaways
+
+-> Humans are awesome, and you should trust them to do high-level tasks (but verify their work sometimes)
+-> Mixed-initiative models for humans + machine learning make everyone happy!
