@@ -33,7 +33,6 @@ Specifically it is a partially cleaned-up wiki source for the table toward the e
 
 Go to the [Data Wrangler website](http://vis.stanford.edu/wrangler/app/).  Load both of the datasets (we recommend cutting out a small subset -- 100~ lines) into Data Wrangler and try playing with the tool.
 
-**note**: `lab3/wrangler` contains a modified python wrangler module, which you should use for this lab.  This means that the python scripts that you export when using Data Wrangler should be run in the `lab3/` folder.
 
 Some tips using Wrangler:
 
@@ -61,8 +60,8 @@ Generate a list of word-meaning pairs. The output should look like:
 
 The `synsets.txt` file is too large to load into the Wrangler GUI, so you need to use the GUI to wrangle a subset of the data, then run a command line script on the complete data set.
 
-The generated script depends on `dw.py`, in the `datawrangler` directory in the lab 3 repository.  Note that this is an updated version of 
-`dw.py` that ships when you `easy-install` the `datawrangler` python package -- python should include the local `dw.py` as long as you run from the `lab3` directory.
+**note**: `lab3/wrangler` contains a modified python wrangler module, which you should use for this lab.  This means that the python scripts that you export when using Data Wrangler should be run in the `lab3/` folder.
+
 
 #### Questions
 
