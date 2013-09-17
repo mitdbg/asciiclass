@@ -1,0 +1,78 @@
+Structured data & Data wrangling
+
+= Wrapping up last week's discussion on structured data
+
+Hierarchical data models
+  - duplicated data
+  - lack of data independence
+  - no high-levle language
+  
+Network model was a low-level answer to hierarchical model
+  - complicated navigational programming (a particular implementation detail of CODASYL)
+  - lack od data independence
+  - no high-level language
+  - programmer in full control
+  
+Relational model
+  - fully expressive
+  - physical and logical data independence
+  - intuitive programming model
+  - efficiency unclear w/o concrete implementation
+  - won out because IBM put its stamp of approval on it
+
+Relational model is schema-first.  XML: schema-later
+  - records are self-describing, but someone can come by and structure it later.
+  - Often arises when you're integrating two different datasets, so before integration you're still resolving schemas.
+  - hasn't seen crazy uptick as of late.  JSON seems to have taken its place, but with less stringent schema rules.
+  - JSON is really nice for prototyping.  It's also used in production systems, but then the developer documents the hell out of the schema, even if its not coded up.
+  - also nice for handling schemas that use only a few fields on each record.  self-describing data might be more effective than developing schemas w/ tons of nulls in them.
+
+Object-relational model
+  - support for complex types/operations in the DB, since the data model and functionality is stored in the DB
+  - storing computation near data saves round-trip time by pushing code to the data
+  - perhaps not as good for modularity, since you're limited in stored procedure language
+  - bad for data portability: SQL is supposed to be the intergalactic standard---why allow people to attach other code to it?
+
+Sam mentions features he'd love to have in SQL:
+  - ordering: you can order data in SQL, but you're not supposed to assume the data is in order downstream
+   -> it's hard in SQL to say "give me the 5th event before this one in time order"
+   -> SQL relies on algebraic optimizations to be successful.  It's harder to get algebraic transforms to work on ordered relations.
+  - graphs: want to be able to model graphs, node traversals, etc.
+
+Are schemas important/necessary?  The Twitter logging paper paints a nice picture of an organic evolution of these things:
+  - log data to disk
+  - other people in the organization want the data, so you store it in some central location
+  - but then people don't know what data you're storing, so you write up documentation of your json-encoded data
+  - but then people change the schema or misinterpret it, and you wish you had programmatically encoded the schema
+  - so you switch to a structured form like a database schema, protocol buffer, etc.
+  - and now the schema is hardened and enforced across the data that links to that schema.
+  - as the number of people working with the data grows, you likely move along this spectrum to ease miscommunication.
+
+= Data Wrangler (presented by Anant Bhardwaj)
+Data Wrangler [http://vis.stanford.edu/wrangler/] is a tool for cleaning and reformatting datasets
+ - don't have to write code to clean data: you might be a business analyst that knows to use Excel, but can't write a script to clean your data
+ - direct manipulation: click on a line of text, identify how you want to transform it, and Wrangler learns a template for the transformations to apply to other lines
+
+3 types of operators
+ - map: take item X, convert it to X'.  cut [some text from a string], edit [convert text to other text], delete [cut with a condition], extract, split, merge
+ - structure operators: change structure of table
+  -> transpose: table value Aij becomes Aji
+    A B       A | 1
+    ---   ->  
+    1 2       B | 2
+  -> drop: drop a column from a table
+  -> wrap: 
+  -> fold:
+   city1 | 2001   | 56                                  2001   2002
+   city1 |  2002  | 70  fold year onto city:    city1    56     70
+   city2 |  2001  | 45                          city2    45     50
+   city2 |  2002  | 50   
+  -> unfold: reverses the fold
+ - positional operators
+  -> fill: copies some data from one element to others
+  -> translate: moves a row left or right
+  -> promote: take a row, and move its columns to the header of a table
+  -> sort: reorder data
+
+Once you're done wrangling, you can export either the wrangled data, or a python/javascript script that can work on a larger dataset.
+
