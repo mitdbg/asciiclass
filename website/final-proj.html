@@ -1,0 +1,233 @@
+<html>
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap --> 
+    <meta charset="utf-8">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="dateformat.js"></script>
+<style type="text/css">
+      html {
+        overflow-y:scroll;
+      }
+
+body,tr {
+          text-align: left;
+          font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+          font-size: 15px;
+          font-weight: 300;
+          background-color: #fdfdfd;
+      }
+
+body {
+  padding-top: 45px;
+}
+body tr.current {
+  border: 2px solid rgb(53, 150, 189);
+}
+body tr td.nextclass {
+  font-size: 18px;
+  text-align: center;
+  background: rgb(53, 150, 189);
+  border: 2px solid rgb(53, 150, 189);
+  color: white;
+}
+
+li.project {
+  padding-left: 15px;
+  padding-right: 100px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: justify;
+  spacing: 5px
+}
+
+a[name] {
+  padding-top: 55px;
+  margin-top: -55px;
+  display: inline-block; /* required for webkit browsers */
+}
+
+</style>
+
+<title>6.885 Final Project</title>
+
+</head>
+<body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">6885 Final Project</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">              
+              <li ><a href="#projects">Project Suggestions</a></li>
+              <li> </li>
+              <li ><a href="index.html"><i class="icon-small icon-home"></i>&nbsp;&nbsp;Class Home</a></li>
+
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+<div class = "container">
+
+
+<div class = "container">
+  <h3>Important Dates:</h3>
+  <div class="row">
+    <div class="span3"><b>Final Project Teams:</b></div>  <div class="span8"> Tuesday, September 24, 2013 </div>
+  </div>
+  <div class="row">
+    <div class="span3"><b>Final Project Proposal:</b></div>  <div class="span8"> Tuesday, October 8, 2013 </div>
+  </div>
+  <div class="row">
+    <div class="span3"><b>Final Project Report:</b></div>  <div class="span8"> Thursday, December 10, 2013 </div>
+  </div>
+  
+<br>
+A substantial part of the grade (33%) 6.885 consists of a final project.
+This project is meant to be a substantial independent research or
+engineering effort related to material we have studied in class.  Your
+project may involve a comparison of systems we have read about, an
+application of database techniques to a system you are familiar with,
+or be a database-related project in your research area.
+<p>
+This document describes what is expected of a final project and 
+proposes some possible project ideas. 
+
+<h3> What is Expected </h3>
+
+Good class projects can vary dramatically in complexity, scope, and topic.
+The only requirement is that they be related to something we have studied
+in this class and that they contain some element of research -- e.g., that
+you do more than simply engineer a piece of software that someone else
+has described or architected.  To help you determine if your idea is of
+reasonable scope, we will arrange to meet with each group several times
+throughout the semester.
+
+<h3> What to Hand In </h3>
+  
+<b>Team List</b>: On Tuesday, September 24th, please hand in one sheet
+  of paper per team.  Teams should consist of 2 or 3 people.  If you
+  do not have a team, simply turn in a sheet with your name and we
+  will match you up.  In addition, if you have a project in mind,
+  please indicate briefly (1--2 sentences) what you are thinking. We
+  have included a list of possible projects at the end of this
+  document although you are not required to choose from these.
+
+  <br> There are two written deliverables that will be used to grade
+  your project: a project proposal, due on October 8th, and a final
+  report, due on the last day of class, December 10th.
+
+<p>
+<b>Project Proposal</b>: The proposal should consist of 1-2 pages
+describing the problem you plan to solve, outlining how you plan to
+solve it, and describing what you will "deliver" for the final
+project.  We will arrange short meetings with every group before the
+project proposal to help you refine your topic and would be happy to 
+provide feedback on a draft of your proposal before it is due.
+<p>
+
+<b>Final Report</b>: You should prepare a conference-style report on
+your project with <b>maximum length</b> of 15 pages (10 pt font or larger,
+one or two columns, 1 inch margins, single or double spaced -- more is not
+better.)  Your report should introduce and motivate the problem your
+project addresses, describe related work in the area, discuss the
+elements of your solution, and present results that measure the
+behavior, performance, or functionality of your system (with
+comparisons to other related systems as appropriate.)
+<p>
+Because this report is the primary deliverable upon which you will
+be graded, <b>do not treat it as an afterthought</b>.  Plan to leave
+at least a week to do the writing, and make sure your proofread and 
+edit carefully!
+<p>
+Please submit a paper copy of your report in class on Thursday, 12/10
+You will also be expected to give a presentation on your
+project in class that will provide an opportunity for you to present
+a short demo of your work and show what you have done to other students
+in the class.  Details about the format of the presentation
+will be posted as the date gets closer.
+
+<h2> <a name="projects"></a>Project Ideas</h2>
+
+The following is a list of possible project ideas;  you are not
+required to choose from this list -- in fact, we encourage you
+to try to solve a problem of your own choosing!  If you are interested
+in working on one of these projects, contact Professor Curino or Professor Stonebraker and we 
+can put you in touch with students and others around MIT working on these
+ideas.  Note that these are not meant to be complete project proposals, but
+just suggestions for areas to explore -- you will need to flesh them out
+into complete projects by talking with your group members, the course staff,
+and graduate students working on these projects.
+
+<ol style="padding:10px; margin:10px">
+
+<li class="project"> Loading large datasets (> 10 GB) can be very slow, especially when there are many indexes on tables.  One simple trick is to sort data before inserting it, or to drop indexes, insert data, and reload indexes. The goal of this project would be to investigate other techniques to improve load performance in an open source database such as Postgres or MySQL/Innodb.
+   One concrete idea might be "fast bulk load" a la Hbase for MySQL.  HBase uses a MapReduce job to build its indexes. One possible project would be to build a prototype that does the same for a single (or multiple) MySQL Boxes.
+  
+  
+<li class="project"> Hosted database services such as Amazon RDS, Microsoft SQL Azure
+     are starting to become popular.  It is still unclear what the
+     performance impact is of running applications on a local
+     (non-hosted) platform, such as a local enterprise datacenter,
+     versus having the data hosted "in the cloud".  This project would investigate
+  the performance of such systems on a particular workload or workloads(s),
+  e.g., OLAP, OLTP, Web.
+	 
+  
+<li class="project"> Flash storage promises lower latency for random operations than
+conventional disks. However, it also has a number of unusual
+limitations. An interesting project investigates the performance
+impact of using flash memories for DB applications, or for specific DB
+tasks such as indexing or recovery.
+
+  
+<li class="project"> Twitter provides a fire hose of data. Automatically filtering,
+aggregating, analyzing such data can allow to harness the full vlue of
+the data, extracting valuable information.  The idea of this project
+is to investigate stream processing technology to operate on social
+streams, or extract structure from them and store them in a database system.
+
+<li class="project"> Scalable Wrangler. Build a Data Wrangler like interface that
+  scales to larger data sets (millions of rows), or devise a sampling
+  strategy to automatically load the most relevant records (e.g.,
+  representative outliers) into wrangler.  More generally think about
+  how you would improve the wrangling interface.
+  
+<li class="project"> Databases are "schema first", meaning you have to declare a schema, and ensure your data conforms
+to it, before you can load data into the datbase.  The goal of this project would be to build a database
+system that allows you to immediately start manipulating your data, without declaring a schema, by, e.g.,
+auto-generating column names, ignoring improperly formatted tuples in input data, etc.  The database would
+then allow you to clean up the data, renaming columsn and fixing up broken or missing records.
+
+<li class="project"> Compare the performance of a Hadoop-based database like <a href="http://hive.apache.org">Hive</a> to a relational system like MySQL or Postgres on some workload, and understand where the differences come from.  Alternatively, look at implementing on of the advanced features of relational databases that we have discussed in Hive, or improving the optimizer in Hive in some way.
+
+<li class="project"> More generally the performance of different SQL/NoSQL solutions on different workloads (e.g., MySQL vs Postgres vs Hive vs Pig vs Voldemort vs Mongo vs ...)
+
+<li class="project"> Look at running some collection of statistical or machine learning or other data analysis operations inside of a database, and compare their performance them to running those algorithms by copying data out of the database and running in Matlab or some other programming language.  See, for example <a href="http://madlib.net/">Mad Lib</a>.
+
+<li class="project">  Build a mobile app to find nearby phones and search the for related data. For example, a user might request: "I want to see the current view of stata after a winter storm" and the system will try to look for photos taken within the last hour or so on phones that it knows about and then stitch them together to generate a 360 view. Challenges are, for example, designing metadata for photos taken on phones, the query language, and how to forward data (send everything to centralized server and then forward to users vs some kind of peer to peer approach).
+
+<li class="project"> Concurrent insert-heavy tree: a lot of people have looked at using batching to improve the performance of insert-heavy workloads (e.g., LSM tress, COLAs, buffer trees). But these are still mostly sequential data structures. The goal of this project is to design a concurrent version of such a tree.
+
+<li class="project"> DB deadlock detector: deadlocks within the DB are  nasty to debug. The goal of this project is to build a tool which analyzes code to automatically find deadlocks, either statically or with runtime instrumentation? As a test for the tool, you might try it on the TPC-C implementation in oltpbench (<a href="http://www.oltpbenchmark.com">oltpbench</a>), which is *full* of deadlocks, and have it automatically find them. 
+
+<li class="project"> Query plan JIT compiler: now that in-memory DBs are becoming more popular, it might make sense to try generating native code for query plan evaluation to reduce the latency of intepreted plans. Some gains might be achieved with runtime type knowledge just as in standard compilers. It would be fun to take SimpleDB and generate (for instance) LLVM bytecode on the fly for query evaluation.
+
+<li class="project"> Benchmark study of different file systems for database performance.  This woould involve an experimental study of different file systems (e.g., ext4, zfs, btrfs, etc.) where you measure how much the choice of file system makes on performance for non in-memory workloads.  You could look at both disk and flash.
+
+
+</ol>
+</div>
+</div>
+</body>
+</html>
