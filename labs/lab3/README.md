@@ -72,13 +72,13 @@ The `synsets.txt` file is too large to load into the Wrangler GUI, so you need t
 
 Use the tool to generate output as follows, i.e., each line in the output contains a country, a year, and the position of the county in that year (if within top 4).
 
-        Brazil, 1962, 1
-        Brazil, 1970, 1
-        Brazil, 1994, 1
-        Brazil, 2002, 1
-        Brazil, 1958, 1
-        Brazil, 1998, 2
-        Brazil, 1950, 2
+        BRA, 1962, 1
+        BRA, 1970, 1
+        BRA, 1994, 1
+        BRA, 2002, 1
+        BRA, 1958, 1
+        BRA, 1998, 2
+        BRA, 1950, 2
         ...
 
 It may help to 
