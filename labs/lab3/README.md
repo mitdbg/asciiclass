@@ -59,9 +59,8 @@ Generate a list of word-meaning pairs. The output should look like:
 
 The `synsets.txt` file is too large to load into the Wrangler GUI, so you need to use the GUI to wrangle a subset of the data, then run a command line script on the complete data set.
 
-To run the script, you will need to install the python data wrangler libraries, which can be obtained by typing:
-
-        sudo easy_install datawrangler
+The generated script depends on `dw.py`, in the `datawrangler` directory in the lab 3 repository.  Note that this is an updated version of 
+`dw.py` that ships when you `easy-install` the `datawrangler` python package -- python should include the local `dw.py` as long as you run from the `lab3` directory.
 
 #### Questions
 
