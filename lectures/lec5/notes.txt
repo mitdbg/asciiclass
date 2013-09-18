@@ -21,7 +21,7 @@ There are many sources for your flight: The Federal Aviation Administration, or 
 == Two datasets
 
 Stock
-  - Crawled 55 deep web sites for 1000 stocks every day in July (a typical summer internship research project data collection month)
+  - Crawled 55 deep web sites for 1000 stocks every day in July
   - Attributes per source: 3-71.  333 total, 153 unique.  13.7% provided by at least one third of sources.
   - Picked best 5 sources (presumably by popularity), and majority voted to get best value for each attribute.
 
@@ -44,7 +44,7 @@ Attribute value consistency
   - Measured # values per attribute, entropy of values, deviation from dominant value, how dominant the dominant value is, etc.
   - What's the point of all of these measures?  Different measures of disagreement---some measure variety of answers, other measure distance of answers.
   - Stock: only 17% of attributes have same value (37% if you exclude one bad source).  Still, they claim low entropy, low deviation even when values are different.
-  - Finance: 61% of attributes have same value.  Generally lower entropy, deviation, except for departure times.
+  - Flight: 61% of attributes have same value.  Generally lower entropy, deviation, except for departure times.
 
 Why are sources not consistent w/ one-another?
   - Semantic ambiguity (different understandings of what the same field means)
@@ -56,10 +56,9 @@ Why are sources not consistent w/ one-another?
 Do dominant values work?
   - Stock: 73% of the data is supported by > 50% of sources.  In those cases, 98% are consistent with the gold standard! (overall it's correct 90.8% of the time)
   - Flight: 82% have data supported by > 50% of sources.  But only 88% consistent w/ gold. (overall it's correct 86.4% of the time)
-  - Less source support, more inconsistency with gold.
   
 Are sources accurate?
-  - Stock: avg. accuracy is .96, authoritative sources have .83-.94 agreement with gold
+  - Stock: avg. accuracy is .86, authoritative sources have .83-.94 agreement with gold
   - Flight: avg. accuracy is .80, authoritative sources have .94-.98 agreement with gold
   - Not quite perfect, and sometimes combining sources is more accurate than any one source.
 
@@ -202,4 +201,5 @@ Benefits
 == Takeaways
 
 -> Humans are awesome, and you should trust them to do high-level tasks (but verify their work sometimes)
+-> Use the right crowd for the right task
 -> Mixed-initiative models for humans + machine learning make everyone happy!
