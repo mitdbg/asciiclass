@@ -225,6 +225,16 @@ then allow you to clean up the data, renaming columsn and fixing up broken or mi
 
 <li class="project"> Benchmark study of different file systems for database performance.  This woould involve an experimental study of different file systems (e.g., ext4, zfs, btrfs, etc.) where you measure how much the choice of file system makes on performance for non in-memory workloads.  You could look at both disk and flash.
 
+<li class="project"> <b>Build an auto-cleaning database:</b> A database that, based on user input, automatically "predicts" missing values in a column using a standard machine learning technique on the remaining columns. A more advanced version of this database can pick the most suited machine learning algorithm that best predicts missing values.
+
+<li class="project"> <b>A graph visualization system:</b> Most graph visualization tools end up displaying a giant mess of links. Build an interactive visualization tool that automatically clusters or samples nodes and edges so that the user is not overwhelmed with the visualization, but the user can interact by zooming in/out in order to get a better sense for the data. Design scalable techniques such that these interactions are seamless.
+
+<li class="project"> <b>Data cleaning experimental study:</b> Do an experimental study of the common data cleaning errors found in practice in log files found online, and develop algorithms for automatically wrangling log files to a more structured form.
+
+<li class="project"><b>Graph processing language:</b> Most graph processing systems end up focusing on simple algorithms (shortest paths, pagerank) that are not really used by real graph analysts. Study http://snap.stanford.edu/snap/description.html to identify common patterns of accesses made by different network algorithms, and design a wrapper over a relational or graph database that can supports a large fraction of these operations.
+
+<li class="project"> <b>Rapid Histogram Visualizations:</b> Study the online aggregation paper, build a system to use the online aggregation techniques to produce rapid histogram visualizations of aggregates that improve over time. Then, study the impact of various sampling techniques to get to even better visualizations that are accurate but are computed on much less data.
+
 
 </ol>
 </div>
