@@ -47,5 +47,7 @@ Questions to answer:
  * What were the most important features that powered your technique?
  * How would you avoid pairwise comparison of all venues across both datasets?
 
+You also need to submit your result file [matches_test.csv]() and the script that outputs this file when run from inside the folder having [locu_train.json](), [foursquare_train.json](), [matches_train.csv](), [locu_test.json](),  and [foursquare_test.json]().
 
-*Fill this in*
+Both the files need to be uploaded on http://anantb.csail.mit.edu/leaderboard/ (you need to register for an account -- please use your MIT ID). On this page you can also see the statistics of other students so that you can improve your algorithm to match those.
+
