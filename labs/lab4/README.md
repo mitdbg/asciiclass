@@ -13,7 +13,10 @@ such as venue names and phone numbers.
 Rather than have you compete against yourself,  we've turned this lab
 into a competition: students will submit their best matching
 algorihtms and try to beat one-another on a leaderboard to identify
-the best algorithm.  We will give a nice prize to the winning team or teams.
+the best algorithm.  You may enter this competition yourself or as a team of up to 3 students.
+  We will give a nice prize to the winning team or teams.
+
+
 
 This lab uses several files for you to test your entity resolution algorithms on:
  * [locu_train.json]()
@@ -44,12 +47,20 @@ Your job is to generate `matches_test.csv`, a mapping that looks like `matches_t
 
 # Submission Instructions
 
-Questions to answer:
- * Describe your best technique, as well as its precision, recall, and F1 score.
+To compete in the challenge, you should go to [http://6885.csail.mit.edu/leaderboard/](http://6885.csail.mit.edu/leaderboard/). Once you have registered for an account, you can upload your results and also see the results of other students so that you can improve your algorithm and compete for the grand prize! 
+
+On website, you will need to submit your result file ([matches_test.csv]()) and the script/program that outputs this file.  This script/program should be  run from inside a directory containing the files [locu_train.json](), [foursquare_train.json](), [matches_train.csv](), [locu_test.json](),  and [foursquare_test.json](), and should output [matches_test.csv]() based on these files.  It can be a script (preferred) or a directory with a README.txt file describing how to compile/run your program.  Please make sure you include a list of packages that need to be installed on a stock Ubuntu 12 installation for your program to run.   We will run your program against a set of test data we have not provided as a final test of the winning student or team's code.
+
+In addition to competing in the challenge, please upload a text file to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab4" assignment. Each team member should upload their own copy of this file (it is OK if uploads of team members are identical).
+
+The text file should contain:
+
+1. Your user name and registered email address on the competition site.
+1. A list of your teammates.
+1. Answers to the following questions:
+ * Describe your entity resolution technique, as well as its precision, recall, and F1 score.
  * What were the most important features that powered your technique?
- * How would you avoid pairwise comparison of all venues across both datasets?
+ * How did you avoid pairwise comparison of all venues across both datasets?
 
-You also need to submit your result file ([matches_test.csv]()) and the script that outputs this file when run from inside the folder having [locu_train.json](), [foursquare_train.json](), [matches_train.csv](), [locu_test.json](),  and [foursquare_test.json]().
 
-Both the files need to be uploaded on http://anantb.csail.mit.edu/leaderboard/ (you need to register for an account). On this page you can also see the statistics of other students so that you can improve your algorithm to match those.
 
