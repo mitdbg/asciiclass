@@ -38,7 +38,14 @@ Your job is to generate `matches_test.csv`, a mapping that looks like `matches_t
  * There are many different features that can suggest venue similarity. Field equality is a good one: if the names or phone numbers of venues are equal, the venues might be equal.  But this is a relatively high-precision, low-recall feature (`Bob's Pizza` and `Bob's Pizzeria` aren't equal), and so you'll have to add other ones.  For example, [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance) between two strings offers finer granularity of how similar two strings are.  At Locu we have many tens of features, ranging from field equality to more esoteric but useful ones (e.g., "Does the first numeric value in the address field match?").
  * Since there are many features, you need some way to combine them.  A simple weighted average of values, where more important values (similar names) are weighed more highly will get you quite far.  In practice, you'd want to build a classifier that takes these features and learns the weights based on the training data.  If you're using Python and want to build a classifier, check out [scikit-learn](http://scikit-learn.org/).  We've seen good results with the decision tree ensemble/random forest techniques.  Note that this step will take time, so only do it if you've hand-rolled your own reasonable matcher already.
  * It's possible to be near 1 for precision/recall/F1 with enough training data and good enough machine learning models, but this took Locu engineers several months to get right.
+ * These datasets aren't too large, but in practice we're matching several million venues across datasets.  Performing an `O(N^2)` comparison on all venues would take too long in those cases, and so in practice, we have some heuristics to narrow down the likely candidates.
 
 # Submission Instructions
+
+Questions to answer:
+ * Describe your best technique, as well as its precision, recall, and F1 score.
+ * What were the most important features that powered your technique?
+ * How would you avoid pairwise comparison of all venues across both datasets?
+
 
 *Fill this in*
