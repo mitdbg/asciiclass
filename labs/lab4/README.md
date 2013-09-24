@@ -47,7 +47,7 @@ Your job is to generate `matches_test.csv`, a mapping that looks like `matches_t
 # Submission Instructions
 
 To compete in the challenge, you should go to
-[http://6885.csail.mit.edu/leaderboard/](http://6885.csail.mit.edu/leaderboard/). Once
+[http://6885.csail.mit.edu](http://6885.csail.mit.edu). Once
 you have registered for an account, you can upload your results and
 also see the results of other students so that you can improve your
 algorithm and compete for the grand prize!
