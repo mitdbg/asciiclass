@@ -1,8 +1,8 @@
 # Lab 4: Entity Resolution
 
-*Assigned: XXX, September XXX*
+*Assigned: 24, September 2013*
 
-*Due: XXX, September XXX, 12:59 PM (just before class)*
+*Due: 1, October 2013, 12:59 PM (just before class)*
 
 In this lab, you will take two datasets that describe the same
 entities, and identify which entity in one dataset is the same as an
@@ -10,18 +10,17 @@ entity in the other dataset.  Our datasets were provided by Foursquare
 and Locu, and contain descriptive information about various venues
 such as venue names and phone numbers.  
 
-Rather than have you compete against yourself,  we've turned this lab
+Rather than have you compete against yourself, we've turned this lab
 into a competition: students will submit their best matching
 algorihtms and try to beat one-another on a leaderboard to identify
-the best algorithm.  You may enter this competition yourself or as a team of up to 3 students.
-  We will give a nice prize to the winning team or teams.
-
-
+the best algorithm.  You may enter this competition yourself or as a
+team of up to 3 students.  We will give a nice prize to the winning
+team or teams.
 
 This lab uses several files for you to test your entity resolution algorithms on:
- * [locu_train.json]()
- * [foursquare_train.json]()
- * [matches_train.csv]()
+ * [locu_train.json](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/locu_train.json)
+ * [foursquare_train.json](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/foursquare_train.json)
+ * [matches_train.csv](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/matches_train.csv)
 
 The `json` files contain a json-encoded list of venue attribute
 dictionaries.  The `csv` file contains two columns, `locu_id` and
@@ -34,8 +33,8 @@ recall, and F1-score](https://en.wikipedia.org/wiki/F-score) of your
 algorithm against the ground truth in `matches_train.csv`.  Once
 you're satisfied with an algorithm that has high values for these
 training data points, move on to the two test files:
- * [locu_test.json]()
- * [foursquare_test.json]()
+ * [locu_test.json](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/locu_test.json)
+ * [foursquare_test.json](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/foursquare_test.json)
 
 Your job is to generate `matches_test.csv`, a mapping that looks like `matches_train.csv` but with mappings for the new test listings.  Here are a few notes:
  * The schemas for these datasets are aligned, but this was something that Locu and Foursquare engineers had to do ahead of time when we initially matched our datasets.
@@ -47,9 +46,13 @@ Your job is to generate `matches_test.csv`, a mapping that looks like `matches_t
 
 # Submission Instructions
 
-To compete in the challenge, you should go to [http://6885.csail.mit.edu/leaderboard/](http://6885.csail.mit.edu/leaderboard/). Once you have registered for an account, you can upload your results and also see the results of other students so that you can improve your algorithm and compete for the grand prize! 
+To compete in the challenge, you should go to
+[http://6885.csail.mit.edu/leaderboard/](http://6885.csail.mit.edu/leaderboard/). Once
+you have registered for an account, you can upload your results and
+also see the results of other students so that you can improve your
+algorithm and compete for the grand prize!
 
-On website, you will need to submit your result file (`matches_test.csv`) and the script/program that outputs this file.  This script/program should be  run from inside a directory containing the files `locu_train.json`, `foursquare_train.json`, `matches_train.csv`, `locu_test.json`,  and `foursquare_test.json`, and should output `matches_test.csv` based on these files.  It can be a script (preferred) or a directory with source code and a `README.txt` file describing how to compile/run your program.  Please make sure you include a list of packages that need to be installed on a stock Ubuntu 12 installation for your program to run.   We will run your program against a set of hidden test data (that we have not provided) as a final test of the top few teams' code.
+On the website, you will need to submit your result file (`matches_test.csv`) and the script/program that outputs this file.  This script/program should be runnable from inside a directory containing the files `locu_train.json`, `foursquare_train.json`, `matches_train.csv`, `locu_test.json`,  and `foursquare_test.json`, and should output `matches_test.csv` based on these files.  It can be a script (preferred) or a directory with source code and a `README.txt` file describing how to compile/run your program.  Please make sure you include a list of packages that need to be installed on a stock Ubuntu 12 installation for your program to run.   We will run your program against a set of hidden test data (that we have not provided) as a final test of the top few teams' code.  *While we'll use `matches_test.csv` to identify the most promising teams, only programs that run on the data and emit the best `matches_test.csv` on our machine will be considered for a prize.*
 
 In addition to competing in the challenge, please upload a text file to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab4" assignment. Each team member should upload their own copy of this file (it is OK if uploads of team members are identical).
 
@@ -61,6 +64,3 @@ The text file should contain:
  * Describe your entity resolution technique, as well as its precision, recall, and F1 score.
  * What were the most important features that powered your technique?
  * How did you avoid pairwise comparison of all venues across both datasets?
-
-
-
