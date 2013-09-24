@@ -74,11 +74,6 @@ print "Splitting into Test and Training"
 (tr1,tr2,tr_ans,test1,test2,test_ans) = generate_test_training(buyAr,abtAr,gtBuyMap,.5)
 
 
-tr2_map = {}
-for v in tr2:
-    tr2_map[v["id"]] = v
-
-
 print "Generating Feature Map"
 
 X = []
