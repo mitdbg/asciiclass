@@ -46,13 +46,19 @@ Your job is to generate `matches_test.csv`, a mapping that looks like `matches_t
 
 # Submission Instructions
 
+## Upload your best results to the leaderboard
+
 To compete in the challenge, you should go to
 [http://6885.csail.mit.edu](http://6885.csail.mit.edu). Once
 you have registered for an account, you can upload your results and
 also see the results of other students so that you can improve your
 algorithm and compete for the grand prize!
 
-On the website, you will need to submit your result file (`matches_test.csv`) and the script/program that outputs this file.  This script/program should be runnable from inside a directory containing the files `locu_train.json`, `foursquare_train.json`, `matches_train.csv`, `locu_test.json`,  and `foursquare_test.json`, and should output `matches_test.csv` based on these files.  It can be a script (preferred) or a directory with source code and a `README.txt` file describing how to compile/run your program.  Please make sure you include a list of packages that need to be installed on a stock Ubuntu 12 installation for your program to run.   We will run your program against a set of hidden test data (that we have not provided) as a final test of the top few teams' code.  *While we'll use `matches_test.csv` to identify the most promising teams, only programs that run on the data and emit the best `matches_test.csv` on our machine will be considered for a prize.*
+On the website, you will need to submit your result file (`matches_test.csv`) and the script/program that outputs this file.  This script/program should be runnable from inside a directory containing the files `locu_train.json`, `foursquare_train.json`, `matches_train.csv`, `locu_test.json`,  and `foursquare_test.json`, and should output `matches_test.csv` based on these files.  It can be a script (preferred) or a directory with source code and a `README.txt` file describing how to compile/run your program.  Please make sure you include a list of packages that need to be installed on a stock Ubuntu 12 installation for your program to run.   We will run your program against a set of hidden test data (that we have not provided) as a final test of the top few teams' code.
+
+*While we'll use `matches_test.csv` to identify the most promising teams, only programs that run on the data and emit the best `matches_test.csv` on our machine will be considered for a prize.*
+
+## Upload a writeup to Stellar
 
 In addition to competing in the challenge, please upload a text file to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab4" assignment. Each team member should upload their own copy of this file (it is OK if uploads of team members are identical).
 
