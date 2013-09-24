@@ -1,0 +1,246 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 AppleSymbols;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww12540\viewh16140\viewkind1
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\b\fs24 \cf0 6885 Lecture 6\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qr
+\cf0 	9/24/2013\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 \
+\ul Lab 3 -- how was it?\
+\ulnone \
+Project groups:  Please submit online today with project ideas.  Projects do not need to be from those that are suggested.  Feel free to ask if a project is OK, but basically just looking to have you apply some data processing too to some data set, or compare several different tools for some task.  Hopefully will be related to your research!\
+\
+\
+
+\b Today:  Entity Resolution\
+
+\b0 \
+\ul What is entity resolution?\
+\ulnone \
+
+\i Determining that two database records are actually about the same object\
+
+\i0 \
+Goes by many different names;  deduplication, approximate match, record linking, etc\
+\
+We've seen this problem already -- both Goby and Locu need to do this!\
+\
+	E.g., ski resorts in Goby, restaurants in Locu\
+\
+SUPER common problem -- any time you need to join two databases that might have duplicates\
+\
+\
+Adam talked a little bit about how to do it\
+\
+Today we're going to talk about some of the challenges of doing this in more detail\
+\
+What makes it hard:\
+\
+1) Spellings / descriptions of items\
+	Data entry errors\
+	Different descriptions of same information\
+\
+	E.g., "Black iPhone" vs "Black Apple iPhone 5"\
+\
+2) Missing values\
+	E.g,  product list 1 has price, product list 2 doesnt\
+\
+3) Lots of data -- may require n^2 comparisons  for just two DBs (all items in DB1 to all items in DB2)\
+\
+\
+\
+\ul Problem Definition:\
+\ulnone \
+DB1		DB2\
+R_11		R_21\
+R_12		R_22\
+R_13		R_23\
+\
+\ul Which records are about the same object?\
+\ulnone \
+Assume that schemas have been "normalized" -- e.g., converted into the same global schema using algorithms and manual effort (just like in Goby and Locu)\
+\
+\
+\ul How do we measure how well we are doing?\
+\ulnone \
+Use some kind of ground truth\
+\
+Define:\
+	true positives:  number of claimed matches that are in GT\
+	false positives:  number of claimed matches not in GT\
+	false negatives: number of matches in GT that are not claimed\
+\
+    precision = truePos / truePos + falsePos\
+    recall = truePos / |DB1|\
+    fmeas = (2.0 * precision * recall) / (precision + recall)\
+\
+\
+How do we do it:\
+\
+	Compute similarity between different attributes of each pair of records\
+	E.g.,:\
+\
+		- edit distance (
+\b Levenshtein)
+\b0 \
+			minimum number of single-character edits (insertion, deletion, substitution) required to change one word into the other\
+\
+		- jaccard similarity of words\
+			S1 = \{words in record1\}\
+			S2 = \{words in record2\}\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc
+\cf0 Similarity = 		\ul |S1 
+\f1 \uc0\u8745  
+\f0 S2|\ulnone \
+			|S1 
+\f1 \uc0\u8746  
+\f0 S2|\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 The more words they have in common, the higher the similarity\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+	\
+	- cosine similarity of documents\
+\
+	- difference between integers\
+\
+	etc.\
+\
+\
+Compute a score based on some combination of similarity features across all attributes\
+\
+\ul What other features might I want to consider?\
+\ulnone \
+"
+\b Relational
+\b0 " -- e.g., if I have two papers, p1 and p2, and want to know if they are they same, I could look at the titles, or at the similarity of their author sets.  Author sets are "relational" features\
+\
+Other examples: set of products manufactured by a company, features of a product, etc\
+\
+\
+Let's do a quick example:\
+\
+
+\i http://dbs.uni-leipzig.de/de/research/projects/object_matching/fever/benchmark_datasets_for_entity_resolution\
+
+\i0 \
+Abt-Buy data set  (show slide)\
+\
+\
+First, let's do a simple manual matcher\
+(look at match-manual.py)\
+\
+Now, let's make it a little fancier and search for the best threshold to emit a match\
+(look at match-loop.py)\
+\
+\
+(Note that this example doesn't have any relational features)\
+\
+\ul Ok, so what are some problems?\
+\ulnone \
+- quadratic computation\
+\
+- only using one feature at a time\
+\
+- heuristic-y exhaustive search for best threshold\
+\
+\
+\
+\
+\ul What to do about quadratic computation?\
+\ulnone \
+"Blocking"  -- partition records into (overlapping) sets that might match -- discard obvious non-matches.\
+\
+Example:  partition according to price, assuming that things that cost $1000 can't match with things that cost $10\
+\
+\
+What about multiple features, and avoid heuristic-y search\
+\
+
+\b \ul Machine learning to the rescue?\
+
+\b0 \ulnone \
+\ul How to apply?\
+\ulnone \
+Suppose we have a set of labeled "ground truth"\
+\
+Compute similarity score score for each data point\
+\
+Determine which points are "correct" and "incorrect" in ground truth\
+\
+Find separator that best divides correct from incorrect\
+\
+This is an optimization problem -- SVM, decision trees, etc are examples of ML algos to do this\
+\
+Consider a simple decision tree on a single attribute -- what do we want to do?\
+\
+Sort data according to attribute\
+\
+Going from smallest to largest value, find best "split point" such that the two sets are as "homogenous" as possible (have as many of the same class labels).  Standard way to do this is to measure the entropy each set, and find the split point that results in the smallest average entropy of the resulting subsets.\
+\
+\ul If we have multiple attributes, what to do?\
+\ulnone \
+Iterate over all attributes and find single best split point amongst them.\
+\
+Recurse on each subset to further split it.\
+\
+In this way, we can "learn" the best separator automatically\
+\
+\
+\
+\
+Ok, so lets try to implement it!!\
+\
+First version:  match-tree.py\
+\
+Split into test and training\
+\
+Construct a vector X with one entry per pair of data elements in the training set, where each entry of the vector indicates the similarity of that pair\
+\
+[ s11,\
+  s12,   \
+  s13,\
+\'85\
+]\
+\
+Where s11 is the similarity between element 1 of buy and element 1 of ask data sets\
+\
+also compute a vector of class assignments, Y, where each element indicates the assigned class in the training Data\
+\
+Y = \
+[ -1,\
+  1, \
+  -1,\
+\'85]\
+\
+etc\
+\
+Then compute how well this works on test data\
+\
+Ok, so what are problems:\
+\
+X and Y vectors are really big\
+\
+"Imbalanced classes"  many more negatives than positives, which makes classifier do badly\
+\
+\
+\ul What can we do?\
+\ulnone \
+Reduce size of vectors by not including elements that we think don't match\
+\
+E.g., use some simple heuristic to determine the likely best match, then include only those in X and Y vectors\
+\
+This is what match-tree2.py does\
+\
+\
+\ul Where did the training set come from?\
+\ulnone \
+Manual effort !!!\
+\
+Painful to generate!!!\
+}
