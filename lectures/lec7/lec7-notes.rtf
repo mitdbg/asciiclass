@@ -1,0 +1,195 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww12540\viewh16140\viewkind1
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\fs24 \cf0 Today\
+\
+Entity Resolution Example Continued\
+\
+Last time -- saw how to build a simple entity resolver\
+\
+for e1 in set1\
+	for e2 in set2\
+		s = similarity(e1,e2)\
+		if s > threshold\
+			output match\
+\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ul \ulc0 Ok, so what are some problems?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ulnone \
+- quadratic computation\
+\
+- only using one feature at a time\
+\
+- heuristic-y exhaustive search for best threshold\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+Today:  Use simple ML to do this\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 \ul \ulc0 Machine learning to the rescue?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 \ulnone \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ul How to apply?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ulnone \
+Suppose we have a set of labeled "ground truth"\
+\
+Compute similarity score score for each data point\
+\
+Determine which points are "correct" and "incorrect" in ground truth\
+\
+Find separator that best divides correct from incorrect\
+\
+This is an optimization problem -- SVM, decision trees, etc are examples of ML algos to do this\
+\
+Consider a simple decision tree on a single attribute -- what do we want to do?\
+\
+Sort data according to attribute\
+\
+Going from smallest to largest value, find best "split point" such that the two sets are as "homogenous" as possible (have as many of the same class labels).  Standard way to do this is to measure the entropy each set, and find the split point that results in the smallest average entropy of the resulting subsets.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ul If we have multiple attributes, what to do?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ulnone \
+Iterate over all attributes and find single best split point amongst them.\
+\
+Recurse on each subset to further split it.\
+\
+In this way, we can "learn" the best separator automatically\
+\
+\
+\
+\
+Ok, so lets try to implement it!!\
+\
+First version:  match-tree.py\
+\
+Split into test and training\
+\
+Construct a vector X with one entry per pair of data elements in the training set, where each entry of the vector indicates the similarity of that pair\
+\
+[ s11,\
+  s12,   \
+  s13,\
+\'85\
+]\
+\
+Where s11 is the similarity between element 1 of buy and element 1 of ask data sets\
+\
+also compute a vector of class assignments, Y, where each element indicates the assigned class in the training Data\
+\
+Y = \
+[ -1,\
+  1, \
+  -1,\
+\'85]\
+\
+etc\
+\
+Then compute how well this works on test data\
+\
+Ok, so what are problems:\
+\
+X and Y vectors are really big\
+\
+"Imbalanced classes"  many more negatives than positives, which makes classifier do badly\
+\
+Visualize tree:  ./show-graph\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ul What can we do?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ulnone \
+Reduce size of vectors by not including elements that we think don't match\
+\
+E.g., use some simple heuristic to determine the likely best match, then include only those in X and Y vectors\
+\
+This is what match-tree2.py does\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ul Where did the training set come from?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ulnone \
+Manual effort !!!\
+\
+Painful to generate!!!\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\
+
+\b Onto Map Reduce\
+
+\b0 \
+\
+What is the MapReduce model?\
+\
+Example -- word count\
+\
+Combiner\
+\
+Exercise:  implement a join in map reduce\
+\
+(Show slides)\
+\
+\
+\
+\ul Two Readings\
+\
+\ulnone Who are authors?   What is their agenda?\
+\
+\
+\
+\ul \
+\
+What are some criticisms of MapReduce?\
+\ulnone 	\
+	- slow\
+		long startup times\
+		inefficient intermediate I/O (why?) vs point to point comm\
+		manipulate ascii records\
+		no indexing\
+		data not "bound" to processing node\
+		\
+\
+		buy this?\
+\
+	- not a data management tool\
+		e.g. lack support for schemas, transactions, high level queries, etc\
+\
+\
+\ul Is Mike just wrong?\
+\ulnone \
+On performance, maybe -- hard to tell.  Hadoop has (historically) had some problems;  getting better.\
+\
+On fact that people want high level query languages for running queries, probably not.\
+\
+\ul What is bad about using MR as the engine for a DBMS?\
+\ulnone \
+Mike's criticisms seem to boil down to performance arguments above (startup times, point to point comm, local data processing.)\
+\
+MapReduce is pretty general -- especially with \
+\
+\ul Are there any good things about building Hive this way?\
+\ulnone \
+	(Fault tolerance;  data in HDFS;  data in representation that is easier to \
+		manipulate with other tools?   Extensibility?)\
+\
+\
+\
+\ul What are some things that are better to do in MapReduce?\
+\ulnone \
+Dean paper makes point about pain of loading into a DBMS effectively -- one off computations on data, e.g., index creation \
+}
