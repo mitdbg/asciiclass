@@ -4,8 +4,8 @@
 
 *Due: 1, October 2013, 12:59 PM (just before class)*
 
-*MODIFIED, SEPTEMBER 25 -- There is no longer a one to one mapping (bijection) between entities in the Locu / foursquare data sets.  Some entities may have
-no matches.*
+<!-- *MODIFIED, SEPTEMBER 25 -- There is no longer a one to one mapping (bijection) between entities in the Locu / foursquare data sets.  Some entities may have
+no matches.* -->
 
 In this lab, you will take two datasets that describe the same
 entities, and identify which entity in one dataset is the same as an
@@ -21,9 +21,9 @@ team of up to 3 students.  We will give a nice prize to the winning
 team or teams.
 
 This lab uses several files for you to test your entity resolution algorithms on:
- * [locu_train.json](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/hard/locu_train_hard.json)
- * [foursquare_train.json](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/hard/foursquare_train_hard.json)
- * [matches_train.csv](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/hard/matches_train_hard.csv)
+ * [locu_train.json](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/easy/locu_train.json)
+ * [foursquare_train.json](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/easy/foursquare_train.json)
+ * [matches_train.csv](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/easy/matches_train.csv)
 
 The `json` files contain a json-encoded list of venue attribute
 dictionaries.  The `csv` file contains two columns, `locu_id` and
@@ -36,8 +36,8 @@ recall, and F1-score](https://en.wikipedia.org/wiki/F-score) of your
 algorithm against the ground truth in `matches_train.csv`.  Once
 you're satisfied with an algorithm that has high values for these
 training data points, move on to the two test files:
- * [locu_test.json](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/hard/locu_test_hard.json)
- * [foursquare_test.json](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/hard/foursquare_test_hard.json)
+ * [locu_test.json](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/easy/locu_test.json)
+ * [foursquare_test.json](https://s3.amazonaws.com/6885public/foursquare-locu+challenge/easy/foursquare_test.json)
 
 Your job is to generate `matches_test.csv`, a mapping that looks like `matches_train.csv` but with mappings for the new test listings.  Here are a few notes:
  * The schemas for these datasets are aligned, but this was something that Locu and Foursquare engineers had to do ahead of time when we initially matched our datasets.
