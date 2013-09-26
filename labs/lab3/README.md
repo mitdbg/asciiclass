@@ -158,7 +158,7 @@ A few examples to give you a flavor of the tools and what one can do with them.
 1. Perform the equivalent of _wrap_ on `labor.csv` (i.e., merge consecutive groups of lines referring to the same record)
 
     	cat labor.csv | awk '/^Series Id:/ {print combined; combined = $0} 
-                            !/^Series Id:/ {combined = combined", "$0;} '
+                            !/^Series Id:/ {combined = combined", "$0;}
     	                    END {print combined}'
 
 1. On  `crime-clean.txt`, the following command does a _fill_ (first row of output: "Alabama, 2004, 4029.3".
