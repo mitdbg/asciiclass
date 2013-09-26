@@ -1,0 +1,80 @@
+=  Entity Resolution Techniques
+Entity resolution: determining that two records are about the same object
+ - like Goby or Locu problems: identify the same events/venues that are discussed on different websites
+
+Other names: approximate matching, deduplication, record linking
+
+Why is this hard?
+  - dissimilar data: "Cannon" and "Cannon Mountain" are the same thing once put into context, but are referred to differently by different sources.
+  - missing data: not every source has all of the fields
+  - mismatched data: the schemas are aligned, but the values in "the same field" are about different things.
+  - different formats: phone numbers are all digits, or (XXX)XXX-XXX format.
+
+How do you know if your entity resolver is doing a good job or not?
+  - collect ground truth data: hand-label some matches, or have a crowd do it.
+  - metrics for how well we're doing
+    - true positives: how many things we matched correctly
+    - false positives: how many things we matched incorrectly
+    - false negatives: how many things that should have been matched did we not match
+  - from those metrics, we can get precision/recall
+    - precision: (true positives) / (true positives + false positives)  [between 0 and 1]
+    - recall: (true positives) / (true positives + false negatives)  [between 0 and 1]
+  - f-measure: a way to combine precision and recall  [between 0 and 1]
+    - (2 * precision * recall) / (precision + recall)
+    - that's an f1-measure, which weighs precision and recall the same.  you can also weigh them differently if one matters more than another.
+
+How do you do the matching across two datasets?
+  - quadratically compare each pair of items: take an item from one dataset, compare them to every item in the other dataset
+  - simple idea: compare the attributes of each item vs the other, see how many are equal
+    -> if 7/8 fields are equal, the items are equal
+  - attribute matching algorithms: aside from equality, what measures are there?
+    - exact match: does item1.field == item2.field?
+    - edit distance: how many characters do i have to switch from one string to get to the other?
+    - overlap (jaccard similarity): |insersection of words in string1 and string2| / |union of words in string1 and string2|
+    - overlap 2-3-grams w/ jaccard similarity: 3-grams of ngram are ngr|gra|ram
+    - cosine similarity instead of jaccard similarity
+    - difference between floating point numbers
+    - dataset-specific information: compare the first number that appears in each address
+    - relationships/relational features: if comparing papers, references to the same authors matter
+    
+Preprocessing/normalization
+  - lowercase words
+  - canonicalize the data: turn "Mtn." into "Mountain"
+  - remove all non-digits from phone numbers
+  - stem words: remove plurals, -ing
+
+So we have tons of features we can extract for similarity.  How do we weigh them?
+  - can just average them, but some features matter more than others
+  - usually, people end up relying on machine learning algorithms for doing classification (e.g., random forests, naive bayes, svms, logistic regression, etc.) to learn weights from the ground truth
+
+= Example: about.com and buy.com
+Sam worked us through code to map product listings from about.com and buy.com
+  -> https://github.com/mitdbg/asciiclass/tree/master/lectures/lec6
+
+The paper Sam referenced says state of the art can only get an f-measure of .497, which on a scale of 0 to 1, is pretty bad.
+
+Avoiding quadratic comparisons
+  - can't compare 10 million items to 10 million others
+  - hash datasets into buckets using semantic hashing or tag the data (expensive/cheap, headphones/keyboards, etc.) so that you only compare similar items
+
+Domain-specific features can help squeeze a few more points of accuracy from the system
+ - extract product codes in a product dataset, or extract street numbers from an address field
+
+= A machine learning approach
+
+Remember to cross-validate, or at least train/test on different data
+ - split gold-standard data into training set and test set
+ - learn feature weights on training data
+ - see how well the algorithm performs on the test data
+ - why?  you want a sense that your algorithm works on data you haven't seen yet.
+
+Having split your examples into training and test data, you want to train a model.
+  -> Training data = [(features_extracted_from_data_for_a_pair, is_there_a_match?), ...]
+    -> A pair is two objects (o1, o2) that you're considering matches
+    -> Should we actually train on all possible pairs of items?  That would mean we're training on O(N^2) data points, only N of which are matches.
+    -> Alternatives: only train on reasonable matches.  Try more complex models than decision trees, etc.
+  -> Train a model (decision tree, svm, random forest, etc.) on the data
+  -> Test the model
+
+= Obtaining ground-truth data is hard
+Usually, you create a simple algorithm, run it with a conservative threshold on the data, generate some decisions to send to human beings (crowd workers, employees, etc.), and then train better models on the human-generated data.
