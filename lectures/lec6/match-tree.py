@@ -142,6 +142,6 @@ for i in xrange(0,len(ans)):
     
 print "TN = ",trueNeg,"TP = ",truePos,"FN = ",falseNeg,"FP = ",falsePos
 precision = truePos / float(truePos + falsePos)
-recall = truePos / float(len(buyAr))
+recall = truePos / float(len(test_ans))
 fmeas = (2.0 * precision * recall) / (precision + recall)
 print "PREC = ",precision,"RECALL = ",recall,"F = ",fmeas
