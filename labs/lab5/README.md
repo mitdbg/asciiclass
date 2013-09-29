@@ -1,4 +1,3 @@
-
 # Lab 5: Hadoop/Elastic-Map-Reduce
 
 *Assigned: XXX*
@@ -12,8 +11,10 @@ You will take the full [enron email corpus](http://www.cs.cmu.edu/~enron/), whic
 
 A sample of the data is below:
 
-    {"bccnames": [], "sender": "phillip.allen@enron.com", "tonames": [""], "cc": [], "text": "Here is our forecast\n\n ", "recipients": ["tim.belden@enron.com"], "mid": "18782981.1075855378110.JavaMail.evans@thyme", "ctype": "text/plain; charset=us-ascii", "bcc": [], "to": ["tim.belden@enron.com"], "replyto": null, "names": [], "ccnames": [], "date": "2001-05-14 16:39:00-07:00", "folder": "_sent_mail", "sendername": "", "subject":     ""}    
-    {"bccnames": [], "sender": "phillip.allen@enron.com", "tonames": [""], "cc": [], "text": "Traveling to have a business meeting takes the fun out of the trip.  ...", "recipients": ["john.lavorato@enron.com"], "mid": "15464986.1075855378456.JavaMail.evans@thyme", "ctype": "text/plain; charset=us-ascii", "bcc": [], "to": ["john.lavorato@enron.com"], "replyto": null, "names": [], "ccnames": [], "date": "2001-05-04 13:51:00-07:00", "folder": "_sent_mail", "sendername": "", "subject": "Re:"}
+````json
+{"bccnames": [], "sender": "phillip.allen@enron.com", "tonames": [""], "cc": [], "text": "Here is our forecast\n\n ", "recipients": ["tim.belden@enron.com"], "mid": "18782981.1075855378110.JavaMail.evans@thyme", "ctype": "text/plain; charset=us-ascii", "bcc": [], "to": ["tim.belden@enron.com"], "replyto": null, "names": [], "ccnames": [], "date": "2001-05-14 16:39:00-07:00", "folder": "_sent_mail", "sendername": "", "subject":     ""}    
+{"bccnames": [], "sender": "phillip.allen@enron.com", "tonames": [""], "cc": [], "text": "Traveling to have a business meeting takes the fun out of the trip.  ...", "recipients": ["john.lavorato@enron.com"], "mid": "15464986.1075855378456.JavaMail.evans@thyme", "ctype": "text/plain; charset=us-ascii", "bcc": [], "to": ["john.lavorato@enron.com"], "replyto": null, "names": [], "ccnames": [], "date": "2001-05-04 13:51:00-07:00", "folder": "_sent_mail", "sendername": "", "subject": "Re:"}
+````
 
 The dataset is stored as a set of files, where each file is contains all emails sent by one person.  They are sitting on amazon S3 at: `s3://asciiclass/enron/*.json`
 
@@ -23,13 +24,17 @@ The dataset is stored as a set of files, where each file is contains all emails 
 
 Decompress `lay-k.json.gz`:
 
-    gzip -d lay-k.json.gz
+````bash
+gzip -d lay-k.json.gz
+````
 
 ### Python
 
 You will need to install the following packages:
 
-    pip install mrjob
+````bash
+pip install mrjob
+````    
     
 [mrjob](http://pythonhosted.org/mrjob/) makes managing and deploying map reduce jobs from Python easy.
 
@@ -48,39 +53,44 @@ Setup your environment:
 `mr_wordcount.py` contains the following code to count the number of times each term (word) appreas
 in the email corpus:
 
-    import sys
-    from mrjob.protocol import JSONValueProtocol
-    from mrjob.job import MRJob
-    from term_tools import get_terms
-    
-    class MRWordCount(MRJob):
-        INPUT_PROTOCOL = JSONValueProtocol
-        OUTPUT_PROTOCOL = JSONValueProtocol
-    
-        def mapper(self, key, email):
-            for term in get_terms(email['text']):
-                yield term, 1
-    
-        def reducer(self, term, occurrences):
-            yield None, {'term': term, 'count': sum(occurrences)}
-    
-    if __name__ == '__main__':
-            MRWordCount.run()
+````python
+import sys
+from mrjob.protocol import JSONValueProtocol
+from mrjob.job import MRJob
+from term_tools import get_terms
+
+class MRWordCount(MRJob):
+    INPUT_PROTOCOL = JSONValueProtocol
+    OUTPUT_PROTOCOL = JSONValueProtocol
+
+    def mapper(self, key, email):
+        for term in get_terms(email['text']):
+            yield term, 1
+
+    def reducer(self, term, occurrences):
+        yield None, {'term': term, 'count': sum(occurrences)}
+
+if __name__ == '__main__':
+    MRWordCount.run()
+````
 
 
 OK now run this locally on `lay-k.json`
             
-    python mr_wordcount.py -o 'wordcount_test' --no-output './lay-k.json'
+````bash
+python mr_wordcount.py -o 'wordcount_test' --no-output './lay-k.json'
+````
 
 The output should be in `wordcount_test/` and should look like:
 
-    {"count": 33, "term": "aapl"}
-    {"count": 2, "term": "aarhus"}
-    {"count": 8, "term": "aaron"}
-    {"count": 1, "term": "aarp"}
-    {"count": 1, "term": "ab-initio"}
-    {"count": 20, "term": "abandon"}
-
+````json
+{"count": 33, "term": "aapl"}
+{"count": 2, "term": "aarhus"}
+{"count": 8, "term": "aaron"}
+{"count": 1, "term": "aarp"}
+{"count": 1, "term": "ab-initio"}
+{"count": 20, "term": "abandon"}
+````
 
 <div style="text-align: center; color: red; font-size: 15pt;">
 Be cool, test locally before deploying globally (on AWS)!
@@ -108,13 +118,15 @@ The downside is if you run your job at the same time as the other students (e.g.
 
 Now let's run the same script on the same file on EC2 (`s3://XXX/lay-k.json`):
 
-    python mr_wordcount.py  --num-ec2-instances=1 \
-      --emr-job-flow-id=XXX \
-      --python-archive package.tar.gz \
-      -r emr \
-      -o 's3://dataiap-YOURUSERNAME-testbucket/output' \
-      --no-output \
-      's3://asciiclass/enron/lay-k.json'
+````bash
+python mr_wordcount.py  --num-ec2-instances=1 \
+  --emr-job-flow-id=XXX \
+  --python-archive package.tar.gz \
+  -r emr \
+  -o 's3://dataiap-YOURUSERNAME-testbucket/output' \
+  --no-output \
+  's3://asciiclass/enron/lay-k.json'
+````      
 
 Go to your bucket and download the output to check if the results are sane.  If so, change the inputs to
 `s3://asciiclass/enron/*.json` and run again.      
