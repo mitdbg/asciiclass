@@ -20,22 +20,9 @@ The dataset is stored as a set of files, where each file contains all emails sen
 
 ## Setup
 
-### Amazon
-
-XXX need to describe why this is necessary
-
-Go to this website to get a class-only AWS account.
-
-Setup your environment:
-
-    export AWS_ACCESS_KEY_ID='your_key_id'
-    export AWS_SECRET_ACCESS_KEY='your_access_id'
-    
-
-
 ### Data
 
-XXX are the files gzipped or not?  above we say they are not, but here we tell them to decompress
+
 
 [Download](https://s3.amazonaws.com/asciiclass/enron/lay-k.json.gz) and decompress `lay-k.json.gz`:
 
@@ -49,15 +36,49 @@ You will need to install the following packages:
 
 ````bash
 pip install mrjob
+pip install awscli
 ````    
     
 [mrjob](http://pythonhosted.org/mrjob/) makes managing and deploying map reduce jobs from Python easy.
 
+[awscli](https://aws.amazon.com/cli/) provides convenient command line tools for managing AWS services (e.g., copying data to and from S3)
+
+    aws s3 cp <local file> s3://<YOUR BUCKET NAME>/
+    
+
+### Amazon
+
+Go to this website to get a class-only AWS account, then navigate to the [IAM service](https://console.aws.amazon.com/iam/home?#users) and create a new access key.
+
+#### Setup for awscli
+
+First [for awscli](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) by creating a config file containing the following (the region=us-west-2 is important)
+
+    [default]
+    aws_access_key_id = <your key>
+    aws_secret_access_key = <your secret>
+    region = us-west-2    
+
+
+Now point the environment variable to it:
+
+    export AWS_CONFIG_FILE=<location of config file>
+
+Now using `awscli` should just work.  Try to list your buckets:
+
+    aws s3 ls
+
+#### Setup for mrjob
+
+Second, [setup for mrjob](http://pythonhosted.org/mrjob/guides/emr-quickstart.html#amazon-setup) by setting:
+
+    export AWS_ACCESS_KEY_ID=<your access key>
+    export AWS_SECRET_ACCESS_KEY=<your secret>
+
+
 ## Running MapReduce locally
 
-Before running a job on multiple servers, it's useful to debug your map reduce job locally.
-
-XXX what kind of server should they run this on?  a micro instance?  or something else?
+Before running a job on multiple servers, it's useful to debug your map reduce job locally (on your own machine, not AWS).
 
 `mr_wordcount.py` contains the following code to count the number of times each term (word) appears
 in the email corpus:
@@ -120,34 +141,32 @@ The reasons are so that
 <li>You don't need to incur the cost of allocating, starting and shutting down the machines for each job.
 </ol>
 
-The downside is if you run your job at the same time as the other students (e.g., on the last day) you will have fewer resources.  This is called _resource sharing_ as is a nice lesson to learn!
+The downside is if you run your job at the same time as the other students (e.g., on the last day) you will have fewer resources.  This is called _resource sharing_ and is a nice lesson to learn!
 </div>
 
-XXX how do they access this shared job pool???  explain "emr-job-flow-id"
-
-Now let's run the same script on the same file on EC2 (`s3://XXX/lay-k.json`):
+Now let's run the same script on the same file on EC2 (`s3://6885public/enron/lay-k.json`):
 
 ````bash
-python mr_wordcount.py  --num-ec2-instances=1 \
+python mr_wordcount.py  \
+  --num-ec2-instances=1 \
   --emr-job-flow-id=XXX \
   --python-archive package.tar.gz \
   -r emr \
   -o 's3://asciiclass-YOURUSERNAME-testbucket/output' \
   --no-output \
-  's3://asciiclass/enron/lay-k.json'
+  's3://6885public/enron/lay-k.json'
 ````      
-
-XXXX do they need to create the bucket?  or are we going to do it for them?
-
-Go to your bucket and download the output to check if the results are sane.  If so, change the inputs to
-`s3://asciiclass/enron/*.json` and run again.      
 
 Some details about executing this:
 
-* Please use less than 20 machines   XXXX where are number of machines specified?
-* Always use the class's job id
+* `--num-ec2-instances` specifies the number of machines.  Please use less than 20 machines
+* `--emr-job-flow-id` is the name of our job pool.  We named it XXX.  **Always use this job id**
 * `--python-archive` contains the python files and packages that your job includes
+* Replace `YOURUSERNAME` with a unique name.  AWS will automatically create the bucket.
 * `--no-output` suppresses outputs to STDOUT
+
+Go to your bucket and download the output to check if the results are sane.  If so, it's probably safe to change the inputs to `s3://6885public/enron/*.json` and run again.
+
 
 
 ## Your Task: TF-IDF
