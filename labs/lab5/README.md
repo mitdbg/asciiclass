@@ -16,7 +16,7 @@ A sample of the data is below:
 {"bccnames": [], "sender": "phillip.allen@enron.com", "tonames": [""], "cc": [], "text": "Traveling to have a business meeting takes the fun out of the trip.  ...", "recipients": ["john.lavorato@enron.com"], "mid": "15464986.1075855378456.JavaMail.evans@thyme", "ctype": "text/plain; charset=us-ascii", "bcc": [], "to": ["john.lavorato@enron.com"], "replyto": null, "names": [], "ccnames": [], "date": "2001-05-04 13:51:00-07:00", "folder": "_sent_mail", "sendername": "", "subject": "Re:"}
 ````
 
-The dataset is stored as a set of files, where each file contains all emails sent by one person.  We have put these files on Amazon S3 at: `s3://asciiclass/enron/*.json`
+The dataset is stored as a set of files, where each file contains all emails sent by one person.  We have put these files on Amazon S3 at: `s3://6885public/enron/*.json`
 
 ## Setup
 
@@ -24,7 +24,7 @@ The dataset is stored as a set of files, where each file contains all emails sen
 
 
 
-[Download](https://s3.amazonaws.com/asciiclass/enron/lay-k.json.gz) and decompress `lay-k.json.gz`:
+[Download](https://s3.amazonaws.com/asciiclass/enron/lay-k.json.gz) and decompress `lay-k.json.gz`, which you will use to test your first mapreduce program:
 
 ````bash
 gzip -d lay-k.json.gz
