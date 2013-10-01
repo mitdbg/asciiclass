@@ -1,8 +1,8 @@
 # Lab 5: Hadoop/Elastic-Map-Reduce
 
-*Assigned: XXX*
+*Assigned: Oct 1, 2013*
 
-*Due: XXX (just before class)*
+*Due: Thursday Oct 3, 2013 12:59PM (just before class)*
 
 The goal of this lab is for you to get experience _running_ Hadoop/MapReduce jobs on AWS, both to understand
 the pros and cons of using Hadoop, and as a setup for the next series of labs.  
@@ -48,7 +48,9 @@ pip install awscli
 
 ### Amazon
 
-Go to this website to get a class-only AWS account, then navigate to the [IAM service](https://console.aws.amazon.com/iam/home?#users) and create a new access key.
+[Go to this website](https://6885.signin.aws.amazon.com/console) and login with the username `6885student` to create your own access key (we will give you the password on Piazza and in class).  Then navigate to the [IAM service](https://console.aws.amazon.com/iam/home?#users) and create a new access key for yourself.  You will need this to interact with AWS.
+
+(We are going to let everyone use the same AWS account and see well that works!)
 
 #### Setup for awscli
 
