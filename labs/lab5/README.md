@@ -4,10 +4,10 @@
 
 *Due: XXX (just before class)*
 
-The goal of this lab is for you to get experience _running_ hadoop jobs on the cloud, both to understand
+The goal of this lab is for you to get experience _running_ Hadoop/MapReduce jobs on AWS, both to understand
 the pros and cons of using Hadoop, and as a setup for the next series of labs.  
 
-You will take the full [enron email corpus](http://www.cs.cmu.edu/~enron/), which contains the email contents of all high level employees during the [Enron fiasco](http://en.wikipedia.org/wiki/Enron_scandal).  You will compute simple and _slightly more_ complicated statistics.
+In this lab, you will work with the [enron email corpus](http://www.cs.cmu.edu/~enron/), which contains the email contents of all high level employees during the [Enron fiasco](http://en.wikipedia.org/wiki/Enron_scandal).  You will compute simple and _slightly more_ complicated statistics.
 
 A sample of the data is below:
 
@@ -16,13 +16,28 @@ A sample of the data is below:
 {"bccnames": [], "sender": "phillip.allen@enron.com", "tonames": [""], "cc": [], "text": "Traveling to have a business meeting takes the fun out of the trip.  ...", "recipients": ["john.lavorato@enron.com"], "mid": "15464986.1075855378456.JavaMail.evans@thyme", "ctype": "text/plain; charset=us-ascii", "bcc": [], "to": ["john.lavorato@enron.com"], "replyto": null, "names": [], "ccnames": [], "date": "2001-05-04 13:51:00-07:00", "folder": "_sent_mail", "sendername": "", "subject": "Re:"}
 ````
 
-The dataset is stored as a set of files, where each file is contains all emails sent by one person.  They are sitting on amazon S3 at: `s3://asciiclass/enron/*.json`
+The dataset is stored as a set of files, where each file contains all emails sent by one person.  We have put these files on Amazon S3 at: `s3://asciiclass/enron/*.json`
 
 ## Setup
 
+### Amazon
+
+XXX need to describe why this is necessary
+
+Go to this website to get a class-only AWS account.
+
+Setup your environment:
+
+    export AWS_ACCESS_KEY_ID='your_key_id'
+    export AWS_SECRET_ACCESS_KEY='your_access_id'
+    
+
+
 ### Data
 
-Decompress `lay-k.json.gz`:
+XXX are the files gzipped or not?  above we say they are not, but here we tell them to decompress
+
+[Download](https://s3.amazonaws.com/asciiclass/enron/lay-k.json.gz) and decompress `lay-k.json.gz`:
 
 ````bash
 gzip -d lay-k.json.gz
@@ -38,19 +53,13 @@ pip install mrjob
     
 [mrjob](http://pythonhosted.org/mrjob/) makes managing and deploying map reduce jobs from Python easy.
 
-### Amazon
-
-Go to this website to get a class-only AWS account.
-
-Setup your environment:
-
-    export AWS_ACCESS_KEY_ID='your_key_id'
-    export AWS_SECRET_ACCESS_KEY='your_access_id'
-    
-
 ## Running MapReduce locally
 
-`mr_wordcount.py` contains the following code to count the number of times each term (word) appreas
+Before running a job on multiple servers, it's useful to debug your map reduce job locally.
+
+XXX what kind of server should they run this on?  a micro instance?  or something else?
+
+`mr_wordcount.py` contains the following code to count the number of times each term (word) appears
 in the email corpus:
 
 ````python
@@ -111,10 +120,10 @@ The reasons are so that
 <li>You don't need to incur the cost of allocating, starting and shutting down the machines for each job.
 </ol>
 
-The downside is if you run your job at the same time as the other students (e.g., on the last day) you will have less resources.  This is caled _resource sharing_ as is a nice lesson to learn.
+The downside is if you run your job at the same time as the other students (e.g., on the last day) you will have fewer resources.  This is called _resource sharing_ as is a nice lesson to learn!
 </div>
 
-
+XXX how do they access this shared job pool???  explain "emr-job-flow-id"
 
 Now let's run the same script on the same file on EC2 (`s3://XXX/lay-k.json`):
 
@@ -123,30 +132,33 @@ python mr_wordcount.py  --num-ec2-instances=1 \
   --emr-job-flow-id=XXX \
   --python-archive package.tar.gz \
   -r emr \
-  -o 's3://dataiap-YOURUSERNAME-testbucket/output' \
+  -o 's3://asciiclass-YOURUSERNAME-testbucket/output' \
   --no-output \
   's3://asciiclass/enron/lay-k.json'
 ````      
+
+XXXX do they need to create the bucket?  or are we going to do it for them?
 
 Go to your bucket and download the output to check if the results are sane.  If so, change the inputs to
 `s3://asciiclass/enron/*.json` and run again.      
 
 Some details about executing this:
 
-* Please use less than 20 machines
+* Please use less than 20 machines   XXXX where are number of machines specified?
 * Always use the class's job id
 * `--python-archive` contains the python files and packages that your job includes
-* `--no-output` supresses outputs to STDOUT
+* `--no-output` suppresses outputs to STDOUT
 
 
 ## Your Task: TF-IDF
 
-You can read about [TF-IDF on Wikipedia](http://en.wikipedia.org/wiki/Tf%E2%80%93idf).  We want you to compute TF-IDF for each sender in the corpus.  Wikipedia describes it as 
-    
+The goal of this section is to perform TF-IDF ("Term Frequency / Inter-Document Frequency") for each sender in the corpus.
+You can read about [TF-IDF on Wikipedia](http://en.wikipedia.org/wiki/Tf%E2%80%93idf).    Wikipedia describes it as:
+ 
     a numerical statistic which reflects how important 
     a word is to a document in a collection or corpus.
 
-In wikipedia's lingo, a "document" is all text in a sender's emails, and the "collection or corpus" is the set of all emails in the corpus. 
+In Wikipedia's lingo, a "document" is all text in a sender's emails, and the "collection or corpus" is the set of all emails in the corpus. 
 
 To make things easy, the total number of emails is `516893`.
 
