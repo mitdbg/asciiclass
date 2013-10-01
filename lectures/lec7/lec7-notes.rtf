@@ -1,7 +1,7 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
-\margl1440\margr1440\vieww12540\viewh16140\viewkind1
+\margl1440\margr1440\vieww12840\viewh16440\viewkind1
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qr
 
 \f0\b\fs24 \cf0 6.885 Lecture 7 -- Entity Resolution Continued, and MapReduce 		9/26/2013\
@@ -31,14 +31,13 @@ for e1 in set1\
 \
 - heuristic-y exhaustive search for best threshold\
 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
-\cf0 \
+\
 Today:  Use simple ML to do this\
 \
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
-\b \cf0 \ul \ulc0 Machine learning to the rescue?\
+\b \cf0 \ul Machine learning to the rescue?\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
 \b0 \cf0 \ulnone \
@@ -129,22 +128,21 @@ This is what match-tree2.py does\
 Manual effort !!!\
 \
 Painful to generate!!!\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
-\cf0 \
 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
-\b Onto Map Reduce -- next phase of class\
+\b \cf0 Onto Map Reduce -- next phase of class\
 \
 raw data --> structure --------> 	data storage  --->  analytics ----> viz\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
-\b0 			     integration\
+\b0 \cf0 			     integration\
 \
 What is the MapReduce model?\
 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
-\cf0 (Show slides)\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
-\cf0 \
+(Show slides)\
+\
 Example -- word count\
 \
 Combiner -- example\
@@ -154,16 +152,20 @@ Exercise:  implement a join in map reduce\
 \
 \
 \
-\ul Two Readings\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ul Two Readings\
 \
-\ulnone Who are authors?   What is their agenda?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ulnone Who are authors?   What is their agenda?\
 \
 \
 \
-\ul \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ul \
 \
 What are some criticisms of MapReduce?\
-\ulnone 	\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ulnone 	\
 	- slow\
 		long startup times\
 		inefficient intermediate I/O (why?) vs point to point comm\
@@ -178,20 +180,26 @@ What are some criticisms of MapReduce?\
 		e.g. lack support for schemas, transactions, high level queries, etc\
 \
 \
-\ul Is Mike just wrong?\
-\ulnone \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ul Is Mike just wrong?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ulnone \
 On performance, maybe -- hard to tell.  Hadoop has (historically) had some problems;  getting better.\
 \
 On fact that people want high level query languages for running queries, probably not.\
 \
-\ul What is bad about using MR as the engine for a DBMS?\
-\ulnone \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ul What is bad about using MR as the engine for a DBMS?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ulnone \
 Mike's criticisms seem to boil down to performance arguments above (startup times, point to point comm, local data processing.)\
 \
-MapReduce is pretty general -- especially with \
+MapReduce is pretty general -- especially with combiners\
 \
-\ul Are there any good things about building Hive this way?\
-\ulnone \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ul Are there any good things about building Hive this way?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ulnone \
 	(Fault tolerance;  data in HDFS;  data in representation that is easier to \
 		manipulate with other tools?   Extensibility?)\
 \
@@ -200,6 +208,8 @@ MapReduce is pretty general -- especially with \
 \
 \
 \
-\ul What are some things that are better to do in MapReduce?\
-\ulnone \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ul What are some things that are better to do in MapReduce?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ulnone \
 Dean paper makes point about pain of loading into a DBMS effectively -- one off computations on data, e.g., index creation, map processing, image processing, page rank computation (all things Google has to do)}

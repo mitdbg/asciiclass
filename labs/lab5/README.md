@@ -2,7 +2,7 @@
 
 *Assigned: Oct 1, 2013*
 
-*Due: Thursday Oct 3, 2013 12:59PM (just before class)*
+*Due: Tuesday Oct 8, 2013 12:59PM (just before class)*
 
 The goal of this lab is for you to get experience _running_ Hadoop/MapReduce jobs on AWS, both to understand
 the pros and cons of using Hadoop, and as a setup for the next series of labs.  
@@ -19,6 +19,9 @@ A sample of the data is below:
 The dataset is stored as a set of files, where each file contains all emails sent by one person.  We have put these files on Amazon S3 at: `s3://6885public/enron/*.json`
 
 ## Setup
+
+You should create a micro-instance as you did in previous
+labs and ssh into your virtual machine (you can also run these commands from your own machine).    Install the following packages.
 
 ### Data
 
@@ -43,24 +46,39 @@ pip install awscli
 
 [awscli](https://aws.amazon.com/cli/) provides convenient command line tools for managing AWS services (e.g., copying data to and from S3)
 
-    aws s3 cp <local file> s3://<YOUR BUCKET NAME>/
+    aws s3 cp <local file> s3://6885public/YOURDIRECTORY/
     
+(6885public is an Amazon bucket we have created for the class.)
 
 ### Amazon
 
-[Go to this website](https://6885.signin.aws.amazon.com/console) and login with the username `6885student` to create your own access key (we will give you the password on Piazza and in class).  Then navigate to the [IAM service](https://console.aws.amazon.com/iam/home?#users) and create a new access key for yourself.  You will need this to interact with AWS.
+[Go to this website](https://6885.signin.aws.amazon.com/console)
+and login with the username `6885student` to create your own access
+key (we will give you the password on Piazza and in class).
 
-(We are going to let everyone use the same AWS account and see well that works!)
+Then navigate to the [IAM
+service](https://console.aws.amazon.com/iam/home?#users) and create
+a new access key for yourself.  You will need this to interact with
+AWS.
 
-#### Setup for awscli
+(We are going to let everyone use the same AWS account and see well
+that works!)
 
-First [for awscli](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) by creating a config file containing the following (the region=us-west-2 is important)
+#### Setup for Amazon Command Line Tools (awscli)
+
+Amazon command line tools (awscli) provides simple commands for communicating
+with AWS services.  You will use it to list, upload and download data
+from their storage service, S3.
+
+[Setup awscli](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) by creating a config file containing the following (the region=us-east-1 is important)
 
     [default]
-    aws_access_key_id = <your access key>
+    aws_access_key_id = AKIAJFDTPC4XX2LVETGA
     aws_secret_access_key = <your secret>
     region = us-east-1
 
+    [preview]
+    emr=true
 
 Now point the environment variable to it:
 
@@ -72,11 +90,11 @@ Now using `awscli` should just work.  Try to list your buckets:
 
 #### Setup for mrjob
 
-Second, [setup for mrjob](http://pythonhosted.org/mrjob/guides/emr-quickstart.html#amazon-setup) by creating `~/.mrjob.conf` with:
+[Setup mrjob](http://pythonhosted.org/mrjob/guides/emr-quickstart.html#amazon-setup) by creating `~/.mrjob.conf` with:
 
     runners:
       emr:
-        aws_access_key_id: <your access key>
+        aws_access_key_id: AKIAJFDTPC4XX2LVETGA
         aws_secret_access_key: <your secret>
         aws_region: us-east-1
         ec2_instance_type: m1.small
@@ -86,7 +104,7 @@ These will set your mrjob default parameters.  Please use `m1.small` instances.
 
 ## Running MapReduce locally
 
-Before running a job on multiple servers, it's useful to debug your map reduce job locally (on your own machine, not AWS).
+Before running a job on multiple servers, it's useful to debug your map reduce job locally (on your own micro-instance or home machine).
 
 `mr_wordcount.py` contains the following code to count the number of times each term (word) appears
 in the email corpus:
@@ -113,7 +131,7 @@ if __name__ == '__main__':
 ````
 
 
-OK now run this locally on `lay-k.json`
+First, run this locally on `lay-k.json`
             
 ````bash
 python mr_wordcount.py -o 'wordcount_test' --no-output './lay-k.json'
@@ -139,7 +157,7 @@ Be cool, test locally before deploying globally (on AWS)!
 
 Our labs are starting to deal with $$$, and the class has a finite budget for AWS usage so please be **VERY CAREFUL**.  Keep the following in mind when deploying on AWS:
 
-* Amazon rounds up to the nearest hour each time you spin up machines.  So if you run 2 separate jobs that spin up 10 machines each and only run 5 minutes each, then it costs 2*10 hours.
+* Amazon rounds up to the nearest hour each time you spin up machines.  So if you run 2 separate jobs that spin up 10 machines each and only run 5 minutes each, then it costs 2x10 hours.
 * When you run a job, `mrjob` will give it an id (e.g., j-12BOETECEU8). **Record this id!!**
 * If you are going to run a bunch of jobs, create a job pool so that subsequent jobs can reuse previously allocated machines.
 * **When you are done, ALWAYS TERMINATE YOUR JOB FLOWS**
@@ -161,13 +179,14 @@ As a precaution, we will periodically run the following command
 
 Now let's run the same script on the same file sitting on s3, `s3://6885public/enron/lay-k.json`:
 
+
 ````bash
 python mr_wordcount.py  \
   --num-ec2-instances=1 \
   --pool-emr-job-flows \
   --python-archive package.tar.gz \
   -r emr \
-  -o 's3://asciiclass-YOURUSERNAME-testbucket/output' \
+  -o 's3://6885public/YOURDIRECTORY/output' \
   --no-output \
   's3://6885public/enron/lay-k.json'
 ````      
@@ -175,13 +194,19 @@ python mr_wordcount.py  \
 Some details about executing this:
 
 * A job-flow simply means the set of machines that have been allocated for a "job".
-* `--num-ec2-instances` specifies the number of machines.  Please use less than 10 machines!!
+* `--num-ec2-instances` specifies the number of machines.  Please use less than 10 machines
 * `--pool-emr-job-flows` re-uses an existing job-flow if one exists.  Otherwise it creates a new job-flow and keeps the allocated machines around after the job ends for future jobs using this flag.  Arguments such as `--num-ec2-instances` must be the same for a job-flow to be reused.  **This means you need to explicitly shut the pool down when you are done!!**
 * `--python-archive` contains the gzip python files and packages that your job uses.
-* Replace `YOURUSERNAME` with a unique name.  AWS will automatically create the bucket.
+* Replace `YOURDIRECTORY` with a unique name.  AWS will automatically create the directory.
 * `--no-output` suppresses outputs to STDOUT
 
-Go to your bucket and download the output to check if the results are sane.  If so, it's probably safe to change the inputs to `s3://6885public/enron/*.json` and run again on `10` instances.
+
+You should be able to use awscli to download the file and check if the results are sane:
+
+    aws s3 cp --recursive s3://6885public/YOURDIRECTORY/output . 
+
+If so, it's probably safe to change the inputs to `s3://6885public/enron/*.json` and run again on `10` instances
+
 
 
 
@@ -203,7 +228,7 @@ You will probably want to
 2. Join that with each sender's IDFs
 
 
-Once again, please test locally before running globally!
+**Once again, please test locally before running globally!**
 
 
 ### Questions
