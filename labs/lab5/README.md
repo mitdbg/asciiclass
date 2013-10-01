@@ -149,7 +149,7 @@ Now let's run the same script on the same file on EC2 (`s3://6885public/enron/la
 ````bash
 python mr_wordcount.py  \
   --num-ec2-instances=1 \
-  --emr-job-flow-id=XXX \
+  --emr-job-flow-id=classpool \
   --python-archive package.tar.gz \
   -r emr \
   -o 's3://asciiclass-YOURUSERNAME-testbucket/output' \
@@ -160,7 +160,7 @@ python mr_wordcount.py  \
 Some details about executing this:
 
 * `--num-ec2-instances` specifies the number of machines.  Please use less than 20 machines
-* `--emr-job-flow-id` is the name of our job pool.  We named it XXX.  **Always use this job id**
+* `--emr-job-flow-id` is the name of our job pool.  We named it "classpool".  **Always use this job id**
 * `--python-archive` contains the python files and packages that your job includes
 * Replace `YOURUSERNAME` with a unique name.  AWS will automatically create the bucket.
 * `--no-output` suppresses outputs to STDOUT
