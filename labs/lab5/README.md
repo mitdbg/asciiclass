@@ -57,9 +57,9 @@ pip install awscli
 First [for awscli](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) by creating a config file containing the following (the region=us-west-2 is important)
 
     [default]
-    aws_access_key_id = <your key>
+    aws_access_key_id = <your access key>
     aws_secret_access_key = <your secret>
-    region = us-west-2    
+    region = us-east-1
 
 
 Now point the environment variable to it:
@@ -72,10 +72,16 @@ Now using `awscli` should just work.  Try to list your buckets:
 
 #### Setup for mrjob
 
-Second, [setup for mrjob](http://pythonhosted.org/mrjob/guides/emr-quickstart.html#amazon-setup) by setting:
+Second, [setup for mrjob](http://pythonhosted.org/mrjob/guides/emr-quickstart.html#amazon-setup) by creating `~/.mrjob.conf` with:
 
-    export AWS_ACCESS_KEY_ID=<your access key>
-    export AWS_SECRET_ACCESS_KEY=<your secret>
+    runners:
+      emr:
+        aws_access_key_id: <your access key>
+        aws_secret_access_key: <your secret>
+        aws_region: us-east-1
+        ec2_instance_type: m1.small
+        
+These will set your mrjob default parameters.  Please use `m1.small` instances.
 
 
 ## Running MapReduce locally
@@ -129,29 +135,36 @@ Be cool, test locally before deploying globally (on AWS)!
 </div>
 
 
+## An Important Note!
+
+Our labs are starting to deal with $$$, and the class has a finite budget for AWS usage so please be **VERY CAREFUL**.  Keep the following in mind when deploying on AWS:
+
+* Amazon rounds up to the nearest hour each time you spin up machines.  So if you run 2 separate jobs that spin up 10 machines each and only run 5 minutes each, then it costs 2*10 hours.
+* When you run a job, `mrjob` will give it an id (e.g., j-12BOETECEU8). **Record this id!!**
+* If you are going to run a bunch of jobs, create a job pool so that subsequent jobs can reuse previously allocated machines.
+* **When you are done, ALWAYS TERMINATE YOUR JOB FLOWS**
+
+        mrjob audit-emr-usage    # lists your job flows at the bottom
+        mrjob terminate-job-flow <ID OF JOB FLOW>
+
+* If you have any questions please [read the mrjob documentation](http://pythonhosted.org/mrjob/guides/emr-tools.html#module-mrjob.tools.emr.create_job_flow) and post on Piazza.
+
+As a precaution, we will periodically run the following command
+
+    mrjob terminate-idle-job-flows
+
+
+
+
 ## Running on EMR
 
-<div style="width: 80%; margin-left: auto; margin-right: auto;">
-<h3>An important note</h3>
- 
-We will provide a job pool on AWS (the VMs are spun up and loaded) for you to run on.   <b>Please use the pool and don't allocate machines on your own!</b>  
 
-The reasons are so that
-
-<ol>
-<li>We can control the cost of running this lab (very important!) and
-<li>You don't need to incur the cost of allocating, starting and shutting down the machines for each job.
-</ol>
-
-The downside is if you run your job at the same time as the other students (e.g., on the last day) you will have fewer resources.  This is called _resource sharing_ and is a nice lesson to learn!
-</div>
-
-Now let's run the same script on the same file on EC2 (`s3://6885public/enron/lay-k.json`):
+Now let's run the same script on the same file sitting on s3, `s3://6885public/enron/lay-k.json`:
 
 ````bash
 python mr_wordcount.py  \
   --num-ec2-instances=1 \
-  --emr-job-flow-id=classpool \
+  --pool-emr-job-flows \
   --python-archive package.tar.gz \
   -r emr \
   -o 's3://asciiclass-YOURUSERNAME-testbucket/output' \
@@ -161,13 +174,14 @@ python mr_wordcount.py  \
 
 Some details about executing this:
 
-* `--num-ec2-instances` specifies the number of machines.  Please use less than 20 machines
-* `--emr-job-flow-id` is the name of our job pool.  We named it "classpool".  **Always use this job id**
-* `--python-archive` contains the python files and packages that your job includes
+* A job-flow simply means the set of machines that have been allocated for a "job".
+* `--num-ec2-instances` specifies the number of machines.  Please use less than 10 machines!!
+* `--pool-emr-job-flows` re-uses an existing job-flow if one exists.  Otherwise it creates a new job-flow and keeps the allocated machines around after the job ends for future jobs using this flag.  Arguments such as `--num-ec2-instances` must be the same for a job-flow to be reused.  **This means you need to explicitly shut the pool down when you are done!!**
+* `--python-archive` contains the gzip python files and packages that your job uses.
 * Replace `YOURUSERNAME` with a unique name.  AWS will automatically create the bucket.
 * `--no-output` suppresses outputs to STDOUT
 
-Go to your bucket and download the output to check if the results are sane.  If so, it's probably safe to change the inputs to `s3://6885public/enron/*.json` and run again.
+Go to your bucket and download the output to check if the results are sane.  If so, it's probably safe to change the inputs to `s3://6885public/enron/*.json` and run again on `10` instances.
 
 
 
