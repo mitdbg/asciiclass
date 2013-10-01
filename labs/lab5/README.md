@@ -2,7 +2,7 @@
 
 *Assigned: Oct 1, 2013*
 
-*Due: Thursday Oct 3, 2013 12:59PM (just before class)*
+*Due: Tuesday Oct 8, 2013 12:59PM (just before class)*
 
 The goal of this lab is for you to get experience _running_ Hadoop/MapReduce jobs on AWS, both to understand
 the pros and cons of using Hadoop, and as a setup for the next series of labs.  
@@ -19,6 +19,9 @@ A sample of the data is below:
 The dataset is stored as a set of files, where each file contains all emails sent by one person.  We have put these files on Amazon S3 at: `s3://6885public/enron/*.json`
 
 ## Setup
+
+You should create a micro-instance as you did in previous
+labs and ssh into your virtual machine (you can also run these commands from your own machine).    Install the following packages.
 
 ### Data
 
@@ -43,44 +46,15 @@ pip install awscli
 
 [awscli](https://aws.amazon.com/cli/) provides convenient command line tools for managing AWS services (e.g., copying data to and from S3)
 
-    aws s3 cp <local file> s3://<YOUR BUCKET NAME>/
+    aws s3 cp <local file> s3://6885public/YOURDIRECTORY/
     
+(6885public is an Amazon bucket we have created for the class.)
 
-### Amazon
-
-[Go to this website](https://6885.signin.aws.amazon.com/console) and login with the username `6885student` to create your own access key (we will give you the password on Piazza and in class).  Then navigate to the [IAM service](https://console.aws.amazon.com/iam/home?#users) and create a new access key for yourself.  You will need this to interact with AWS.
-
-(We are going to let everyone use the same AWS account and see well that works!)
-
-#### Setup for awscli
-
-First [for awscli](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) by creating a config file containing the following (the region=us-west-2 is important)
-
-    [default]
-    aws_access_key_id = <your key>
-    aws_secret_access_key = <your secret>
-    region = us-west-2    
-
-
-Now point the environment variable to it:
-
-    export AWS_CONFIG_FILE=<location of config file>
-
-Now using `awscli` should just work.  Try to list your buckets:
-
-    aws s3 ls
-
-#### Setup for mrjob
-
-Second, [setup for mrjob](http://pythonhosted.org/mrjob/guides/emr-quickstart.html#amazon-setup) by setting:
-
-    export AWS_ACCESS_KEY_ID=<your access key>
-    export AWS_SECRET_ACCESS_KEY=<your secret>
 
 
 ## Running MapReduce locally
 
-Before running a job on multiple servers, it's useful to debug your map reduce job locally (on your own machine, not AWS).
+Before running a job on multiple servers, it's useful to debug your map reduce job locally (on your own micro-instance or home machine).
 
 `mr_wordcount.py` contains the following code to count the number of times each term (word) appears
 in the email corpus:
@@ -107,7 +81,7 @@ if __name__ == '__main__':
 ````
 
 
-OK now run this locally on `lay-k.json`
+First, run this locally on `lay-k.json`
             
 ````bash
 python mr_wordcount.py -o 'wordcount_test' --no-output './lay-k.json'
@@ -129,12 +103,43 @@ Be cool, test locally before deploying globally (on AWS)!
 </div>
 
 
-## Running on EMR
+## Using Amazon's Elastic Map Reduce (EMR)
+
+
+#### Setup for Amazon Command Line Tools (awscli)
+
+You will access a pool of map reduce machines we have created for you, rather than setting up and running map reduce yourself.  You will access these machines using the Amazon command line tools (awscli).  You can read about [awscli](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html).
+
+The first step is to create a config file that allows you to access our Amazon instances.  It should look as follows (the region=us-west-2 is important):
+
+    [default]
+    aws_access_key_id = AKIAJFDTPC4XX2LVETGA
+    aws_secret_access_key = <secret key>
+    region = us-west-2    
+
+You will need to replace <secret key> with the secret key we posted on Piazza.
+
+Now point the environment variable to it:
+
+    export AWS_CONFIG_FILE=<location of config file>
+
+Now using `awscli` should just work.  Try to list all of the buckets:
+
+    aws s3 ls
+
+#### Setup for mrjob
+
+Second, [setup for mrjob](http://pythonhosted.org/mrjob/guides/emr-quickstart.html#amazon-setup) by setting:
+
+    export AWS_ACCESS_KEY_ID=AKIAJFDTPC4XX2LVETGA
+    export AWS_SECRET_ACCESS_KEY=<secret key>
+
+### Running Jobs
 
 <div style="width: 80%; margin-left: auto; margin-right: auto;">
 <h3>An important note</h3>
  
-We will provide a job pool on AWS (the VMs are spun up and loaded) for you to run on.   <b>Please use the pool and don't allocate machines on your own!</b>  
+We have provided a job pool on AWS (the VMs are spun up and loaded) for you to run on.   <b>Please use the pool and don't allocate machines on your own!</b>  
 
 The reasons are so that
 
@@ -146,7 +151,7 @@ The reasons are so that
 The downside is if you run your job at the same time as the other students (e.g., on the last day) you will have fewer resources.  This is called _resource sharing_ and is a nice lesson to learn!
 </div>
 
-Now let's run the same script on the same file on EC2 (`s3://6885public/enron/lay-k.json`):
+First, run the same script on the same file on EC2 (`s3://6885public/enron/lay-k.json`):
 
 ````bash
 python mr_wordcount.py  \
@@ -154,7 +159,7 @@ python mr_wordcount.py  \
   --emr-job-flow-id=classpool \
   --python-archive package.tar.gz \
   -r emr \
-  -o 's3://asciiclass-YOURUSERNAME-testbucket/output' \
+  -o 's3://6885public/YOURDIRECTORY/output' \
   --no-output \
   's3://6885public/enron/lay-k.json'
 ````      
@@ -164,10 +169,14 @@ Some details about executing this:
 * `--num-ec2-instances` specifies the number of machines.  Please use less than 20 machines
 * `--emr-job-flow-id` is the name of our job pool.  We named it "classpool".  **Always use this job id**
 * `--python-archive` contains the python files and packages that your job includes
-* Replace `YOURUSERNAME` with a unique name.  AWS will automatically create the bucket.
+* Replace `YOURDIRECTORY` with a unique name.  AWS will automatically create the directory.
 * `--no-output` suppresses outputs to STDOUT
 
-Go to your bucket and download the output to check if the results are sane.  If so, it's probably safe to change the inputs to `s3://6885public/enron/*.json` and run again.
+You should be able to use awscli to download the file and check if the results are sane:
+
+    aws s3 cp --recursive s3://6885public/YOURDIRECTORY/output . 
+
+If so, it's probably safe to change the inputs to `s3://6885public/enron/*.json` and run again.
 
 
 
