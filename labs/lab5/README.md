@@ -164,6 +164,7 @@ Our labs are starting to deal with $$$, and the class has a finite budget for AW
 
         mrjob audit-emr-usage    # lists your job flows at the bottom
         mrjob terminate-job-flow <ID OF JOB FLOW>
+        mrjob audit-emr-usage    # jobs should be SHUTTING_DOWN, TERMINATED, COMPLETED
 
 * If you have any questions please [read the mrjob documentation](http://pythonhosted.org/mrjob/guides/emr-tools.html#module-mrjob.tools.emr.create_job_flow) and post on Piazza.
 
