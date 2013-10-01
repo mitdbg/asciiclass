@@ -186,6 +186,7 @@ python mr_wordcount.py  \
   --num-ec2-instances=1 \
   --pool-emr-job-flows \
   --python-archive package.tar.gz \
+  --s3-scratch-uri='s3://6885public/YOURDIRECTORY/scratch' \
   -r emr \
   -o 's3://6885public/YOURDIRECTORY/output' \
   --no-output \
@@ -198,6 +199,7 @@ Some details about executing this:
 * `--num-ec2-instances` specifies the number of machines.  Please use less than 10 machines
 * `--pool-emr-job-flows` re-uses an existing job-flow if one exists.  Otherwise it creates a new job-flow and keeps the allocated machines around after the job ends for future jobs using this flag.  Arguments such as `--num-ec2-instances` must be the same for a job-flow to be reused.  **This means you need to explicitly shut the pool down when you are done!!**
 * `--python-archive` contains the gzip python files and packages that your job uses.
+* `--s3-scratch-uri` is the folder where emr's temporary log files should be stored.
 * Replace `YOURDIRECTORY` with a unique name.  AWS will automatically create the directory.
 * `--no-output` suppresses outputs to STDOUT
 
