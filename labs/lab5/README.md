@@ -232,7 +232,7 @@ To make things easy, the total number of emails is `516893`.
 You will probably want to
 
 1. Compute per-term IDFs
-2. Join that with each sender's IDFs
+2. Join that with each sender's TFs
 
 
 **Once again, please test locally before running globally!**
