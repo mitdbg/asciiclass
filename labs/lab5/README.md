@@ -61,7 +61,7 @@ service](https://console.aws.amazon.com/iam/home?#users) and create
 a new access key for yourself.  You will need this to interact with
 AWS.
 
-(We are going to let everyone use the same AWS account and see well
+(We are going to let everyone use the same AWS account and see how well
 that works!)
 
 #### Setup for Amazon Command Line Tools (awscli)
@@ -155,7 +155,7 @@ Be cool, test locally before deploying globally (on AWS)!
 
 ## An Important Note!
 
-Our labs are starting to deal with $$$, and the class has a finite budget for AWS usage so please be **VERY CAREFUL**.  Keep the following in mind when deploying on AWS:
+In the following parts of the lab you will run on multiple EMR nodes on Amazon.  This starts to cost actual money, and the class has a finite budget for AWS usage so please be **VERY CAREFUL**.  Keep the following in mind when deploying on AWS:
 
 * Amazon rounds up to the nearest hour each time you spin up machines.  So if you run 2 separate jobs that spin up 10 machines each and only run 5 minutes each, then it costs 2x10 hours.
 * When you run a job, `mrjob` will give it an id (e.g., j-12BOETECEU8). **Record this id!!**
