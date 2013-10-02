@@ -50,6 +50,7 @@ pip install awscli
     
 (6885public is an Amazon bucket we have created for the class.)
 
+<!--
 ### Amazon
 
 [Go to this website](https://6885.signin.aws.amazon.com/console)
@@ -63,6 +64,7 @@ AWS.
 
 (We are going to let everyone use the same AWS account and see how well
 that works!)
+-->
 
 #### Setup for Amazon Command Line Tools (awscli)
 
@@ -74,17 +76,19 @@ from their storage service, S3.
 
     [default]
     aws_access_key_id = AKIAJFDTPC4XX2LVETGA
-    aws_secret_access_key = <your secret>
+    aws_secret_access_key = <secret key from piazza>
     region = us-east-1
 
     [preview]
     emr=true
 
-Now point the environment variable to it:
+Note that everyone in the class will be using the same secret key, which is posted on Piazza.
+
+Now export the `AWS_CONFIG_FILE` environment variable, as follows:
 
     export AWS_CONFIG_FILE=<location of config file>
 
-Now using `awscli` should just work.  Try to list your buckets:
+Now using `awscli` should work.  Try to list your buckets:
 
     aws s3 ls
 
@@ -95,7 +99,7 @@ Now using `awscli` should just work.  Try to list your buckets:
     runners:
       emr:
         aws_access_key_id: AKIAJFDTPC4XX2LVETGA
-        aws_secret_access_key: <your secret>
+        aws_secret_access_key: <secret key from piazza>
         aws_region: us-east-1
         ec2_instance_type: m1.small
         
