@@ -27,7 +27,7 @@ labs and ssh into your virtual machine (you can also run these commands from you
 
 
 
-[Download](https://s3.amazonaws.com/asciiclass/enron/lay-k.json.gz) and decompress `lay-k.json.gz`, which you will use to test your first mapreduce program:
+Decompress `lay-k.json.gz`, which you will use to test your first mapreduce program:
 
 ````bash
 gzip -d lay-k.json.gz
