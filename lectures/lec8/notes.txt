@@ -1,0 +1,67 @@
+= Column-oriented Databases
+The workload these systems solve is an online analytical (OLAP) one:
+  - compute an aggregate (min/max/sum/count) over some fraction of the database, perhaps grouped on some field.
+  - SELECT aggregate(x) FROM table WHERE predicate GROUP BY y
+    -> predicate likely filters >1% of a large database
+  - applications: statistical analysis, visualization, data exploration, report-building
+    -> "we solve 3M widgets this quarter, broken down by color and size"
+
+How would you optimize these types of queries?
+  - Throw an index on the columns with the predicate to reduce the number of rows you're accessing.
+    -> either you have to rearrange the data so it's sorted in the order of the index, which might not be possible with multiple predicates, or your index might cause you to have to jump around on disk to actually read the out-of-order data.
+  - Make it fast to sequentially scan the data.
+    -> sequential scans on lots of irrelevant data (that doesn't match the predicate) are slow.  Need to reduce the size of the data that is read to avoid this.  This is what most column-oriented databases do.
+
+== Row-oriented storage
+Given some table of stocks: Symbol, Price, Volume, Exchange, Date
+
+Most traditional relational DBs store data row-by-row on disk, meaning all of the five columns above are stored for each row next to each other.
+
+That's great if you want to read all of the information on a particular row ("What do I know about IBM on Oct. 3 at 5:59:03pm), but often reporting queries only want to filter on one column and compute an aggregate on another column ("Filter on stocks in the last quarter, and sum up the volume").
+
+== Column-oriented storage
+Instead, we can store each column (or groups of co-accessed columns) in a separate file on disk.
+
+To answer our date-based volume query, we only have to read the date and volume data, avoiding reading excessive data.
+
+How do you speed up predicate-based sequential scans?
+  - store each column's data in 64-MB chunks.  Each chunk should have a few kilobytes describing statistics (e.g., start of range, end of range).
+  - Keep the headers in a sparse block index that help you quickly decide which blocks need to be read
+
+= Optimizations
+Just storing things as columns isn't all: you can get greater than an order of magnitude of speed improvements with a few more tricks
+
+Compress the data
+  - similar sequential integers (e.g., primary key column, or date column) can be stored as deltas (e.g., this block contains keys 1-1000000 in order)
+  - run-length encode data that repeats (e.g., there are 1000 rows with IBM, followed by 800 with ORCL)
+
+Sort the data
+  - Can help you better compress and combine the data in multiple columns
+
+Late materialization
+  - if filtering on date and summing volume, only read in date, filter to a row range, and then read the right volume entries
+  - to do this, keep a bitmap with an entry per row of each predicate that is true for a row.  easy to combine two filters' (symbol=IBM, date=9/15/2013) bitmaps for subsequently reading data
+  - (a bitmap is a block of memory with as many bits as there are rows.  for each row that a predicate matches on, we'll flip that bit to 1.  it's now easy to AND together huge bit vectors of 1s/0s in memory to see which rows pass all the predicates)
+
+Distribute and parallelize
+  - since the data is in 64MB chunks, keep different chunks on different machines
+  - things like SUM/COUNT are associative+commutative, so compute partial sums and counts on each machine, and combine them in one location afterward.
+  - joins are harder to get right, but there are tricks for that.
+  
+= Demo
+Sam ran a TPC-H query on Postgres and Vertica.  The Vertica one was ~15x faster.  Woo!
+
+= Can we just make a row store act like a column store?
+Store each column in its own table, execute queries across all of these tables.
+
+Challenges:
+  - need a way to identify each row in the original table.  If your column is an integer, you need to add another integer for the primary key of the original row, doubling the size of the data.
+  - row headers are large (postgres seems best, and it has 26 bytes of overhead on each row).
+  - late materialization becomes harder, since you're doing it outside of the query executor
+
+= High-level takeaway
+Just like it's unfair to say "Hadoop is slow," it's unfair to say "SQL-based systems don't scale."
+Different instantiations/implementations of each of MapReduce or SQL are slow/unscalable at various tasks.  Use the right tool for the job.
+
+
+

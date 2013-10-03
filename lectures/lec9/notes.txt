@@ -1,0 +1,139 @@
+Data cubes, Materialized Views, Caching
+
+= Data cubes
+
+Let's start w/ cubes (also called crosstabs, pivot tables)
+
+Imagine a huge table of flights
+
+id    airline    origin		destination
+
+SELECT airline, origin, avg(delay)
+FROM flights
+CUBE (airline, origin);
+
+How different from GROUP BY instead of Cube?  Group by would only show all co-occuring airlines and origins.
+
+A cube instead returns all co-occurences and sub-aggregates:
+
+         origin
+          BOS	JFK	LAX	TOTAL
+airline
+AA         1     3   2   2
+UA         2        ...
+US         3        ...
+WN         0        ...
+TOTAL     1.5   --------> OVERALL
+
+This allows you to compute aggregates and sub-aggregates across all dimensions of the data.
+
+We watched a video: Tableau is a company that provides data analysis based on data cubes.  It supports "business intelligence," which is a fancy word for computing aggregates over many dimensions of your data.
+  - Tableau doesn't rely on the underlying DB to support cubes---it calculates and maintains its own cubes from normal SQL aggregate queries.
+Sam played around with Pivot Tables in excel, which give you the ability to cube/filter your data.
+
+
+== How to represent cubes in a relational database?
+
+Three-column table:
+airline		city	aggregate
+ua			bos		...
+ua			jfk		...
+ua			sfo		...
+aa			jfk     ...
+aa			*		[total for aa]   
+*			bos		[total for bos]
+*			*		[overall total]
+
+(this works for any number of dimensions and aggregates)
+
+== How to maintain cubes?
+
+When new data is inserted or updated, or records get deleted, how do we update the cubes?
+
+New record comes in: AA, BOS, 3 hrs
+  -> if aggregate=count, increment the needed rows on arrival, decrement on delete
+  -> if aggregate=min/max, insert is easy, delete is hard
+  -> if aggregate=avg, then keep a running sum and running count and then increment/decrement both the sum and count appropriately
+  -> if aggregate=median or distinct count, it's tricky: you have to keep a state whose size is proportional to the entire original dataset.
+
+In the data cubes paper, this is the difference between algebraic and holistic aggregates.
+
+More generally, if you have an aggregate function and want to support a maintained cube on it:
+  - initialize() -> instantiates some amount of state for the aggregate
+  - update(new_value, previous_state) -> new_state
+  - finalize(state) -> aggregatevalue
+
+Example for avg:
+  - initialize() -> (0, 0)
+  - update(new_value, (old_count, old_sum)) -> return (old_count + 1, old_sum + new_value)
+  - finalize((count, sum)) -> return sum/count
+
+
+== What can go wrong with data cubes?
+You can cube any number of dimensions A, B, C, ...
+If the cardinality of a dimension A (the number of unique values in it) is |A|, the cardinality of a cube is
+   |A|*|B|*|C|
+
+Which causes a space explosion.  For flights, for example there are thousands of airports with only one flight to one other airport.  That leaves a lot of sparseness in the data.
+
+Two ideas:
+  - Don't have rows in the relational representation if the data is empty (ROLAP---relational olap)
+  - Represent the cube as a matrix and use sparse matrix implementations (MOLAP---matrix olap)
+  - Pick a dense vs. sparse representation depending on the dataset (HOLAP---hybrid olap)
+
+Criticisms
+  - You likely don't need all possible aggregates across all dimensions, and dimensionality past 2-3 dimensions can kill
+  - The approach might not be flexible: the implementations generally work on some table and udpate the cube as the table changes, but don't work with generic SQL views, etc.  Need to solve the materialized view problem!
+
+
+= View materialization and maintenance
+Sometimes computing results on the fly takes too long.  You want to compute them once and update them as you go.  This is a superset of the data cube problem.
+
+Example:
+CREATE VIEW emp_dept_17 AS
+	SELECT emp.id, emp.name, dept.name
+	FROM emp JOIN dept on emp.dno = dept.dno
+	WHERE dept.building = 17;
+  -> employees joined with departments that are in building 17
+
+When a new department record arrives: if it has employees, and it's in building 17, add a row to the view.  If you have foreign key constraints, likely no employee works in the newly created department.
+When a new employee record arrives: if it's in a department that's in building 17, add a row to the view.
+
+You only have to incrementally add/update rows rather than recalculate the whole join.
+
+
+== What views can't we maintain?
+- Sorts with specific records---the top K records by salary
+- Aggregates like medians (same reason as data cubes)
+- Deletions of records w/o keys---no keys mean you don't know who is referencing that record
+
+What do we do when we can't maintain a view?
+  - either recompute the view on each update
+  - or periodically update the view, putting up with stale data in the view
+
+DBToaster paper proposes a way to figure out what state you need to maintain to incrementally update any view (except for two types of SQL constructs that they list in the paper).
+
+Example: a view on SELECT COUNT(*) FROM A JOIN B;
+You only need to keep the state |A| and |B|.
+
+Say |A| = 3 and |B| = 2, COUNT = |A|*|B| = 6
+  - insert a row into A: |A| = 4, COUNT = 8
+  - then insert a row into B: |B| = 3, COUNT = 12
+
+It's cool that DB folks have thought what applications they can get reasonable view updates from.
+
+
+= Caching
+This is likely the most popular instantiation of materialized views
+
+Querying a database might be slow, so you can store results into memcached/redis that you check for before hitting the database.  Subsequent requests will see precomputed values without having to hit the database.
+
+Why not leave caching to the database?
+  - operations: it's easier to scale a memory-only cache across multiple machines than it is to scale your single-node relational database, so separate your concerns
+  - development: you want to cache more than just database results.  you might want to store the results of an expensive algorithm or generated HTML blob.
+
+== How to maintain an up-to-date cache?
+- Keep a time-to-live (TTL) on each key.  This bounds the staleness of the data before the cached key goes away.
+- Expire/delete cache keys that relate to the data being updated.  BUT, as application becomes more complex, it's hard to tell what cached objects need to be updated for arbitrary data changes.
+
+
