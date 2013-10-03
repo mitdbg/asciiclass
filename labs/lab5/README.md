@@ -50,6 +50,60 @@ pip install awscli
     
 (6885public is an Amazon bucket we have created for the class.)
 
+<!--
+### Amazon
+
+[Go to this website](https://6885.signin.aws.amazon.com/console)
+and login with the username `6885student` to create your own access
+key (we will give you the password on Piazza and in class).
+
+Then navigate to the [IAM
+service](https://console.aws.amazon.com/iam/home?#users) and create
+a new access key for yourself.  You will need this to interact with
+AWS.
+
+(We are going to let everyone use the same AWS account and see how well
+that works!)
+-->
+
+#### Setup for Amazon Command Line Tools (awscli)
+
+Amazon command line tools (awscli) provides simple commands for communicating
+with AWS services.  You will use it to list, upload and download data
+from their storage service, S3.
+
+[Setup awscli](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) by creating a config file containing the following (the region=us-east-1 is important)
+
+    [default]
+    aws_access_key_id = AKIAJFDTPC4XX2LVETGA
+    aws_secret_access_key = <secret key from piazza>
+    region = us-east-1
+
+    [preview]
+    emr=true
+
+Note that everyone in the class will be using the same secret key, which is posted on Piazza.
+
+Now export the `AWS_CONFIG_FILE` environment variable, as follows:
+
+    export AWS_CONFIG_FILE=<location of config file>
+
+Now using `awscli` should work.  Try to list your buckets:
+
+    aws s3 ls
+
+#### Setup for mrjob
+
+[Setup mrjob](http://pythonhosted.org/mrjob/guides/emr-quickstart.html#amazon-setup) by creating `~/.mrjob.conf` with:
+
+    runners:
+      emr:
+        aws_access_key_id: AKIAJFDTPC4XX2LVETGA
+        aws_secret_access_key: <secret key from piazza>
+        aws_region: us-east-1
+        ec2_instance_type: m1.small
+        
+These will set your mrjob default parameters.  Please use `m1.small` instances.
 
 
 ## Running MapReduce locally
@@ -103,61 +157,41 @@ Be cool, test locally before deploying globally (on AWS)!
 </div>
 
 
-## Using Amazon's Elastic Map Reduce (EMR)
+## An Important Note!
+
+In the following parts of the lab you will run on multiple EMR nodes on Amazon.  This starts to cost actual money, and the class has a finite budget for AWS usage so please be **VERY CAREFUL**.  Keep the following in mind when deploying on AWS:
+
+* Amazon rounds up to the nearest hour each time you spin up machines.  So if you run 2 separate jobs that spin up 10 machines each and only run 5 minutes each, then it costs 2x10 hours.
+* When you run a job, `mrjob` will give it an id (e.g., j-12BOETECEU8). **Record this id!!**
+* If you are going to run a bunch of jobs, create a job pool so that subsequent jobs can reuse previously allocated machines.
+* **When you are done, ALWAYS TERMINATE YOUR JOB FLOWS**
+
+        mrjob audit-emr-usage    # lists your job flows at the bottom
+        mrjob terminate-job-flow <ID OF JOB FLOW>
+        mrjob audit-emr-usage    # jobs should be SHUTTING_DOWN, TERMINATED, COMPLETED
+
+* If you have any questions please [read the mrjob documentation](http://pythonhosted.org/mrjob/guides/emr-tools.html#module-mrjob.tools.emr.create_job_flow) and post on Piazza.
+
+As a precaution, we will periodically run the following command
+
+    mrjob terminate-idle-job-flows
 
 
-#### Setup for Amazon Command Line Tools (awscli)
 
-You will access a pool of map reduce machines we have created for you, rather than setting up and running map reduce yourself.  You will access these machines using the Amazon command line tools (awscli).  You can read about [awscli](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html).
 
-The first step is to create a config file that allows you to access our Amazon instances.  It should look as follows (the region=us-west-2 is important):
+## Running on EMR
 
-    [default]
-    aws_access_key_id = AKIAJFDTPC4XX2LVETGA
-    aws_secret_access_key = <secret key>
-    region = us-west-2    
 
-You will need to replace <secret key> with the secret key we posted on Piazza.
+Now let's run the same script on the same file sitting on s3, `s3://6885public/enron/lay-k.json`:
 
-Now point the environment variable to it:
-
-    export AWS_CONFIG_FILE=<location of config file>
-
-Now using `awscli` should just work.  Try to list all of the buckets:
-
-    aws s3 ls
-
-#### Setup for mrjob
-
-Second, [setup for mrjob](http://pythonhosted.org/mrjob/guides/emr-quickstart.html#amazon-setup) by setting:
-
-    export AWS_ACCESS_KEY_ID=AKIAJFDTPC4XX2LVETGA
-    export AWS_SECRET_ACCESS_KEY=<secret key>
-
-### Running Jobs
-
-<div style="width: 80%; margin-left: auto; margin-right: auto;">
-<h3>An important note</h3>
- 
-We have provided a job pool on AWS (the VMs are spun up and loaded) for you to run on.   <b>Please use the pool and don't allocate machines on your own!</b>  
-
-The reasons are so that
-
-<ol>
-<li>We can control the cost of running this lab (very important!) and
-<li>You don't need to incur the cost of allocating, starting and shutting down the machines for each job.
-</ol>
-
-The downside is if you run your job at the same time as the other students (e.g., on the last day) you will have fewer resources.  This is called _resource sharing_ and is a nice lesson to learn!
-</div>
-
-First, run the same script on the same file on EC2 (`s3://6885public/enron/lay-k.json`):
 
 ````bash
 python mr_wordcount.py  \
+  --owner=YOURNAME \
   --num-ec2-instances=1 \
-  --emr-job-flow-id=classpool \
+  --pool-emr-job-flows \
   --python-archive package.tar.gz \
+  --s3-scratch-uri='s3://6885public/YOURDIRECTORY/scratch' \
   -r emr \
   -o 's3://6885public/YOURDIRECTORY/output' \
   --no-output \
@@ -166,17 +200,22 @@ python mr_wordcount.py  \
 
 Some details about executing this:
 
-* `--num-ec2-instances` specifies the number of machines.  Please use less than 20 machines
-* `--emr-job-flow-id` is the name of our job pool.  We named it "classpool".  **Always use this job id**
-* `--python-archive` contains the python files and packages that your job includes
+* A job-flow simply means the set of machines that have been allocated for a "job".
+* `--owner` given the job's owner a name.  Helps you and us identify job owners.  Set it to your name or alias.
+* `--num-ec2-instances` specifies the number of machines.  Please use less than 10 machines
+* `--pool-emr-job-flows` re-uses an existing job-flow if one exists.  Otherwise it creates a new job-flow and keeps the allocated machines around after the job ends for future jobs using this flag.  Arguments such as `--num-ec2-instances` must be the same for a job-flow to be reused.  **This means you need to explicitly shut the pool down when you are done!!**
+* `--python-archive` contains the gzip python files and packages that your job uses.
+* `--s3-scratch-uri` is the folder where emr's temporary log files should be stored.
 * Replace `YOURDIRECTORY` with a unique name.  AWS will automatically create the directory.
 * `--no-output` suppresses outputs to STDOUT
+
 
 You should be able to use awscli to download the file and check if the results are sane:
 
     aws s3 cp --recursive s3://6885public/YOURDIRECTORY/output . 
 
-If so, it's probably safe to change the inputs to `s3://6885public/enron/*.json` and run again.
+If so, it's probably safe to change the inputs to `s3://6885public/enron/*.json` and run again on `10` instances
+
 
 
 
@@ -195,10 +234,10 @@ To make things easy, the total number of emails is `516893`.
 You will probably want to
 
 1. Compute per-term IDFs
-2. Join that with each sender's IDFs
+2. Join that with each sender's TFs
 
 
-Once again, please test locally before running globally!
+**Once again, please test locally before running globally!**
 
 
 ### Questions
