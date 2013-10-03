@@ -1,0 +1,72 @@
+= MapReduce
+
+A canonical mapreduce example: wordcount
+
+map(String key):
+  for each word w in key
+    EmitIntermediate(w, 1)
+
+reduce(key, Iterator values):
+  int result = 0
+  for v in values
+  	result += v
+  Emit(key, result)
+
+Mappers map over the data, generate several values (words).
+
+All map-generated keys with the same key are sent to the same reducer, so one reducer can count the instances of each word.
+
+Why do we Emit 1 in the mapper and still do `+= v` in the reducer?
+ -> For optimization reasons: if your reduction logic is commutative and associative, you can run a combiner to pre-reduce the data on each mapper, and send less data to the reducers.
+
+= Implementing joins in mapreduce
+
+SELECT e.name, e.age, d.name
+FROM emp, dept
+WHERE e.did = dept.eid
+
+map(record):
+	# emit record.__table and either record.eid or record.did depending on the table you're getting
+
+reduce(key, records:
+  for r1 in records:
+    for r2 in records:
+      if r1.__table != r2.__table:
+        output combine(r1, r2)
+
+It turns out you can implement all relational operators in mapreduce.  Yay!
+
+But there's controversy!
+
+= MapReduce vs. Stonebraker
+Agendas
+  - Jeff Dean + Sanjay Ghemawat wrote mapreduce.  They would love the ideas to be adopted beyond Google.
+  - Mike Stonebraker has written many relational analysis platforms.  He doesn't believe MapReduce is a good framework.
+
+== MapReduce criticisms & responses
+Bad for iterative algorithms (e.g., graphs, machine learning, etc.).
+  - For example, pagerank needs to iterate on the web link graph multiple times, revisiting each node multiple times.
+  - Each iteration would be a map/reduce phase, which would require it to write the intermediate data out to disk between phases.  We don't need all of that persistence per iteration!
+
+All operations are scans
+  - While you could build/encode indices in filenames, indexing isn't as well-integrated into MapReduce as, say RDBMSs
+  - Query optimization is manual
+  - Reasonable interpretation: MapReduce is a lower-level framework, which you have to build things on top of to get something comparable to RDBMSs.
+
+Note: common criticisms of MapReduce are actually criticisms of some particular version of Hadoop, an implementation.
+  - e.g., long startup times, starting a new JVM with each instance, etc.
+
+Examples of what MR is used for in Google
+  - Stitching images together in GMaps (totally unnatural to implement this in an RDBMS!)
+  - Path precomputation in GMaps
+  - Inverted index construction for text search (you only ever generate an index on a version of the web once---next time you crawl, you'll run it on a different dataset.  loading data into RDBMSs takes time, so why load it if you're only going to use it once?)
+  - Pagerank (maybe not as efficient if you need to iterate a lot, but similar to inverted index construction: preloading into an RDBMS to process the data once seems wasteful.)
+
+So there's clearly a use case for MR above RDBMSs, and at that point you're looking at optimizing MR for your use-case.
+
+= High-level programming paradigms on top of MapReduce
+Systems like HIVE provide an SQL-like interface on top of MapReduce.
+  - the bad: DB folks have already optimized SQL on top of more fine-tuned storage/query processing systems.  Why go to MapReduce?
+  - the good: from an abstract point of view, if what you're doing is scanning huge amount of data and computing statistics over it, MapReduce seems like a decent substrate for this computation
+  - the lukewarm: MapReduce is designed for throughput and falt-tolerance.  This means it can effectively handle tons of data, but increases latency of queries through its sequentially writing out data of incremental steps.
+  - the practical: once you plug into SQL/HIVE, you can move to other systems if you decide to do so: Vertica, Shark, Impala, etc.
