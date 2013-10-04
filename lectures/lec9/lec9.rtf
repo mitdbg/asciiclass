@@ -1,0 +1,249 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww18140\viewh16380\viewkind1
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7605\tqr\tx9343\pardirnatural
+
+\f0\b\fs24 \cf0 6885 Lecture 9 Materialization							10/3/2013\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b0 \cf0 Lab 5 out -- Map Reduce\
+Next time -- guest lecture -- Tyson Condie\
+\
+Data storage progression:\
+\
+MapReduce\
+   + 		----> MySQL -----> Vertica ---->  Data Cubes\
+HDFS \
+\
+Increasing specialization brings improved performance but also a more restrictive workload.\
+\
+Recap:  what is a materialized view?  (Precompute the results of a query in table, run later queries on that precomputed result.  Database systems provide varying degrees of support for maintaining those views in the presence of updates to the underlying tables.)\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 Going to look first at a restricted version of a materialized view -- the "data cube"\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+Then will talk about materialization in general\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 Then about caching more generally\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+
+\b \ul Data Cubes\
+
+\b0 \ulnone \
+What is the idea?\
+\
+"Cross tabs"\
+\
+Example of Tableau -- video  \
+(http://www.youtube.com/watch?feature=player_embedded&v=37Mx3uZRwBE)\
+\
+Tableau is based on data cubes\
+\
+Lets understand how they use it for  flights:\
+\
+FlightNo 	Airline 	Origin 	Dest 	StartTime 	EndTime 	Delay\
+1	    	US		NYC	LAX	1 PM		4 PM		0\
+2		UN		BOS	ORL	3 PM		7 PM		.5\
+\
+What does a cube do:\
+\
+SELECT airline, origin, avg(delay)\
+FROM flights\
+GROUP BY CUBE (airline, origin)\
+\
+		airport\
+			BOS		JFK		LAX	TOTAL\
+	airline	\
+		AA	xx		xx		xx	yy\
+		UA	xx		xx		xx	yy\
+		US	xx		xx		xx	yy\
+		WN	xx		xx		xx	yy\
+	      TOTAL	yy		yy		yy	yy\
+\
+relational rep:\
+\
+	AA	BOS		AVG\
+	UA	BOS		AVG\
+	US	BOS		AVG\
+	WN	BOS		AVG\
+	AA	JFK		AVG\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 	UA	JFK		AVG\
+	US	JFK		AVG\
+	WN	JFK		AVG\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 	\'85\
+	AA	ALL		AVG\
+	US	ALL		AVG\
+	\'85\
+	ALL	BOS		AVG\
+	\'85\
+	ALL	ALL		AVG\
+\
+O(|airline| X |airport|) rows\
+\
+This is an example of a pivot table\
+\
+	(Show excel ) --- on test1_flighthistory_rev1.csv from \
+	http://www.gequest.com/c/flight2/data\
+\
+Key advantage is that this is a compact way to summarize a large amount of data for small number of attributes\
+\
+Why would I want to do this in my database?\
+\
+It can efficiently maintain this structure!\
+(How?)\
+\
+Key insight:  SQL aggregates are incrementally maintainable\
+\
+For example, if a new Record (AA, BOS, 10 min) arrives, we can clearly update the counts\
+\
+What about averages?\
+\
+What if we had medians?\
+\
+Paper has taxonomy of aggregates\
+\
+	distributive (e.g., count) -- no additional state is needed\
+	algebraic (e.g., avg) -- some state is needed but fixed in size\
+	holistic (e.g., median) -- no constant bound on state needed\
+\
+\
+What if I want to write my own aggregation function?\
+\
+Can write it as:\
+\
+Problems with cubes -- \
+\
+"curse of dimensionality"\
+\
+	Lots of empty values\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 	MOLAP vs ROLAP vs HOLAP\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+Rigid -- \
+	can't answer a lot of different queries from this\
+\
+\
+\
+More generally :  materialized views -- can define an arbitrary query that I want to maintain\
+\
+E.g.,\
+\
+	SELECT emp.eid, emp.name, dept.name\
+	FROM emp JOIN dept ON emp.dno = dept.dno\
+	WHERE dept.bldg = 17 or dept.bldg  = 18\
+\
+what we'd like to do is to figure out how to maintain this view when a new emp/dept tuple arrives\
+\
+What do we need to do?  Compute a "Delta Query" -- update strategy for view when new data rrives\
+\
+When a new dept arrives -- nothing\
+When a new emp E arrives -- join E with dept table, apply where clause, if matches, add to view\
+\
+Can implement by attaching a trigger to the emp table\
+\
+\
+What queries can't I incrementally maintain?\
+\
+Deletions from views without primary keys\
+Deletions from aggregate views\
+\
+NOT IN joins, e.g.\
+\
+	SELECT * FROM emp WHERE emp.eno NOT IN (select eno from bademps)\
+\
+\
+What about nested queries?\
+\
+	That's basically what the DBToaster paper shows\
+\
+	Example\
+\
+	v = SELECT count(*) FROM A JOIN B\
+\
+	Why tricky?\
+	\
+	cross product -- so each new A updates the count by the number of tuples in B\
+\
+	Their observation -- maintain "multi-level deltas" -- like 2nd derivatives of queries:\
+\
+	E.g.,:\
+\
+
+\fs20 	v			\uc0\u8706  A     		\u8706  B		\u8706  \u8706   A		\u8706  \u8706  B\
+	SELECT count(*)   	count(B)	count (A)	1		1\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 	FROM A JOIN B								\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 	\
+On insert into A: \
+		
+\fs24 \uc0\u8706  B  += \u8706  \u8706  A\
+		v += \uc0\u8706  B\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\fs20 \cf0 On insert into B: \
+		
+\fs24 \uc0\u8706  A  += \u8706  \u8706  B\
+		v += \uc0\u8706  A\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\
+\
+\
+\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\fs20 \cf0 Example\
+\
+	v			\uc0\u8706  A     		\u8706  B		\u8706  \u8706   A		\u8706  \u8706  B\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\fs24 \cf0 \
+	6			3		2		1		1\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 Insert into B\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+	8			2		4		1		1\
+\
+\
+Insert into A\
+	\
+	12			3		4		1		1\
+\
+\
+Paper shows how to do this for general queries (I have a hard time understanding how it works for arbitrary queries)\
+\
+\
+LOTS of work on this problem -- see me for more references or look at section 2.1.  Work on what can be maintained, and also maintenance strategies (e.g., eager vs lazy;  batched vs immediate, etc.)\
+\
+
+\b More general caching strategies for databases\
+\
+
+\b0 Materialized views and data cubes are a form of precomputation / caching\
+\
+Lots of other caching mechanisms for databases \
+\
+E.g., application caching (memcached) -- store results of queries (or other computations) in some kind of application-level cache, reuse them\
+\
+Advantages:\
+	- very general -- can store more than database results\
+	- fast -- can be lower latency than SQL queries\
+\
+Disadvantages:\
+	- hard to maintain;  failure to maintain can result in inconsistent answers\
+	- lots of approaches for maintenance have been tried -- triggers?  db modifications?\
+	(TxCache)}
