@@ -227,7 +227,10 @@ You can read about [TF-IDF on Wikipedia](http://en.wikipedia.org/wiki/Tf%E2%80%9
     a numerical statistic which reflects how important 
     a word is to a document in a collection or corpus.
 
-In Wikipedia's lingo, a "document" is all text in a sender's emails, and the "collection or corpus" is the set of all emails in the corpus. 
+Feel free to use your own reasonable definition of "document" and "collection"  for your analyses.  Just be clear about what they are.  Some examples:
+
+* In Wikipedia lingo, a "document" could be all text in all of a sender's emails, and the "collection or corpus" could be the set of all emails in the corpus. Or
+* "document" could be the text in each sender's emails and "collection" could be all emails in a corpus. 
 
 To make things easy, the total number of emails is `516893`.
 
