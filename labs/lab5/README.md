@@ -227,7 +227,10 @@ You can read about [TF-IDF on Wikipedia](http://en.wikipedia.org/wiki/Tf%E2%80%9
     a numerical statistic which reflects how important 
     a word is to a document in a collection or corpus.
 
-In Wikipedia's lingo, a "document" is all text in a sender's emails, and the "collection or corpus" is the set of all emails in the corpus. 
+TF-IDF is pretty general, and the definiton of "document" and "collection" varies depending on analysis.  Pick and describe whatever makes sense to compute the top terms for Enron's key people (see questions).
+As an example, a "document" may be all text in all of a sender's
+emails, and the "collection or corpus" could be the set of all emails in
+the corpus.
 
 To make things easy, the total number of emails is `516893`.
 
@@ -235,6 +238,9 @@ You will probably want to
 
 1. Compute per-term IDFs
 2. Join that with each sender's TFs
+
+You can optionally do preprocessing of the documents, such as removing stop words (see [NLTK stopwords](https://www.google.com/search?q=nltk+stop+word)), stemming words, etc etc...
+
 
 
 **Once again, please test locally before running globally!**
