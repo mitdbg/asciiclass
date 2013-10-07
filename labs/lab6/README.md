@@ -108,7 +108,7 @@ To destroy the cluster once you're done:
 ```` 
 
 ### Questions
-
+<!--
 * List the top TF-IDF terms for Enron's key people: 
     * Kenneth Lay, Founder, Chairman and CEO
     * Jeffrey Skilling, former President, and COO
@@ -125,13 +125,13 @@ each person (node).  These edges form a graph.
 Bonus question (optional):
 
 * Cluster the senders by their TF-IDF vectors in whatever way you want.  Describe the clusters.  Who's close to whom?
-
+-->
 
 
 # Submission Instructions
 
 
-Answer the questions above in a text file called "lab5-lastname", where lastname is your last name.  Make sure the text file also has your complete name.   Save your writeup and scripts in a zip file or tarball.   Upload it to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab5" assignment.
+Answer the questions above in a text file called "lab6-lastname", where lastname is your last name.  Make sure the text file also has your complete name.   Save your writeup and scripts in a zip file or tarball.   Upload it to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab6" assignment.
 
 Now you're almost done!  Go read the assigned paper(s) for today.
 
