@@ -108,25 +108,7 @@ To destroy the cluster once you're done:
 ```` 
 
 ### Questions
-<!--
-* List the top TF-IDF terms for Enron's key people: 
-    * Kenneth Lay, Founder, Chairman and CEO
-    * Jeffrey Skilling, former President, and COO
-    * Andrew Fastow, former CFO
-    * Rebecca Mark-Jusbasche, former Vice Chairman, Chairman and CEO of Enron International
-    * Stephen F. Cooper, Interim CEO and CRO
-* How did you compute TF-IDF on the whole corpus?  What was easy, what was hard?
-
-The `from` and `to,cc,bcc` fields in each email define directed edges (from --> to) between 
-each person (node).  These edges form a graph.  
-
-* Sketch a description of how you would use EMR to run [page rank](http://en.wikipedia.org/wiki/Page_rank) on this graph.  What would be some pain points?
-
-Bonus question (optional):
-
-* Cluster the senders by their TF-IDF vectors in whatever way you want.  Describe the clusters.  Who's close to whom?
--->
-
+TODO 
 
 # Submission Instructions
 
