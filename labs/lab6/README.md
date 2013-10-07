@@ -30,6 +30,7 @@ Set up your amazon credentials
 ````bash
 export AWS_ACCESS_KEY_ID=AKIAJFDTPC4XX2LVETGA
 export AWS_SECRET_ACCESS_KEY=<ACCESS KEY FROM PIAZZA>
+````
 
 Launch a spark cluster with 3 machines
 
