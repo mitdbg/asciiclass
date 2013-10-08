@@ -248,7 +248,7 @@ You can optionally do preprocessing of the documents, such as removing stop word
 
 ### Questions
 
-* List the top TF-IDF terms for Enron's key people: 
+* List the top TF-IDF terms for Enron's key people (or as many as you can find):
     * Kenneth Lay, Founder, Chairman and CEO
     * Jeffrey Skilling, former President, and COO
     * Andrew Fastow, former CFO
