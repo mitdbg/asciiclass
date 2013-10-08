@@ -1,0 +1,192 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww12540\viewh16140\viewkind1
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\fs24 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qr
+\cf0 10/8/2013\
+Lecture 10\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 Lab 4 Prizes\
+Lab 5 discussion\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 Today: \
+\
+Approximate query processing\
+\
+Motivation:\
+\
+\
+Techniques:\
+\
+	Histograms\
+	Samples\
+	Sketches\
+\
+
+\b \ul Histogram
+\b0 \ulnone \
+\
+Simplest approach\
+\
+Given a distribution of values, can estimate number of values in a given range, as well as averages, etc.\
+\
+Problems: \
+- Can be highly inaccurate\
+- Unclear how to bound error it gives\
+\
+
+\b \ul Sampling
+\b0 \ulnone \
+\
+Idea -- given a sample of values, can estimate many parameters from that sample\
+\
+For example, standard error of the mean (standard deviation of the error of the sample mean) can be computed as:\
+\
+	s/sqrt(n), \
+\
+If the data is normally distributed, we can say that 95% of the time the true mean will be with 1.96 x of this value.\
+\
+where s is the standard deviation of the samples.  \
+\
+Need a lot of samples to dramatically reduce the data set size!\
+\
+Can also estimate count (trivially), variance, etc.\
+\
+Challenges:\
+\
+How to efficiently compute a sample (without replacement)?\
+\
+(Reservoir sampling)\
+\
+For large data sets, linear pass sucks, especially if we have to do it on the fly every time.\
+\
+What can we do?\
+\
+Store the data in random order on disk (e.g., "random index"), or precompute samples.\
+\
+\
+Skewed distributions:\
+\
+A purely random sample may under-represent rare subgroups\
+\
+Ex:\
+\
+Q1: SELECT avg(Salary) FROM employees WHERE  city=\'91New York\'92\
+Q2: SELECT avg(Salary) FROM employees WHERE city=\'91Cambridge\'92\
+\
+Solution: Stratified sampling \'96 only sample values that appear more than K times;  preserve other values\
+\
+\
+How can we build a query processor that uses sampling?\
+\
+BlinkDB\
+\
+Provides bounded errors, or bounded runtimes, for aggregation-based SQL queries using sampling\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 SELECT avg(Salary) FROM employees WHERE  city=\'91New York\'92 within 1% conf 95%\
+SELECT avg(Salary) FROM employees WHERE  city=\'91New York\'92 LIMIT 2 secs\
+\
+System precomputes stores a set of (stratified) samples for each table\
+\
+At runtime, system chooses which sample(s) to use\
+\
+\
+\
+\
+What to stratify on?\
+\
+	Use historical workload to estimate columns that are selected on frequently\
+	More likely to stratify on highly skewed columns\
+\
+\
+What about joins?\
+\
+Tricky -- in general the join of two random samples is not equivalent to a random sample of the join, since join attributes may be highly skewed\
+\
+In blinkdb we only allow one of the two tables to be sampled\
+\
+\
+How to estimate errors?\
+\
+Use standard estimators\
+
+\i \
+Note that using a pre-computed sampled is a big bogus, since for a given query and sample, either the error bound is met or it is not -- there's no "confidence"
+\i0 \
+\
+\
+Looking into generic estimators of confidence intervals, e.g., based on the 
+\i bootstrap\
+\
+
+\i0 \
+Michael Jordan will be giving a talk 4--5 next Thursday where he talks about this! (Amongst other things)\
+\
+\
+Implemented on top of Hive query processor on map reduce\
+\
+Demo\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\ul Sketches\
+\
+\
+\ulnone \
+\
+Idea:  Estimate certain properties of a data set, e.g., minima, maxima, number of distinct values, number of occurrences of a particular data item, etc.\
+\
+Vs sampling can:\
+\
+	1) answer some queries sampling cant (e.g., count of distinct values)\
+	\
+	2) answer some queries with less space, e.g., size 1/eps vs 1/eps^2 with epsN accuracy (where N is number of distinct values)\
+\
+\
+\ul Count-Min Sketch\
+\ulnone \
+Basic idea:  estimate the number of times value v occurs in a set \
+\
+\
+Algo:\
+\
+	h hash functions\
+	each maps into range 1\'85w\
+\
+	store h arrays of size w\
+		w0	w1	w2	\'85.\
+	h0\
+	h1\
+	h2\
+	\'85\
+\
+	for new value v, increment  A[i,h_i(v)] for all i in 1\'85h\
+\
+	to estimate count C' of item v:\
+\
+		C'  = compute min_i A[i,h_i(v)]\
+\
+	delta = 1/e^w\
+	eps = e/h\
+\
+With probability 1-delta,  C' < C +  N * eps, where C is the true count and N is the number of items in the stream\
+\
+\
+}
