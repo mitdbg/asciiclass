@@ -118,3 +118,24 @@ Works as follows
     query -> pick samples to use -> run query on sample on hive --> error estimation --> result
 
         
+## Sketches/[Streaming algorithms](http://en.wikipedia.org/wiki/Streaming_algorithm)
+
+Very compact, and highly optimized for a single task (bloomfilter, mincount, etc)
+
+
+### [Min Count](http://en.wikipedia.org/wiki/Count-Min_sketch)
+
+Keep `k` hash functions and `k` hash tables
+
+                     buckets
+                    0  1 …  m
+    hashtable 1     0  0 .. 0
+    …
+    hashtable k     0  0 .. 0
+
+* For value v, hash into each hashtable and increment the bucket.
+* At query time, min(v) = min(hashtable[hash(v)] for the k hash functions)
+* Code of count-min is posted online.  Super simple algorithm.
+
+Really good for heavy hitters (really popular values).  If everything is roughly the same, then hard to distinguish.
+
