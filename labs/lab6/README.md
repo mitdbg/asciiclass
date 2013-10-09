@@ -111,7 +111,7 @@ To destroy the cluster once you're done:
 ./spark-ec2 -k sparklab-yourusername -i ~/sparklab-yourusername.pem --region=XX-YYYY-N destroy YOURUSERNAME-cluster
 ```` 
 
-### Questions
+# Questions
 
 Implement [PageRank](http://en.wikipedia.org/wiki/PageRank) over the graph induced by the `from:` and `to:` fields in the Enron data sets in the S3 folder `6885public/enron/*.json`.  To make this easier, you may wish to refer to the [Spark implementation of PageRank over URLs](https://github.com/apache/incubator-spark/blob/master/python/examples/pagerank.py).  
 
