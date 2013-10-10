@@ -14,7 +14,7 @@ You may also want to check out the [Spark NSDI 2012 Paper](http://www.cs.berkele
 
 There are several steps to set up Amazon and EC2 to run Spark:
 
-1. Start the EC2 instance from lab 1.  When you start the instance, take a look at the URL in the Amazon console.  It should have a segment of the form: `region=XX-YYYY-N` (example: `us-east-1` or `us-west-2`).  Note this region.
+1. Start the EC2 instance from [lab 1](https://github.com/mitdbg/asciiclass/tree/master/labs/lab1).  When you start the instance, take a look at the URL in the Amazon console.  It should have a segment of the form: `region=XX-YYYY-N` (example: `us-east-1` or `us-west-2`).  Note this region.
 1. [Go to this website](https://6885.signin.aws.amazon.com/console) and login with the username `6885student` (we will give you the password on Piazza).
 1. Head over to https://console.aws.amazon.com/ec2/home?region=REGION-NAME-HERE#s=KeyPairs after replacing REGION-NAME-HERE with the region that your ec2 instance from lab 1 runs in (see the first step above).
 1. Click `Create Key Pair` and name the pair `sparklab-yourusername.pem`.  Download the keypair, and scp it to your EC2 instance from Step 1, e.g.:
@@ -42,7 +42,9 @@ Launch a Spark cluster with 3 machines:
 ./spark-ec2 -k sparklab-yourusername -i ~/sparklab-yourusername.pem -s 3 --instance-type=m1.small --region=XX-YYYY-N launch YOURUSERNAME-cluster
 ````
 
-This process will take about 20 minutes.
+Note: the `-k` argument expects the original name you gave to the pem file through the AWS console, whereas the `-i` argument expects the path to the `.pem` file.
+
+This process will take about 20 minutes.  If it spits out an error, you can try using the `start` command.
 
 To stop or start your cluster (if you stop the lab half-way to get dinner, save some money!):
 
@@ -56,7 +58,12 @@ To stop or start your cluster (if you stop the lab half-way to get dinner, save 
 ./spark-ec2 -k sparklab-yourusername -i ~/sparklab-yourusername.pem --region=XX-YYYY-N login YOURUSERNAME-cluster
 ```` 
 
-Once you're on the Spark master node, create a file, `test.py` and save the following information to it (Need to install emacs on the Spark master node?  `sudo yum install emacs`):
+Once you're on the Spark master node, download the file, `test.py`:
+
+	wget https://raw.github.com/mitdbg/asciiclass/lab6/labs/lab6/test.py
+
+And edit the `<AWS KEY FROM PIAZZA>` part.  `test.py` contains the following code:
+
 ````python
 from pyspark import SparkContext
 
