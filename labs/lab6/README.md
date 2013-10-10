@@ -36,6 +36,13 @@ export AWS_ACCESS_KEY_ID=AKIAJFDTPC4XX2LVETGA
 export AWS_SECRET_ACCESS_KEY=<ACCESS KEY FROM PIAZZA>
 ````
 
+AWS uses python 2.6 by default.  The Spark launch scripts assume python 2.7, so
+install it:
+
+	sudo yum install python27
+	sudo rm /usr/bin/python
+	sudo ln -s /usr/bin/python2.7 /usr/bin/python
+
 Launch a Spark cluster with 3 machines:
 
 ````bash
@@ -54,6 +61,9 @@ To stop or start your cluster (if you stop the lab half-way to get dinner, save 
 ````
 
 # Run something on your cluster
+
+First, login to the master node:
+
 ````bash
 ./spark-ec2 -k sparklab-yourusername -i ~/sparklab-yourusername.pem --region=XX-YYYY-N login YOURUSERNAME-cluster
 ```` 
@@ -62,7 +72,7 @@ Once you're on the Spark master node, download the file, `test.py`:
 
 	wget https://raw.github.com/mitdbg/asciiclass/lab6/labs/lab6/test.py
 
-And edit the `<AWS KEY FROM PIAZZA>` part.  `test.py` contains the following code:
+And edit the `<AWS KEY FROM PIAZZA>` part in the file.  `test.py` contains the following code:
 
 ````python
 from pyspark import SparkContext
@@ -73,7 +83,7 @@ import time
 print 'loading'
 sc = SparkContext("local", "Simple App")
 # Replace `lay-k.json` with `*.json` to get a whole lot more data.
-lay = sc.textFile('s3n://AKIAJFDTPC4XX2LVETGA:<AWS KEY FROM PIAZZA>@6885public/enron/lay-k.json')
+lay = sc.textFile('s3n://AKIAJFDTPC4XX2LVETGA:lJPMR8IqPw2rsVKmsSgniUd+cLhpItI42Z6DCFku@6885public/enron/lay-k.json')
 
 json_lay = lay.map(lambda x: json.loads(x)).cache()
 print 'json lay count', json_lay.count()
@@ -109,7 +119,13 @@ Run the test.py script:
 /root/spark/pyspark test.py 2>/dev/null # if you don't want to see the java debugging output
 ````
 
+You can also run a python prompt to play with pyspark interactively:
+````bash
+MASTER=`cat ~/spark-ec2/cluster-url` /root/spark/pyspark
+````
+
 To read about more Spark functions, check out the [PySpark Documentation](http://spark.incubator.apache.org/docs/latest/api/pyspark/index.html).  While you won't likely be programming in Scala for this lab, the [Scala Documentation on Transformations and Actions](http://spark.incubator.apache.org/docs/latest/scala-programming-guide.html) has some nice English-language explanations of each function.
+
 
 # Shut it down
 
@@ -119,6 +135,19 @@ To destroy the cluster once you're done:
 ```` 
 
 # Questions
+
+Re-do `lab 5`'s TF-IDF analysis using Spark.  Include some amount (your choice) of sender disambiguation.
+
+1. Describe the disambiguation you performed.  How did Spark affect (if at all) the choice of technique?
+
+Reflect on your experience using Spark:
+
+1. Compare your experience to using EMR.  What things did Spark simplify?  
+2. Given Spark, why would you use EMR?
+3. Were there any limitations to using the Spark model?
+4. Describe in a few sentences how Spark would simplify an implementation of pagerank over your answer in Lab 5 using EMR.
+
+**Bonus questions (optional)**
 
 Implement [PageRank](http://en.wikipedia.org/wiki/PageRank) over the graph induced by the `from:` and `to:` fields in the Enron data sets in the S3 folder `6885public/enron/*.json`.  To make this easier, you may wish to refer to the [Spark implementation of PageRank over URLs](https://github.com/apache/incubator-spark/blob/master/python/examples/pagerank.py).  
 
