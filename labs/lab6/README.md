@@ -43,10 +43,10 @@ install it:
 	sudo rm /usr/bin/python
 	sudo ln -s /usr/bin/python2.7 /usr/bin/python
 
-Launch a Spark cluster with 3 machines:
+Launch a Spark cluster with 7 machines:
 
 ````bash
-./spark-ec2 -k sparklab-yourusername -i ~/sparklab-yourusername.pem -s 3 --instance-type=m1.small --region=XX-YYYY-N launch YOURUSERNAME-cluster
+./spark-ec2 -k sparklab-yourusername -i ~/sparklab-yourusername.pem -s 7 --instance-type=m1.small --region=XX-YYYY-N launch YOURUSERNAME-cluster
 ````
 
 Note: the `-k` argument expects the original name you gave to the pem file through the AWS console, whereas the `-i` argument expects the path to the `.pem` file.
