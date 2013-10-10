@@ -49,7 +49,11 @@ Launch a Spark cluster with 7 machines:
 ./spark-ec2 -k sparklab-yourusername -i ~/sparklab-yourusername.pem -s 7 --instance-type=m1.small --region=XX-YYYY-N launch YOURUSERNAME-cluster
 ````
 
-Note: the `-k` argument expects the original name you gave to the pem file through the AWS console, whereas the `-i` argument expects the path to the `.pem` file.
+Note: 
+
+* Replace `XX-YYYY-N` and `YOURUSERNAME` with your user name. You will want to do this in all of the subsequent `spark-ec2` commands
+* The `-k` argument expects the original name you gave to the pem file through the AWS console
+* The `-i` argument expects the path to the `.pem` file.
 
 This process will take about 20 minutes.  If it spits out an error, you can try using the `start` command.
 
