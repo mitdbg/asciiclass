@@ -119,10 +119,15 @@ Run the test.py script:
 /root/spark/pyspark test.py 2>/dev/null # if you don't want to see the java debugging output
 ````
 
+
 You can also run a python prompt to play with pyspark interactively:
 ````bash
 MASTER=`cat ~/spark-ec2/cluster-url` /root/spark/pyspark
 ````
+
+
+Note: the Spark instances run `python2.6`.  If you want pyspark to run 2.7 on all the nodes, you'll need to
+muck with the launch scripts :(
 
 To read about more Spark functions, check out the [PySpark Documentation](http://spark.incubator.apache.org/docs/latest/api/pyspark/index.html).  While you won't likely be programming in Scala for this lab, the [Scala Documentation on Transformations and Actions](http://spark.incubator.apache.org/docs/latest/scala-programming-guide.html) has some nice English-language explanations of each function.
 
