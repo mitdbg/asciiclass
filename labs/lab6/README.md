@@ -1,8 +1,8 @@
 # Lab 6: Spark
 
-*Assigned: Oct XXX, 2013*
+*Assigned: Oct 10, 2013*
 
-*Due: XXX Oct XXX, 2013 12:59PM (just before class)*
+*Due: Thursday Oct 17, 2013 12:59PM (just before class)*
 
 In this lab you will use [Spark](http://spark.incubator.apache.org), a parallel cluster computing framework designed to be easier to program and more efficient than MapReduce/Hadoop while providing the same degree of scalability.
 
@@ -72,7 +72,12 @@ Once you're on the Spark master node, download the file, `test.py`:
 
 	wget https://raw.github.com/mitdbg/asciiclass/lab6/labs/lab6/test.py
 
-And edit the `<AWS KEY FROM PIAZZA>` part in the file.  `test.py` contains the following code:
+And edit the file in two ways:
+
+1. Replace `<MASTER URI>` with the contents in `~/spark-ec2/cluster-url`
+1. Replace `<AWS KEY FROM PIAZZA>` 
+
+`test.py` contains the following code:
 
 ````python
 from pyspark import SparkContext
@@ -81,7 +86,7 @@ import json
 import time
 
 print 'loading'
-sc = SparkContext("local", "Simple App")
+sc = SparkContext("<MASTER URI>", "Simple App")
 # Replace `lay-k.json` with `*.json` to get a whole lot more data.
 lay = sc.textFile('s3n://AKIAJFDTPC4XX2LVETGA:<AWS KEY FROM PIAZZA>@6885public/enron/lay-k.json')
 
@@ -126,8 +131,12 @@ MASTER=`cat ~/spark-ec2/cluster-url` /root/spark/pyspark
 ````
 
 
-Note: the Spark instances run `python2.6`.  If you want pyspark to run 2.7 on all the nodes, you'll need to
+Note: 
+
+* The Spark instances run `python2.6`.  If you want pyspark to run 2.7 on all the nodes, you'll need to
 muck with the launch scripts :(
+* [The configuration documentation](http://spark.incubator.apache.org/docs/latest/configuration.html) describes knobs for tuning memory allocation, etc.  If your `.collect()` call is throwing memory errors, check out `spark.akka.frameSize`.
+
 
 To read about more Spark functions, check out the [PySpark Documentation](http://spark.incubator.apache.org/docs/latest/api/pyspark/index.html).  While you won't likely be programming in Scala for this lab, the [Scala Documentation on Transformations and Actions](http://spark.incubator.apache.org/docs/latest/scala-programming-guide.html) has some nice English-language explanations of each function.
 
@@ -150,7 +159,8 @@ Reflect on your experience using Spark:
 1. Compare your experience to using EMR.  What things did Spark simplify?  
 2. Given Spark, why would you use EMR?
 3. Were there any limitations to using the Spark model?
-4. Describe in a few sentences how Spark would simplify an implementation of pagerank over your answer in Lab 5 using EMR.
+4. Describe in a few sentences how Spark would simplify an implementation 
+   of pagerank over your answer in Lab 5 using EMR. 
 
 **Bonus questions (optional)**
 
