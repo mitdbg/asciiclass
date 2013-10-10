@@ -83,7 +83,7 @@ import time
 print 'loading'
 sc = SparkContext("local", "Simple App")
 # Replace `lay-k.json` with `*.json` to get a whole lot more data.
-lay = sc.textFile('s3n://AKIAJFDTPC4XX2LVETGA:lJPMR8IqPw2rsVKmsSgniUd+cLhpItI42Z6DCFku@6885public/enron/lay-k.json')
+lay = sc.textFile('s3n://AKIAJFDTPC4XX2LVETGA:<AWS KEY FROM PIAZZA>@6885public/enron/lay-k.json')
 
 json_lay = lay.map(lambda x: json.loads(x)).cache()
 print 'json lay count', json_lay.count()
