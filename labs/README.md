@@ -19,3 +19,8 @@ Entity resolution challenge using Foursquare and Locu venue datasets
 ### [Lab 5](./lab5/)
 
 Introduction to Hadoop/EMR
+
+
+### [Lab 6](./lab6)
+
+Introduction to Iterative MapReduce (Spark)
