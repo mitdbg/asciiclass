@@ -1,0 +1,81 @@
+HOURS
+---------
+>>> hours
+[4.0, 5.0, 3.5, 3.0, 6.0, 7.0, 8.0, 13.0, 6.0, 5.5, 2.5, 4.5, 6.0, 4.0, 2.0, 7.0, 7.0, 6.0, 5.0, 15.0, 8.0, 5.0, 4.0, 5.0, 0.5, 5.0, 13.0, 5.0, 4.0, 3.5, 5.0, 5.0, 6.0, 5.0, 2.5, 9.0, 8.5, 8.0, 4.0, 4.0, 4.0, 6.0, 2.5, 3.5, 5.5]
+>>> max(hours)
+15.0
+>>> min(hours)
+0.5
+>>> sum(hours)/len(hours)
+5.588888888888889
+>>> import numpy
+nu>>> numpy.percentile(hours, 50)
+5.0
+>>> numpy.percentile(hours, 95)
+12.199999999999989
+
+
+
+FEEDBACK
+-------------
+high level from adam: lots of students walked away with the idea that protobufs are comparable to mongodb/postgres, whereas they aren't a storage system: they are a component in one.
+
+high level from adam: more students said sql easier to interpret than mongo, and that they spent the most time on mongo.  however, if no sql experience and no mongo experience, claimed mongo was easier.
+
+-----
+## Optional
+### Is the lab too difficult or too easy?
+
+Overall, it was a reasonable level of difficulty.
+
+Tasks #3 and #4 were pretty similar, and perhaps making a query that
+is either "impossible" in MongoDB, or where being able to write
+data-specific code (fuzzy joins) shines.
+
+It might have been interesting to work with a larger dataset to get a
+sense of the relative speeds of the different systems on different
+queries.
+
+### Did you look forward to any exercise that the lab did not cover?
+
+It would be nice to get some understanding of how MongoDB actually
+works. It felt a bit like writing SQL in a different syntax.
+
+### Which parts of the lab were interesting or valuable towards understanding the material?
+
+It was useful to read through the protocol buffer documentation to
+understand how they work -- the tutorials were quite
+informative. (Something similar with MongoDB would have been great.)
+
+### How is the pace of the course so far?
+
+The pace of the course is reasonable. I think it's a little more
+skewed toward database systems material than machine learning and
+visualization/presentation than I hoped it would be, but the material
+has been interesting.
+------
+
+
+Feedback
+=========
+- The lab felt pretty easy, but I do a lot of database work so that could be part
+of it.
+- I think I would have enjoyed coming up with the .proto and .ddl files on my own
+as opposed to being given them.
+- I thought questions 2,3,4 helped put in perspective some of the pros and cons of
+each system.
+
+-------
+
+Feedback: I really enjoyed this lab, and wished that more Course 6 classes were like this. We're typically given a file with a few lines that say "YOUR CODE HERE" and told to fill them in. Here, you gave us an objective and a set of documentation â€“Â this is what the real world is like, and how I feel more classes should be.
+
+I was really expecting to have to do a join for the SQL question.
+
+-------
+
+- I thought the lab was great. Practical and I didn't get hung up for too long as logistical things - my time was spent well.
+- Would it be possible to get solutions from someone knowledgeable on the proper way to do some of these queries? My
+solutions work but I'm sure aren't optimal.
+- Maybe allowing us to pick our preferred method and do a more in depth analysis of the data would have been cool, so we can
+get more depth as well as the breadth of coverage this lab provided. Even if optional, some kind of prompt would provide some
+direction, as well as motivation
