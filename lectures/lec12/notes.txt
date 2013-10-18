@@ -36,9 +36,9 @@ Another problem: small companies/startups are now running computation on small c
 
 Another problem: running inside a public cloud like amazon web servies
 
-  - Untrusted users (security)
-  - Users pay per machine, so availability/reliability trade off with that
-  - Users are unrelated to one-another, but their workloads might conflict with one-another
+  - Security: Untrusted users (security)
+  - Guarantees: Users pay per machine, so availability/reliability trade off with that
+  - Resource sharing: Users are unrelated to one-another, but their workloads might conflict with one-another
 
 Since you're running multiple jobs from different users, you have a resource allocation problem
 
@@ -57,6 +57,9 @@ Old Hadoop 1.0 Architecture
     - there are fixed slots for map tasks and reduce tasks.  what if you have more maps than reduces?  no luck!
     - slow maps and reduces hold up other maps and reduces
     - can only run mapreduce on this cluster: what about streaming or graph processing?
+
+Hadoop 1.0 has so many problems, how about buling a clusterOS focused on separating resource management from the "map reduce" type applications?
+
 
 Three proposals to get a better version
 
