@@ -639,6 +639,7 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
       <td >
 	<p >
 	  <span >What are the challenges of running ML algorithms on Big Data, what are frameworks that have been proposed, how are they better than existing systems (e.g., Relational DBs  + UDFs/UDAs).
+        In particular, iterative algorithms require you to do several passes over your data. &nbsp;Tools like MapReduce are not as useful for this because both their programming model and execution model aren&rsquo;t designed around iteration.
 	  </span>
 	  <span >&nbsp;
 	  </span>
@@ -648,6 +649,7 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
 	<p >
 	  <span >
         Read the <a href="2011-NIPS-BigLearn-Scalops.pdf">Scalops</a> paper.
+        You may also want to read the 	    <a  href="http://www.cs.berkeley.edu/~matei/papers/2010/hotcloud_spark.pdf">Spark paper</a>.
         </span>
 	</p>
 	<p >
@@ -663,52 +665,7 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
 	</p>
       </td>
     </tr>
-<!--
-     <tr >
-      <td >
-	<p >
-	  <span class="date">
-	  </span>
-        </td>
-      <td >
-	<p >
-	  <span >L12: Computation inside and outside the database  
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >Traditionally, people use tools like databases to store/retrieve/ask basic questions (sums, counts, averages, etc.) of data. &nbsp;They use tools like R/numpy/Julia to do deeper exploration of the data. &nbsp;It turns out that you can do deep computation inside the database, and ask high-level questions of data outside of the database, and we&rsquo;ll show you how.
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >&nbsp;
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >
-	    <a  href="http://doc.madlib.net/v1.0/group__grp__linreg.html">Linear regression in postgres using MADLIB
-	    </a>
-	  </span>
-	</p>
-	<p >
-	  <span >
-	  </span>
-	</p>
-	<p >
-	  <span >
-	    <a  href="https://github.com/amplab/shark/wiki/Running-Shark-on-EC2">Query json files in shark
-	    </a>
-	  </span>
-	</p>
-      </td>
-    </tr>
-    -->
-    <tr style="color:gray;"><td>10/15/13<td colspan=4><b> HOLIDAY: VETERANS DAY </b></tr>
+    <tr style="color:gray;"><td>10/15/13<td colspan=4><b> HOLIDAY: COLUMBUS DAY </b></tr>
      <tr >
       <td >
 	<p >
@@ -719,22 +676,21 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
 	<p >
 	  <span >L12:
 	  </span>
-	  <span >Iterative Algorithms (Carlo Curino)
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >Iterative algorithms require you to do several passes over your data. &nbsp;Tools like MapReduce are not as useful for this because both their programming model and execution model aren&rsquo;t designed around iteration.
+	  <span >Future of Hadoop-Like Platforms (Carlo Curino)
 	  </span>
 	</p>
       </td>
       <td >
 	<p >
 	  <span >
-	    <a  href="http://www.cs.berkeley.edu/~matei/papers/2010/hotcloud_spark.pdf">Spark paper
-	    </a>
 	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+No reading was assigned, but for those interested, you may want to read the <a href="https://54e57bc8-a-62cb3a1a-s-sites.googlegroups.com/site/2013socc/home/program/a5-vavilapalli.pdf?attachauth=ANoY7cqT92es5QkFBwaQdFmL4Idq4jAeS_-o3OkN0E8of-3tMjPju5kcDKeJd_BMTjBIr4AfKhMF-rByipi_46snkr5amvUiZOYql1oUjh6NHeraciPPnfXhF30Wgsn87X_VpUW_1N3XeyNUkrbbrRC8Wh9Wtf0_F7cEnVpVU30ZVQRt_vCzKbY2sg95ok8tEqKPlsKasIopXW2QkBoq0X5tTaefkfdZOJxLwDACcDOD4ES74GepiGY%3D&attredirects=0">YARN paper</a>.
+        </span>
 	</p>
       </td>
       <td >
@@ -753,7 +709,120 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
         </td>
       <td >
 	<p >
-	  <span >L13: Stream data processing
+	  <span >L13: Graph processing
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Lots of data is graphical, be it the world wide web or social networks. &nbsp;Graph processing systems help you run algorithms to process these graphs.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	    Read the <a  href="http://kowshik.github.io/JPregel/pregel_paper.pdf">Pregel paper
+	    </a> and check out the <a href="http://giraph.apache.org/intro.html">Giraph Docs</a>.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >&nbsp;
+	  </span>
+	</p>
+      </td>
+    </tr>
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
+      <td >
+	<p >
+	  <span >L14: Student Data Case Studies (Eugene Wu and Students)
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span > <!-- Scaling machines learning algorithms is still an open problem. &nbsp;Map-reduce happens to scale well, and Gradient Descent methods are currently the most understood algorithm to run scalably on map-reduce frameworks to solve problems such as SVMs. -->
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span > <!-- Jimmy Lin Paper (MR as a hammer)-->
+	  </span>
+	</p>
+	<p >
+	  <span > <!-- Hogwild for extra credit. &nbsp;It&rsquo;s probably too math dense.-->
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+        <!--
+	  <span >Implement IGD for SVM
+	  </span>
+	  <span >&nbsp;on spark
+	  </span>
+        -->
+	</p>
+      </td>
+    </tr>
+
+     <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
+      <td >
+	<p >
+	  <span >L15: Scalable Algos (Tim Kraska)
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+       Database techniques may be able to further speed up machine learning techniques by embedding them within the DBMS, declaratively specifying the machine learning algorithms and parameters and letting the DBMS optimize the parameters, or implementing the algortihms on map-reduce systems.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Read the <a href="http://www.cs.berkeley.edu/~ameet/mlbase_cidr.pdf">MLBase Paper</a>
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Compare and contrast runnning in-database ML (madlib) vs out-of-database ML.
+	  </span>
+	</p>
+	<p >
+	  <span >
+	  </span>
+	</p>
+	<p >
+	  <span >
+	  </span>
+	</p>
+      </td>
+    </tr>
+        <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
+      <td >
+	<p >
+	  <span >L16: Stream data processing
 	  </span>
 	</p>
       </td>
@@ -794,118 +863,6 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
 	    </a>
 	  </span>
 	  <span >&nbsp;to connect to the Twitter streaming API and calculate the most retweeted tweets and identify trending topics.
-	  </span>
-	</p>
-      </td>
-    </tr>
-     <tr >
-      <td >
-	<p >
-	  <span class="date">
-	  </span>
-        </td>
-      <td >
-	<p >
-	  <span >L14: Graph processing
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >Lots of data is graphical, be it the world wide web or social networks. &nbsp;Graph processing systems help you run algorithms to process these graphs.
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >
-	    <a  href="http://kowshik.github.io/JPregel/pregel_paper.pdf">Pregel paper
-	    </a>
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >&nbsp;
-	  </span>
-	</p>
-      </td>
-    </tr>
-     <tr >
-      <td >
-	<p >
-	  <span class="date">
-	  </span>
-        </td>
-      <td >
-	<p >
-	  <span >L15: Student Data Case Studies
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span > <!-- Scaling machines learning algorithms is still an open problem. &nbsp;Map-reduce happens to scale well, and Gradient Descent methods are currently the most understood algorithm to run scalably on map-reduce frameworks to solve problems such as SVMs. -->
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span > <!-- Jimmy Lin Paper (MR as a hammer)-->
-	  </span>
-	</p>
-	<p >
-	  <span > <!-- Hogwild for extra credit. &nbsp;It&rsquo;s probably too math dense.-->
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-        <!--
-	  <span >Implement IGD for SVM
-	  </span>
-	  <span >&nbsp;on spark
-	  </span>
-        -->
-	</p>
-      </td>
-    </tr>
-     <tr >
-      <td >
-	<p >
-	  <span class="date">
-	  </span>
-        </td>
-      <td >
-	<p >
-	  <span >L16: Scalable Algos #2
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >
-       Database techniques may be able to further speed up machine learning techniques by embedding them within the DBMS, declaratively specifying the machine learning algorithms and parameters and letting the DBMS optimize the parameters, or implementing the algortihms on map-reduce systems.
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >Daisy&rsquo;s paper, MLBase?
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >Compare and contrast runnning in-database ML (madlib) vs out-of-database ML.
-	  </span>
-	</p>
-	<p >
-	  <span >
-	  </span>
-	</p>
-	<p >
-	  <span >
 	  </span>
 	</p>
       </td>
