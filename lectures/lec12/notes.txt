@@ -55,4 +55,19 @@ YARN
     - A client submits a job to YARN.  A resource manager assigns you machines for it, and on the first machine, runs an Application Master for you that does the rest of your resource management.
     - The App Master calls the central resource manager back and asks for resources (5 containers, 50 gigs of ram, 10 processors, 1 TB disk, ideally on two machines, hopefully in same rack, but it's OK if they are in the same data center).
       -> e.g., the mapreduce app master says: I want to run 500 mappers, so let's ask for 500 containers with 1 GB memory and 5 GB disk each.  My data is on rack 10, so try to put my containers near there.  Now it's time to run reducers: I need 10 of those, and can start shutting down mappers as they complete.
-    - 
+    - Each job you run gets one app master.  For example, two mapreduce jobs will get two application masters.  This makes it easy to upgrade software, etc.
+
+Mesos
+  - Allows you to run multiple frameworks (Spark, MapReduce, Storm, etc.) on the same cluster.
+  - Rather than one app master per job, it runs one resource manager per framework.
+  - A Mesos scheduler round-robins between the resource managers, ensuring they have the most resources available for them at the same time.
+  - Benefits: easier to run things like long-running services (e.g., GMail) on top of it---doesn't assume you're running computation frameworks.
+
+Omega
+  - Rather than having a single scheduler, you give the global cluster state to each framework.
+  - Frameworks respond to you and ask you to allocate parts of this cluster to them.  Resolve conflicts on their behalf---wasn't sure how.
+
+Huge benefit of these systems:
+  - helps people innovate
+  - used to be: i improve mapreduce, and Yahoo! has to take down the cluster and update it.
+  - now: run a new application container with my software, compare it side-by-side.
