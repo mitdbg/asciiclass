@@ -192,6 +192,11 @@ Test this by
 2. Start hadoop on your master: `$HADOOP_HOME/bin/start-all.sh`
 3. ssh to a slave and run: `jps`.  TaskTracker and DataNode should be running.
 
+HDFS may be read-only for ~5 minutes while files are replicated.  Until then, you may get a
+"Name node is in safe mode." error.
+
+
+
 Hurray!
 
 
@@ -235,6 +240,10 @@ Run the query:
 	  -of org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
 	  -op shortestpathsOutput \
 	  -w 1
+	  
+The output files are in
+
+	$HADOOP_HOME/bin/hadoop dfs -ls shortestpathsOutput/
 
 We briefly describe the parameters above below;  for more details run GiraphRunner with the `-h` option:
 
