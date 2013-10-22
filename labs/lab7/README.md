@@ -50,9 +50,9 @@ can copy and use with minimal tweaks.  First, create an instance:
 
 Depending on your region, the IMAGE_ID is 
 
-* `ami-aee4d3eb` for us-west-1 
-* `ami-a463fa94` for us-west-2 
-* `ami-995d01f0` for us-east-1
+* `ami-6cedda29` for us-west-1 
+* `ami-ea1881da` for us-west-2 
+* `ami-6b1d4102` for us-east-1
 
 Make sure that your Amazon credentials are set up as in lab 6 or the `AWS_CONFIG_FILE` environment variable is set as in lab 5. It might take a few minutes to get the instance running. You can check the instance by logging in to [this link](https://6885.signin.aws.amazon.com/console) as in lab 6. Alternatively, you can use the ec2 tools as follows:
 
