@@ -180,7 +180,7 @@ Deploy Giraph as follows:
 
 #### Shortest Path Query
 
-Upload the sample dataset:
+First upload the sample dataset to HDFS:
 
 	$HADOOP_HOME/bin/hadoop dfs -copyFromLocal tiny_graph.txt tiny_graph.txt
 
