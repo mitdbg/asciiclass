@@ -1,4 +1,4 @@
-# Lab 8: Graph Analytics Using Giraph
+# Lab 7: Graph Analytics Using Giraph
 
 *Assigned: Oct 24, 2013*
 
@@ -36,13 +36,28 @@ Install Java 7:
 	export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 
 
+### Giraph
+
+You can build Giraph by installing Maven and then compiling Giraph. To make things easier for you, we have created an image with precompiled Giraph. You can create instances of this image as follows:
+
+	aws ec2 run-instances --image-id <IMAGE_ID> --count 1 --instance-type m1.small --key-name <your key pair from lab6> --region <your region name from lab6>
+
+Depending on your region, the IMAGE_ID is `ami-dcffc899` for us-west-1 `ami-5672eb66` for us-west-2 and `ami-6b1d4102` for us-east-1. Make sure that your amazon credentials are set up as in lab 6 or the `AWS_CONFIG_FILE` environment variable is set as in lab 5. It might take a few minutes to get the instance running. You can check the instance by login to [this link](https://6885.signin.aws.amazon.com/console) as in lab 6. Alternatively, you could use ec2 tools as follows:
+
+	aws ec2 describe-instances --instance-ids <INSTANCE_ID>
+
+Note the public DNS name of the newly launched instance and ssh into it. You will find precompiled Giraph in `/home/ubuntu/giraph-1.0.0`. Remember to terminate your instance once you are done as follows:
+
+	aws ec2 terminate-instances --instance-ids <INSTANCE_ID>
+
+
 ### Hadoop
 
-Giraph runs on top of Hadoop/MapReduce. So we need to first setup Hadoop. We will first set up Hadoop in pseudo-distributed mode on a single instance.
+Giraph runs on top of Hadoop/MapReduce. So we need to setup Hadoop. We will first set up Hadoop in pseudo-distributed mode on a single instance.
 
-	wget http://archive.apache.org/dist/hadoop/core/hadoop-0.20.203.0/	hadoop-0.20.203.0rc1.tar.gz
-	tar xzf hadoop-0.20.203.0rc1.tar.gz
-	mv hadoop-0.20.203.0 hadoop
+	wget http://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/	hadoop-0.20.2.tar.gz
+	tar xzf hadoop-0.20.2.tar.gz
+	mv hadoop-0.20.2 hadoop
 	export HADOOP_HOME=~/hadoop
 
 #### Configuring Hadoop
@@ -112,7 +127,7 @@ On successfully starting Hadoop, `jps` should show something like this (ignore t
 11679 JobTracker
 ````
 
-
+<!--
 ### Maven
 
 We need Maven to build Giraph. Run the following.
@@ -132,9 +147,9 @@ Deploy Giraph as follows:
 	tar xzf giraph-1.0.0.tar.gz
 	mv giraph-1.0.0 giraph
 	cd giraph
-	mvn package -DskipTests
+	mvn package -DskipTests -Phadoop_non_secure 0.20.2	
 	export GIRAPH_HOME=~/giraph
-
+-->
 
 ## Running Giraph
 
@@ -164,10 +179,10 @@ Now implement the PageRank query using Giraph. You will need to write the `compu
 You will run PageRank on the LiveJournal dataset, which is not in the JSON format (as the tiny_graph.txt). You can handle this in either of two ways:
 
 1. Pre-process the data file and convert it into the JSON format, or
-2. Modify the vertex/edge input format to parse the input data accordingly.
+2. Modify the vertex/edge input formats to parse the input data accordingly.
 
 
-#### Fully Distributed Mode
+#### Fully Distributed Mode (Optional)
 
 Launch 10 instances on ec2 and install/configure Hadoop on all of them. Re-run the PageRank query on 10 instances.
 
@@ -175,7 +190,7 @@ Launch 10 instances on ec2 and install/configure Hadoop on all of them. Re-run t
 
 * List the vertex ids of the top 10 PageRanks.
 * How did you handle the LiveJournal input file?
-* Compare the PageRank implementation in Giraph with the PageRank implementation in:
+* Qualitatively compare the PageRank implementation in Giraph with the PageRank implementation in:
 	* Hadoop
 	* Spark
 * What are the pros and cons of vertex-centric computation model?
