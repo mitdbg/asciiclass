@@ -40,7 +40,7 @@ where each line is in JSON format as
 
 ### Giraph
 
-You can build Giraph by installing Maven and then compiling Giraph. To make things easier for you, we have created an image with precompiled Giraph. You can create instances of this image as follows:
+You can build Giraph by installing Maven and then compiling Giraph. To make things easier for you, we have created an image with Giraph precompiled. You can create instances of this image as follows:
 
 	aws ec2 run-instances --image-id <IMAGE_ID> --count 1 --instance-type m1.small --key-name <your key pair from lab6> --region <your region name from lab6>
 
@@ -52,7 +52,7 @@ Depending on your region, the IMAGE_ID is
 * `ami-5672eb66` for us-west-2 
 * `ami-6b1d4102` for us-east-1
 
-Make sure that your amazon credentials are set up as in lab 6 or the `AWS_CONFIG_FILE` environment variable is set as in lab 5. It might take a few minutes to get the instance running. You can check the instance by login to [this link](https://6885.signin.aws.amazon.com/console) as in lab 6. Alternatively, you could use ec2 tools as follows:
+Make sure that your Amazon credentials are set up as in lab 6 or the `AWS_CONFIG_FILE` environment variable is set as in lab 5. It might take a few minutes to get the instance running. You can check the instance by logging in to [this link](https://6885.signin.aws.amazon.com/console) as in lab 6. Alternatively, you can use the ec2 tools as follows:
 
 	aws ec2 describe-instances --instance-ids <INSTANCE_ID>
 
@@ -62,14 +62,14 @@ Note the public DNS name of the newly launched instance and ssh into it.
 	# or
 	ssh -i <your keypair .pem file> ec2-user@<public hostname>  
 
-You will find precompiled Giraph in `/home/ubuntu/giraph-1.0.0`. Remember to terminate your instance once you are done as follows:
+You will find the precompiled Giraph binaries in `/home/ubuntu/giraph-1.0.0`. Remember to terminate your instance once you are done as follows:
 
 	aws ec2 terminate-instances --instance-ids <INSTANCE_ID>
 
 
 ### Hadoop
 
-Giraph runs on top of Hadoop/MapReduce. So we need to setup Hadoop. We will first set up Hadoop in pseudo-distributed mode on a single instance.
+Giraph runs on top of Hadoop/MapReduce. To run it we first need to setup Hadoop. We will first set up Hadoop in pseudo-distributed mode on a single instance.
 
 	wget http://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
 	tar xzf hadoop-0.20.2.tar.gz
@@ -118,7 +118,7 @@ Add the following properties in $HADOOP_HOME/conf/mapred-site.xml. Again replace
 	</property>
 
 
-Specify a temporary directory location and replication factor in $HADOOP_HOME/conf/hdfs-site.xml. Replication factor is set to 1 in the pseudo-distributed mode.
+Now specify a temporary directory location and replication factor in $HADOOP_HOME/conf/hdfs-site.xml. Since we are running in "pseudo-distributed mode", we just set the replication factor to 1.
 
 	<property>
 	<name>hadoop.tmp.dir</name>
@@ -130,7 +130,7 @@ Specify a temporary directory location and replication factor in $HADOOP_HOME/co
 	<value>1</value>
 	</property>
 
-Finally, you need to setup passphraseless access from the master to the slave node (The same node in this case).
+Finally, we need to setup passphrase-less access from the master to the slave node (The same node in this case).
 
 	ssh-keygen -t rsa -P ""
 	cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
@@ -188,7 +188,7 @@ Run the query:
 
 	$HADOOP_HOME/bin/hadoop jar ~/giraph-1.0.0/giraph-examples/target/giraph-examples-1.0.0-for-hadoop-0.20.2-jar-with-dependencies.jar org.apache.giraph.GiraphRunner org.apache.giraph.examples.SimpleShortestPathsVertex -vif org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexInputFormat -vip tiny_graph.txt -of org.apache.giraph.io.formats.IdWithValueTextOutputFormat -op shortestpaths -w 1
 
-Few details about the parameters abive are as follows (for more details run GiraphRunner with `-h` option).  
+We briefly describe the parameters above below;  for more details run GiraphRunner with the `-h` option:
 
 * -vif	defines the vertex input format.  `JsonLongDoubleFloatDoubleVertexInputFormat` parses the input file format.
 * -vip	provides the path of the vertex input file
@@ -200,7 +200,7 @@ For example code, look in the `~/giraph-1.0.0/giraph-examples/src/main/java/org/
 
 #### PageRank Query
 
-Now implement the PageRank query using Giraph. You will need to write the `compute` function. 
+Now implement  PageRank using Giraph. You will need to write the `compute` function. 
 For reference, you can have a look at the example PageRank implementation in 
 Giraph [here](https://github.com/apache/giraph/blob/release-1.0/giraph-examples/src/main/java/org/apache/giraph/examples/SimplePageRankVertex.java). 
 
@@ -216,14 +216,14 @@ Instead, each line is simply a `startvertexid  endvertexid` pair.  You can handl
 Launch 10 instances on ec2 and install/configure Hadoop on all of them (one way is to create an AMI image of
 an instance with hadoop installed and call `aws ec2 run-instances` with that image).  Then you will need to
 
-* start hadoop on all of the instances
-* add the slave machines' hostnames (ec2-x-x...amazon.com) to the master node's `~/hadoop/conf/slaves` file. 
+* Start Hadoop on all of the instances
+* Add the slave machines' hostnames (ec2-x-x...amazon.com) to the master node's `~/hadoop/conf/slaves` file. 
   One hostname per line
-* on the master node.  Terminate everything (`~/hadoop/bin/stop-all.sh`) and start everything up (`~/hadoop/bin/start-all.sh`).
+* On the master node.  Terminate everything (`~/hadoop/bin/stop-all.sh`) and start everything up (`~/hadoop/bin/start-all.sh`).
 
-Sanity check by rerunning the `tiny_graph.txt`
+Sanity check by rerunning on `tiny_graph.txt`
 
-Re-run the PageRank query on 10 instances.
+Finally, re-run  PageRank on 10 instances.
 
 ### Questions
 
