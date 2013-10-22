@@ -226,6 +226,9 @@ Deploy Giraph as follows:
 
 ## Running Giraph
 
+#### Compile a program
+
+
 
 #### Shortest Path Query
 
