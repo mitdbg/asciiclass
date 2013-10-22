@@ -1,6 +1,6 @@
 # Lab 7: Graph Analytics Using Giraph
 
-*Assigned: Oct 24, 2013*
+*Assigned: Oct 22, 2013*
 
 *Due: Tuesday Oct 31, 2013 12:59PM (just before class)*
 
@@ -10,20 +10,15 @@ to Google's Pregel, and to understand the pros and cons of vertex-centric approa
 Check out the [Pregel](http://dl.acm.org/citation.cfm?id=1807167.1807184&coll=DL&dl=ACM&CFID=371018483&CFTOKEN=18422478)
 paper for more details.
 
+## Datasets
+
 In this lab, you will work with the [LiveJournal dataset](http://snap.stanford.edu/data/soc-LiveJournal1.html), 
 which is a directed friendship graph from the LiveJournal website. You will run the PageRank and the ShortestPath statistics over this dataset.
 
 Each line in the dataset represents an edge of the form `FromNodeId ToNodeId`in the friendship graph. 
-We have put these files on Amazon S3 at: `s3://6885public/livejournal/dataset.txt`
 
 
-## Setup
-
-You should create a micro-instance as you did in previous labs and ssh into your virtual machine (you can also run these commands from your own machine). Install the following packages.
-
-### Data
-
-You will use `tiny_graph.txt` to test your first Giraph program. It contains the following data:
+You will also use `tiny_graph.txt` stored as an adjacency list:
 
 ````bash
 [0,0,[[1,1],[3,3]]]
@@ -36,6 +31,12 @@ You will use `tiny_graph.txt` to test your first Giraph program. It contains the
 where each line is in JSON format as
 
 	[vertexid, vertexvalue, [ [vertexid, edgeweight], ...] ]
+
+Both of these files should be already in the home directory and/or HDFS when you spin up your instances.
+
+## Setup
+
+You should create a micro-instance as you did in previous labs and ssh into your virtual machine (you can also run these commands from your own machine). Install the following packages.
 
 
 ### Start an Instance
@@ -66,87 +67,26 @@ Remember to terminate your instance once you are done as follows:
 
 	aws ec2 terminate-instances --instance-ids <INSTANCE_ID>
 
-<!--
-### Set up Hadoop
-
-Giraph runs on top of Hadoop/MapReduce. To run it we first need to setup Hadoop. We will first set up Hadoop in pseudo-distributed mode on a single instance.
-
-	wget http://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
-	tar xzf hadoop-0.20.2.tar.gz
-	mv hadoop-0.20.2 hadoop
-	export HADOOP_HOME=~/hadoop
--->
 
 #### Configuring Hadoop
 
-<!--
-Now we need to configure a bunch of properties.
+Setup passphrase-less access from the master to the slave node (The same node in this case).
 
-
-First install Java 7:
-
-	sudo apt-get update
-	sudo apt-get install openjdk-7-jdk
-	export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
-
-
-Set the java home in $HADOOP_HOME/conf/hadoop-env.sh:
-
-	export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
-
--->
-
-You need to tell this Hadoop instance where it is, and setup password-less SSH so Hadoop can log into the nodes without
-typing in a password.
-
-Update `$HADOOP_HOME/conf/core-site.xml`. Replace `HOSTNAME` with the name (ec2-X-X-X-X.compute-..com) 
-of your instance.
-
-	<property>
-	<name>fs.default.name</name>
-	<value>hdfs://HOSTNAME:9000</value>
-	</property>
-
-Update `$HADOOP_HOME/conf/mapred-site.xml` similarly -- replace `HOSTNAME` with the name of your instance.
-
-	<property>
-	<name>mapred.job.tracker</name>
-	<value>HOSTNAME:9001</value>
-	</property>
-
-<!--	
-Now specify a temporary directory location and replication factor in $HADOOP_HOME/conf/hdfs-site.xml. 
-Since we are running in "pseudo-distributed mode", we just set the replication factor to 1.
-
-	<property>
-	<name>hadoop.tmp.dir</name>
-	<value>/home/ubuntu/hadoopTmpDirectory</value>
-	</property>
-
-	<property>
-	<name>dfs.replication</name>
-	<value>1</value>
-	</property>
--->
-
-Finally, we need to setup passphrase-less access from the master to the slave node (The same node in this case).
-
-	rm ~/.ssh/known_hosts
+	# the first two are to remove .ssh stuff from eugene's instance
+	rm ~/.ssh/known_hosts 
 	rm ~/.ssh/id_rsa*
+	# generate a key
 	ssh-keygen -t rsa -P ""
+	# authorize the key on the machine you want to ssh into
 	cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
-_Finally_, you can run Hadoop:
+Now you can run hadoop!
 	
-	$HADOOP_HOME/bin/start-all.sh
-	
-<!--	
-	$HADOOP_HOME/bin/hadoop namenode -format
-	$HADOOP_HOME/bin/start-dfs.sh 
-	$HADOOP_HOME/bin/start-mapred.sh
--->
+	# PATH should include ~/hadoop/bin
+	start-all.sh
 
-On successfully starting Hadoop, `jps` should show something like this (ignore the pids):
+
+On successfully starting Hadoop, running `jps` should show something like this (ignore the pids):
 
 ````bash
 11576 SecondaryNameNode
@@ -157,163 +97,173 @@ On successfully starting Hadoop, `jps` should show something like this (ignore t
 11679 JobTracker
 ````
 
+Note: some commands that you may want to be aware of:	
+
+	# format your HDFS namenode
+	hadoop namenode -format
+
+	# start HDFS
+	start-dfs.sh
+
+You may also want to tune the number of map tasks by editing `~/hadoop/conf/mapred-site.xml`.
+
 
 #### Testing HDFS
 
-Let's make sure HDFS works and has our `tiny_graph.txt` dataset
+Let's make sure HDFS works and has our datasets
 
 List files in HDFS
 
-	$HADOOP_HOME/bin/hadoop dfs -ls
+	hadoop dfs -ls
 	
-You should see a few files: `live.txt, tiny_graph.txt, ...`.  The first one is the livejournal dataset that
-we pre-loaded into HDFS.  The second `tiny_graph.txt` has size zero, so let's re-upload it again.
+You should see a few files (if you don't you'll need to copy them to HFS, which we will do now):
 
-Delete the file
+	live.txt
+	livesmall.txt
+	tiny_graph.txt
 
-	$HADOOP_HOME/bin/hadoop dfs -rm tiny_graph.txt
+These are the full and sampled live journal datasets and the sample graph.  Let's delete and reupload it:
 
-Copy it back in
-	
-	$HADOOP_HOME/bin/hadoop dfs -rm tiny_graph.txt
+	hadoop dfs -rm tiny_graph.txt
+	hadoop dfs -copyFromLocal tiny_graph.txt tiny_graph.txt
 
-Now if you `-ls`, you should see that the file is not empty.
+Now if you `-ls`, you should see that the file is there again.
+
+
+
+## Running Giraph
+
+Let's run something!  We've added a self contained development folder in ~/code 
+that contains two sample programs that take two different file formats (tiny_graph and live journal).
+This is partly so you don't need to touch the giraph or hadoop codebases and deal with things like Maven.
+
+This code is also in the repository under `lab7/code`.
+
+#### Compile a program
+
+First compile the program
+
+	cd ~/code
+    javac -cp lib/giraph.jar:lib/hadoop-core.jar src/test/*.java -d ./ 
+
+The class files should now be in `./test`.  To run the programs, we need to package them up in
+a jar that also includes everything Giraph needs:
+
+    cp lib/giraph.jar giraph.jar
+    # add the compiled class file to giraph.jar
+    jar uf giraph.jar test/*.class
+
+#### Run shortest paths
+
+You should now be able to run shortest paths on `tiny_graph`:
+
+    hadoop jar giraph.jar  org.apache.giraph.GiraphRunner \
+     test.SimpleShortestPathsVertex    \
+     -vif org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexInputFormat \
+     -vip tiny_graph.txt  \
+     -of org.apache.giraph.io.formats.IdWithValueTextOutputFormat   \
+     -op tinyOutput  \
+     -w 1
+
+What are these parameters? (run GiraphRunner with the `-h` option for help)
+
+* `-vif`	defines the vertex input format. See [the source code](https://github.com/apache/giraph/tree/release-1.0/giraph-core/src/main/java/org/apache/giraph/io) for details.
+* `-vip`	is the HDFS path for the vertex centric input file
+* `-of` the class that defines the output format.  
+* `-op` is the HDFS path for the output files
+* `-w` tells the number of workers (should be 1 less than the maximum number of map tasks in `mapred-site.xml`)
+
+Setting the `vip` and `vif` parameters is important as we will see when running on the Live Journal dataset:
+
+    hadoop jar giraph.jar  org.apache.giraph.GiraphRunner \
+     test.LiveJournalShortestPaths  \
+     -eif org.apache.giraph.io.formats.IntNullTextEdgeInputFormat \
+     -eip livesmall.txt  \
+     -of org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
+     -op livesmallOutput  \
+     -w 1
+
+We used the `-eif` and `-eip` flags because the dataset is a list of edges rather than vertex centric.
+`IntNullTextEdgeInputFormat` knows how to parse files where each line is `[sourceid]  [edgeid]`.
+
+	  
+The output files are in
+
+	hadoop dfs -ls tinyOutput/
+	hadoop dfs -ls livesmallOutput/	
+
+#### A quick primer on the code
+
+
+All Giraph programs subclass `org.apache.giraph.graph.Vertex`, which 
+is the compute function for a vertex.  The compute structure is basically:
+
+	parse inputs using formattors -> VertexCompute() -> format the output 
+
+`vif`/`eif`/`of` defines the input and output formatting.  The program implements the compute function.
+
+The `Vertex` signature is:
+
+	class Vertex<I extends WritableComparable, V extends Writable, E extends Writable, M extends Writable>
+
+I, V, E, M are respectively serializers for the Vertex id, Vertex data, Edge data (e.g., weight), Message data
+
+Diff the source files to see the differences:
+
+	diff ./src/test/*.java
+
+Looking at the source, the Live Journal data doesn't care about edge weight, so it is a `NullWriter`.  
+Take a look at the source for further details.
+
 
 #### Creating a Cluster
 
-Now you can spin up (between 1 - 7) instances and configure them.  Record their hostnames.
+Now you can spin up (between 1 - 5) instances.  Record their hostnames (ec2-xx-xx..amazon.com)
 
 In order to add them to a cluster, pick one of your instances as the master and add the hostnames
 to `~/hadoop/conf/slaves`.  One hostname per line.
 
-Test this by
+Make sure you can passwordless ssh from the master to the slaves by adding the `~/.ssh/id_rsa.pub` value in
+each slave's `~/.ssh/authorized_keys` file.
 
-1. Stop Hadoop on all of the instances: `$HADOOP_HOME/bin/stop-all.sh`
-2. Start hadoop on your master: `$HADOOP_HOME/bin/start-all.sh`
-3. ssh to a slave and run: `jps`.  TaskTracker and DataNode should be running.
+Now run the cluster
 
-HDFS may be read-only for ~5 minutes while files are replicated.  Until then, you may get a
-"Name node is in safe mode." error.
+1. Start hadoop on your master: `start-all.sh`
+2. ssh to a slave and run: `jps`.  TaskTracker and DataNode should be running.
 
+Now update `mapred-site.xml` with the proper number of map tasks.
 
+Note: HDFS may be read-only for ~5 minutes while files are replicated.  Until then, you may get a
+"Name node is in safe mode." error when you perform HDFS write operations.
 
 Hurray!
 
 
-<!--
-### Maven
-
-We need Maven to build Giraph. Run the following.
-
-	sudo apt-get install maven
-
-If you see the installer complaining about `libwagon2-java` then run the folloowing and then try installing maven again.
-	
-	sudo dpkg -i --force-all /var/cache/apt/archives/libwagon2-java_2.2-3+nmu1_all.deb
-
-
-### Giraph
-
-Deploy Giraph as follows:
-	
-	wget http://apache.mirrors.pair.com/giraph/giraph-1.0.0/giraph-1.0.0.tar.gz
-	tar xzf giraph-1.0.0.tar.gz
-	mv giraph-1.0.0 giraph
-	cd giraph
-	mvn package -DskipTests -Phadoop_non_secure 0.20.2	
-	export GIRAPH_HOME=~/giraph
--->
-
-## Running Giraph
-
-#### Compile a program
-
-
-
-#### Shortest Path Query
-
-Run the query:
-
-	$HADOOP_HOME/bin/hadoop jar \
-	  ~/giraph-1.0.0/giraph-examples/target/giraph-examples-1.0.0-for-hadoop-0.20.2-jar-with-dependencies.jar \
-	  org.apache.giraph.GiraphRunner\
-	  org.apache.giraph.examples.SimpleShortestPathsVertex \
-	  -vif org.apache.giraph.io.formats.JsonLongDoubleFloatDoubleVertexInputFormat\
-	  -vip tiny_graph.txt \
-	  -of org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
-	  -op shortestpathsOutput \
-	  -w 1
-	  
-The output files are in
-
-	$HADOOP_HOME/bin/hadoop dfs -ls shortestpathsOutput/
-
-We briefly describe the parameters above below;  for more details run GiraphRunner with the `-h` option:
-
-* -vif	defines the vertex input format.  `JsonLongDoubleFloatDoubleVertexInputFormat` parses the input file format.
-* -vip	provides the path of the vertex input file
-* -of defines the output format
-* -op provides the output path
-* -w tells the number of workers (should be at most 1 less than the maximum number of map tasks)
-
-For example code, look in the `~/giraph-1.0.0/giraph-examples/src/main/java/org/apache/giraph/examples` directory.
-
-#### PageRank Query
+## PageRank Query
 
 Now implement  PageRank using Giraph. You will need to write the `compute` function. 
 For reference, you can have a look at the example PageRank implementation in 
 Giraph [here](https://github.com/apache/giraph/blob/release-1.0/giraph-examples/src/main/java/org/apache/giraph/examples/SimplePageRankVertex.java). 
 
-You will run PageRank on the LiveJournal dataset, which is not in the `tiny_graph.txt` format. 
-Instead, each line is simply a `startvertexid  endvertexid` pair.  You can handle this in either of two ways:
+Run it on the Live Journal dataset!
 
-1. Pre-process the data file and convert it into the JSON format, or
-2. Modify the vertex/edge input formats to parse the input data accordingly.
-
-
-#### Fully Distributed Mode (Optional)
-
-Launch 10 instances on ec2 and install/configure Hadoop on all of them (one way is to create an AMI image of
-an instance with hadoop installed and call `aws ec2 run-instances` with that image).  Then you will need to
-
-* Start Hadoop on all of the instances
-* Add the slave machines' hostnames (ec2-x-x...amazon.com) to the master node's `~/hadoop/conf/slaves` file. 
-  One hostname per line
-* On the master node.  Terminate everything (`~/hadoop/bin/stop-all.sh`) and start everything up (`~/hadoop/bin/start-all.sh`).
-
-Sanity check by rerunning on `tiny_graph.txt`
-
-Finally, re-run  PageRank on 10 instances.
 
 ### Questions
 
 * List the vertex ids of the top 10 PageRanks.
 * How did you handle the LiveJournal input file?
-* Qualitatively compare the PageRank implementation in Giraph with the PageRank implementation in:
+* Compare the PageRank implementation in Giraph with your thought experiments from the previous labs on:
 	* Hadoop
 	* Spark
-* What are the pros and cons of vertex-centric computation model?
+* Compare with the previous systems along the usability dimesion.  What would you most likely use in the future?	
+* What are the pros and cons of vertex-centric computation model?  Did this even make sense to do?
 
 
 # Submission Instructions
 
 
-Answer the questions above in a text file called "lab8-lastname", where lastname is your last name.  Make sure the text file also has your complete name.   Save your writeup and scripts in a zip file or tarball.   Upload it to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab8" assignment.
+Answer the questions above in a text file called "lab7-lastname", where lastname is your last name.  Make sure the text file also has your complete name.   Save your writeup and script in a zip file or tarball.   Upload it to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab7" assignment.
 
 Now you're almost done!  Go read the assigned paper(s) for today.
 
 You can always feel free to contact us with questions on [Piazza](https://piazza.com/class/hl6u4m7ft8n373).
-
-### Feedback (optional, but valuable)
-
-If you have any comments about this lab, or any thoughts about the
-class so far, we would greatly appreciate them.  Your comments will
-be strictly used to improve the rest of the labs and classes and have
-no impact on your grade. 
-
-Some questions that would be helpful:
-
-* Is the lab too difficult or too easy or too boring?  
-* Did you look forward to any exercise that the lab did not cover?
-* Which parts of the lab were interesting or valuable towards understanding the material?
-* How is the pace of the course so far?
