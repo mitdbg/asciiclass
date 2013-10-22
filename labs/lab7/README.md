@@ -63,6 +63,7 @@ Note the public DNS name of the newly launched instance and ssh into it.
 	ssh -i <your keypair .pem file> ubuntu@<public hostname>  
 		
 You will find the precompiled Giraph binaries in `~/giraph-1.0.0`.  Hadoop is in `~/hadoop/`.  The datasets are in `~/`.
+
 Remember to terminate your instance once you are done as follows:
 
 	aws ec2 terminate-instances --instance-ids <INSTANCE_ID>
@@ -247,6 +248,9 @@ Giraph [here](https://github.com/apache/giraph/blob/release-1.0/giraph-examples/
 
 Run it on the Live Journal dataset!
 
+Did we mention that you should terminate your instances when you're done?  (some machines from lab6 were running for 100 hours)
+
+	aws ec2 terminate-instances --instance-ids <INSTANCE_ID>
 
 ### Questions
 
@@ -259,7 +263,9 @@ Run it on the Live Journal dataset!
 * What are the pros and cons of vertex-centric computation model?  Did this even make sense to do?
 
 
+
 # Submission Instructions
+
 
 
 Answer the questions above in a text file called "lab7-lastname", where lastname is your last name.  Make sure the text file also has your complete name.   Save your writeup and script in a zip file or tarball.   Upload it to the [course Stellar site](http://stellar.mit.edu/S/course/6/fa13/6.885/) as the "lab7" assignment.
