@@ -1,4 +1,4 @@
 asciiclass
 ==========
 
-Repository for labs and lections and notes for [Ascii to Answers](http://db.csail.mit.edu/6.885/) class
+Repository for labs, lectures and notes for MIT's [Ascii to Answers](http://db.csail.mit.edu/6.885/) "Big Data" class.
