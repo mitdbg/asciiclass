@@ -5,15 +5,15 @@
 *Due: Tuesday Oct 31, 2013 12:59PM (just before class)*
 
 
-The goal of this lab is for you to get experience _running_ graph queries on Giraph, the open-source counterpart 
-to Google's Pregel, and to understand the pros and cons of vertex-centric approach to graph analytics. 
+The goal of this lab is for you to get try _running_ graph queries on Giraph, the open-source counterpart 
+to Google's Pregel, and to understand the pros and cons of the vertex-centric approach to graph analytics. 
 Check out the [Pregel](http://dl.acm.org/citation.cfm?id=1807167.1807184&coll=DL&dl=ACM&CFID=371018483&CFTOKEN=18422478)
 paper for more details.
 
 ## Datasets
 
 In this lab, you will work with the [LiveJournal dataset](http://snap.stanford.edu/data/soc-LiveJournal1.html), 
-which is a directed friendship graph from the LiveJournal website. You will run the PageRank and the ShortestPath statistics over this dataset.
+which is a directed friendship graph from the LiveJournal website. You will run  [PageRank](http://en.wikipedia.org/wiki/PageRank) and  [single-source shortest path](http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) algorithms on this dataset.
 
 Each line in the dataset represents an edge of the form `FromNodeId ToNodeId`in the friendship graph. 
 
@@ -36,13 +36,13 @@ Both of these files should be already in the home directory and/or HDFS when you
 
 ## Setup
 
-You should create a micro-instance as you did in previous labs and ssh into your virtual machine (you can also run these commands from your own machine). Install the following packages.
+You should create a micro-instance as you did in previous labs and ssh into your virtual machine (you can also run these commands from your own machine). 
 
 
 ### Start an Instance
 
 You will need Giraph and Hadoop to run this lab.  Installing them is a pain, so we've created AMI images that you
-can copy and use with minimal tweaks.  First, create an instance:
+can copy and use with minimal tweaks.  First, create an m1.small instance:
 
 	aws ec2 run-instances --image-id <IMAGE_ID> --count 1 --instance-type m1.small --key-name <your key pair from lab6> --region <your region name from lab6>
 
@@ -86,7 +86,7 @@ Now you can run hadoop!
 	start-all.sh
 
 
-On successfully starting Hadoop, running `jps` should show something like this (ignore the pids):
+On successfully starting Hadoop, running `jps` (the Hadoop Java Process Status tool) should show something like this (ignore the pids):
 
 ````bash
 11576 SecondaryNameNode
@@ -143,15 +143,15 @@ This code is also in the repository under `lab7/code`.
 
 First compile the program
 
-	cd ~/code
-    javac -cp lib/giraph.jar:lib/hadoop-core.jar src/test/*.java -d ./ 
+      cd ~/code
+      javac -cp lib/giraph.jar:lib/hadoop-core.jar src/test/*.java -d ./ 
 
 The class files should now be in `./test`.  To run the programs, we need to package them up in
 a jar that also includes everything Giraph needs:
 
-    cp lib/giraph.jar giraph.jar
-    # add the compiled class file to giraph.jar
-    jar uf giraph.jar test/*.class
+      cp lib/giraph.jar giraph.jar
+      # add the compiled class file to giraph.jar
+      jar uf giraph.jar test/*.class
 
 #### Run shortest paths
 
@@ -173,7 +173,7 @@ What are these parameters? (run GiraphRunner with the `-h` option for help)
 * `-op` is the HDFS path for the output files
 * `-w` tells the number of workers (should be 1 less than the maximum number of map tasks in `mapred-site.xml`)
 
-Setting the `vip` and `vif` parameters is important as we will see when running on the Live Journal dataset:
+Setting the `vip` and `vif` parameters is important as we will see when running on the LiveJournal dataset:
 
     hadoop jar giraph.jar  org.apache.giraph.GiraphRunner \
      test.LiveJournalShortestPaths  \
@@ -212,13 +212,13 @@ Diff the source files to see the differences:
 
 	diff ./src/test/*.java
 
-Looking at the source, the Live Journal data doesn't care about edge weight, so it is a `NullWriter`.  
+Looking at the source, the LiveJournal data doesn't care about edge weight, so it is a `NullWriter`.  
 Take a look at the source for further details.
 
 
 #### Creating a Cluster
 
-Now you can spin up (between 1 - 5) instances.  Record their hostnames (ec2-xx-xx..amazon.com)
+Now you can spin up (1 -- 5) instances.  Record their hostnames (ec2-xx-xx...amazon.com)
 
 In order to add them to a cluster, pick one of your instances as the master and add the hostnames
 to `~/hadoop/conf/slaves`.  One hostname per line.
@@ -245,7 +245,7 @@ Now implement  PageRank using Giraph. You will need to write the `compute` funct
 For reference, you can have a look at the example PageRank implementation in 
 Giraph [here](https://github.com/apache/giraph/blob/release-1.0/giraph-examples/src/main/java/org/apache/giraph/examples/SimplePageRankVertex.java). 
 
-Run it on the Live Journal dataset!
+Run it on the LiveJournal dataset!
 
 
 ### Questions
