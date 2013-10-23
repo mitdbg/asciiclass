@@ -64,7 +64,7 @@ Note the public DNS name of the newly launched instance and ssh into it.
 		
 You will find the precompiled Giraph binaries in `~/giraph-1.0.0`.  Hadoop is in `~/hadoop/`.  The datasets are in `~/`.
 
-Remember to terminate your instance once you are done as follows:
+**Remember to terminate your instance once you are done as follows:**
 
 	aws ec2 terminate-instances --instance-ids <INSTANCE_ID>
 
@@ -219,10 +219,14 @@ Take a look at the source for further details.
 
 #### Creating a Cluster
 
-Now you can spin up (between 1 - 5) instances.  Record their hostnames (ec2-xx-xx..amazon.com)
+Let's make your existing instance the master and spin up a few more instances (--count flag):
 
-In order to add them to a cluster, pick one of your instances as the master and add the hostnames
-to `~/hadoop/conf/slaves`.  One hostname per line.
+	aws ec2 run-instances --image-id <IMAGE_ID> --count 3 --instance-type m1.small --key-name <your key pair from lab6> --region <your region name from lab6>
+
+Use the same IMAGE\_ID etc as you did when launching the master.
+
+Remember their hostnames (ec2-xx-xx..amazon.com) and instance-IDs. On the master node,
+add the hostnames to `~/hadoop/conf/slaves`.  One hostname per line.
 
 Make sure you can passwordless ssh from the master to the slaves by adding the `~/.ssh/id_rsa.pub` value in
 each slave's `~/.ssh/authorized_keys` file.
@@ -248,7 +252,7 @@ Giraph [here](https://github.com/apache/giraph/blob/release-1.0/giraph-examples/
 
 Run it on the Live Journal dataset!
 
-Did we mention that you should terminate your instances when you're done?  (some machines from lab6 were running for 100 hours)
+**Did we mention that you should terminate your instances when you're done?  (some machines from lab6 were running for 100 hours)**
 
 	aws ec2 terminate-instances --instance-ids <INSTANCE_ID>
 
