@@ -2,7 +2,7 @@
 
 *Assigned: Oct 22, 2013*
 
-*Due: Tuesday Oct 31, 2013 12:59PM (just before class)*
+*Due: Thursday, Oct 31, 2013 12:59PM (just before class)*
 
 
 The goal of this lab is for you to get experience _running_ graph queries on Giraph, the open-source counterpart 
