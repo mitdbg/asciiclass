@@ -108,15 +108,14 @@ Commands that you may want to be aware of:
 	# start HDFS
 	start-dfs.sh
 
-If you run into memory issues, m1.small instances have ~1.2GB of RAM.  
-You prabably want to give the JVM between 512-768MB.  Too little and the map task won't have enough, 
-too much and the OS will kill your process.  If you want, use `m1.medium` instances instead and increase 
-the RAM for the JVM.  Just be even more prudent about terminating them when you're done with thelab.
+If you run into memory issues, m1.small instances have ~1.2GB of RAM.  You prabably want to give the JVM between 512-768MB.  Too little and the map task won't have enough, too much and the OS will kill your process.  Edit `~/hadoop/conf/mapred-site.xml`:
 
 	<property>
     	  <name>mapred.child.java.opts</name>
     	  <value>-Xmx512m</value>
   	</property>
+
+If you want, use `m1.medium` instances instead and increase the RAM for the JVM.  Just be even more prudent about terminating them when you're done with the lab.  
 
 Later when you add machines to your cluster, you may tune the number of map tasks by editing `~/hadoop/conf/mapred-site.xml`.
 
