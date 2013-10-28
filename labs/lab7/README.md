@@ -98,7 +98,9 @@ On successfully starting Hadoop, running `jps` should show something like this (
 11679 JobTracker
 ````
 
-Note: some commands that you may want to be aware of:	
+#### Some Notes
+
+Commands that you may want to be aware of:	
 
 	# format your HDFS namenode
 	hadoop namenode -format
@@ -106,7 +108,17 @@ Note: some commands that you may want to be aware of:
 	# start HDFS
 	start-dfs.sh
 
-You may also want to tune the number of map tasks by editing `~/hadoop/conf/mapred-site.xml`.
+If you run into memory issues, m1.small instances have ~1.2GB of RAM.  
+You prabably want to give the JVM between 512-768MB.  Too little and the map task won't have enough, 
+too much and the OS will kill your process.  If you want, use `m1.medium` instances instead and increase 
+the RAM for the JVM.  Just be even more prudent about terminating them when you're done with thelab.
+
+	<property>
+    	  <name>mapred.child.java.opts</name>
+    	  <value>-Xmx512m</value>
+  	</property>
+
+Later when you add machines to your cluster, you may tune the number of map tasks by editing `~/hadoop/conf/mapred-site.xml`.
 
 
 #### Testing HDFS
