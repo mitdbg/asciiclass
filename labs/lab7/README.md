@@ -270,7 +270,6 @@ Run it on the Live Journal dataset!
 ### Questions
 
 * List the vertex ids of the top 10 PageRanks.
-* How did you handle the LiveJournal input file?
 * Compare the PageRank implementation in Giraph with your thought experiments from the previous labs on:
 	* Hadoop
 	* Spark
