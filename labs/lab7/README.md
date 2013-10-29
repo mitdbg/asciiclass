@@ -52,7 +52,7 @@ Depending on your region, the IMAGE_ID is
 
 * `ami-6cedda29` for us-west-1 
 * `ami-ea1881da` for us-west-2 
-* `ami-6b1d4102` for us-east-1
+* `ami-9b401cf2` for us-east-1
 
 Make sure that your Amazon credentials are set up as in lab 6 or the `AWS_CONFIG_FILE` environment variable is set as in lab 5. It might take a few minutes to get the instance running. You can check the instance by logging in to [this link](https://6885.signin.aws.amazon.com/console) as in lab 6. Alternatively, you can use the ec2 tools as follows:
 
@@ -98,7 +98,9 @@ On successfully starting Hadoop, running `jps` should show something like this (
 11679 JobTracker
 ````
 
-Note: some commands that you may want to be aware of:	
+#### Some Notes
+
+Commands that you may want to be aware of:	
 
 	# format your HDFS namenode
 	hadoop namenode -format
@@ -106,7 +108,16 @@ Note: some commands that you may want to be aware of:
 	# start HDFS
 	start-dfs.sh
 
-You may also want to tune the number of map tasks by editing `~/hadoop/conf/mapred-site.xml`.
+If you run into memory issues, m1.small instances have ~1.2GB of RAM.  You prabably want to give the JVM between 512-768MB.  Too little and the map task won't have enough, too much and the OS will kill your process.  Edit `~/hadoop/conf/mapred-site.xml`:
+
+	<property>
+    	  <name>mapred.child.java.opts</name>
+    	  <value>-Xmx512m</value>
+  	</property>
+
+If you want, use `m1.medium` instances instead and increase the RAM for the JVM.  Just be even more prudent about terminating them when you're done with the lab.  
+
+Later when you add machines to your cluster, you may tune the number of map tasks by editing `~/hadoop/conf/mapred-site.xml`.
 
 
 #### Testing HDFS
@@ -217,7 +228,9 @@ Looking at the source, the Live Journal data doesn't care about edge weight, so 
 Take a look at the source for further details.
 
 
-#### Creating a Cluster
+### Creating a Cluster
+
+#### Launch new slave instances
 
 Let's make your existing instance the master and spin up a few more instances (--count flag):
 
@@ -228,15 +241,32 @@ Use the same IMAGE\_ID etc as you did when launching the master.
 Remember their hostnames (ec2-xx-xx..amazon.com) and instance-IDs. On the master node,
 add the hostnames to `~/hadoop/conf/slaves`.  One hostname per line.
 
+#### Configure the slaves
+
 Make sure you can passwordless ssh from the master to the slaves by adding the `~/.ssh/id_rsa.pub` value in
 each slave's `~/.ssh/authorized_keys` file.
 
-Now run the cluster
+Now some configuration of the slaves ([documented here](http://hadoop.apache.org/docs/r0.18.3/cluster_setup.html#Site+Configuration)) is necessary...
+
+Update `~/hadoop/conf/mapred-site.xml` on the slaves to point them to the master job tracker:
+
+	<name>mapred.job.tracker</name>
+	<value>{{Master node Public DNS}}:9001</value>
+
+Update `~/hadoop/conf/core-site.xml` on the slaves to point HDFS to the name server:
+
+	<name>fs.default.name</name>
+	<value>{{Master node Public DNS}}:9000</value>
+
+#### Configure the master
+
+Switch back to the master and update `mapred-site.xml` with the proper number of map tasks.
+
+Run the cluster:
 
 1. Start hadoop on your master: `start-all.sh`
 2. ssh to a slave and run: `jps`.  TaskTracker and DataNode should be running.
 
-Now update `mapred-site.xml` with the proper number of map tasks.
 
 Note: HDFS may be read-only for ~5 minutes while files are replicated.  Until then, you may get a
 "Name node is in safe mode." error when you perform HDFS write operations.
@@ -259,7 +289,6 @@ Run it on the Live Journal dataset!
 ### Questions
 
 * List the vertex ids of the top 10 PageRanks.
-* How did you handle the LiveJournal input file?
 * Compare the PageRank implementation in Giraph with your thought experiments from the previous labs on:
 	* Hadoop
 	* Spark
