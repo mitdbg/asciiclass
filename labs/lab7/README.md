@@ -228,7 +228,9 @@ Looking at the source, the Live Journal data doesn't care about edge weight, so 
 Take a look at the source for further details.
 
 
-#### Creating a Cluster
+### Creating a Cluster
+
+#### Launch new slave instances
 
 Let's make your existing instance the master and spin up a few more instances (--count flag):
 
@@ -239,27 +241,32 @@ Use the same IMAGE\_ID etc as you did when launching the master.
 Remember their hostnames (ec2-xx-xx..amazon.com) and instance-IDs. On the master node,
 add the hostnames to `~/hadoop/conf/slaves`.  One hostname per line.
 
+#### Configure the slaves
+
 Make sure you can passwordless ssh from the master to the slaves by adding the `~/.ssh/id_rsa.pub` value in
 each slave's `~/.ssh/authorized_keys` file.
 
-Now run the cluster
+Now some configuration of the slaves ([documented here](http://hadoop.apache.org/docs/r0.18.3/cluster_setup.html#Site+Configuration)) is necessary...
 
-1. Start hadoop on your master: `start-all.sh`
-2. ssh to a slave and run: `jps`.  TaskTracker and DataNode should be running.
-
-Some configuration ([documented here](http://hadoop.apache.org/docs/r0.18.3/cluster_setup.html#Site+Configuration)) is necessary...
-
-Update their `~/hadoop/conf/mapred-site.xml` files to point them to the master job tracker:
+Update `~/hadoop/conf/mapred-site.xml` on the slaves to point them to the master job tracker:
 
 	<name>mapred.job.tracker</name>
 	<value>{{Master node Public DNS}}:9001</value>
 
-Update their `~/hadoop/conf/core-site.xml` files to point HDFS to the name server:
+Update `~/hadoop/conf/core-site.xml` on the slaves to point HDFS to the name server:
 
 	<name>fs.default.name</name>
 	<value>{{Master node Public DNS}}:9000</value>
 
-Now update `mapred-site.xml` on the master with the proper number of map tasks.
+#### Configure the master
+
+Switch back to the master and update `mapred-site.xml` with the proper number of map tasks.
+
+Run the cluster:
+
+1. Start hadoop on your master: `start-all.sh`
+2. ssh to a slave and run: `jps`.  TaskTracker and DataNode should be running.
+
 
 Note: HDFS may be read-only for ~5 minutes while files are replicated.  Until then, you may get a
 "Name node is in safe mode." error when you perform HDFS write operations.
