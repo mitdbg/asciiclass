@@ -247,7 +247,19 @@ Now run the cluster
 1. Start hadoop on your master: `start-all.sh`
 2. ssh to a slave and run: `jps`.  TaskTracker and DataNode should be running.
 
-Now update `mapred-site.xml` with the proper number of map tasks.
+Some configuration ([documented here](http://hadoop.apache.org/docs/r0.18.3/cluster_setup.html#Site+Configuration)) is necessary...
+
+Update their `~/hadoop/conf/mapred-site.xml` files to point them to the master job tracker:
+
+	<name>mapred.job.tracker</name>
+	<value>{{Master node Public DNS}}:9001</value>
+
+Update their `~/hadoop/conf/core-site.xml` files to point HDFS to the name server:
+
+	<name>fs.default.name</name>
+	<value>{{Master node Public DNS}}:9000</value>
+
+Now update `mapred-site.xml` on the master with the proper number of map tasks.
 
 Note: HDFS may be read-only for ~5 minutes while files are replicated.  Until then, you may get a
 "Name node is in safe mode." error when you perform HDFS write operations.
