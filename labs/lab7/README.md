@@ -246,9 +246,9 @@ add the hostnames to `~/hadoop/conf/slaves`.  One hostname per line.
 Make sure you can passwordless ssh from the master to the slaves by adding the `~/.ssh/id_rsa.pub` value in
 each slave's `~/.ssh/authorized_keys` file.
 
-Now some configuration of the slaves ([documented here](http://hadoop.apache.org/docs/r0.18.3/cluster_setup.html#Site+Configuration)) is necessary...
+Here is a pointer to  ([setting up clusters on hadoop.apache.org](http://hadoop.apache.org/docs/r0.18.3/cluster_setup.html#Site+Configuration))
 
-Update `~/hadoop/conf/mapred-site.xml` on the slaves to point them to the master job tracker:
+<!--Update `~/hadoop/conf/mapred-site.xml` on the slaves to point them to the master job tracker:
 
 	<name>mapred.job.tracker</name>
 	<value>{{Master node Public DNS}}:9001</value>
@@ -257,6 +257,7 @@ Update `~/hadoop/conf/core-site.xml` on the slaves to point HDFS to the name ser
 
 	<name>fs.default.name</name>
 	<value>{{Master node Public DNS}}:9000</value>
+-->
 
 #### Configure the master
 
