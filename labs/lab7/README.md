@@ -248,7 +248,7 @@ each slave's `~/.ssh/authorized_keys` file.
 
 As far as we can tell, this is enough setup on the slaves.  Here is a pointer to [setting up clusters on hadoop.apache.org](http://hadoop.apache.org/docs/r0.18.3/cluster_setup.html#Site+Configuration)
 
-(A post on piazza suggested editing `mapred-site.xml` and `core-site.xml` and pointing the job tracker and fs to the master node, but other students have verified that it breaks the configuration, so we've removed the suggestion.)
+([A post on piazza](https://piazza.com/class/hl6u4m7ft8n373?cid=105) suggested editing `mapred-site.xml` and `core-site.xml` and pointing the job tracker and fs to the master node, but other students have verified that it breaks the configuration.  Results seem mixed, so read the post and come to your own conclusions.)
 <!--Update `~/hadoop/conf/mapred-site.xml` on the slaves to point them to the master job tracker:
 
 	<name>mapred.job.tracker</name>
