@@ -1,0 +1,208 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\froman\fcharset0 Times-Roman;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww16880\viewh15920\viewkind1
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qr
+
+\f0\fs24 \cf0 10/31/2013\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 Stream Processing \'97 Lecture 14\
+
+\b0 \
+\ul What is Stream Processing / Why Do I Care?\
+\ulnone \
+\
+\
+Example:  Twitter Fire Hose\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc
+\cf0 {{\NeXTGraphic Pasted Graphic.pdf \width5380 \height3360
+}¬}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+\cf0 Challenges:		high rates\
+				deletes\
+				dissemination\
+			\
+\
+General Requirements:\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+	Low latency\
+		500 m / day = 12K / sec \'97 not clear we can run a general purpose transaction processing system at this rate\
+	\
+	Parallel processing\
+		- Data parallelism\
+		- Pipelined parallelism\
+\
+	Pipeline of transformations (\'93operators\'94\
+\
+		\'93Data Flow\'94\
+\
+			Ex: extract, index, etc\
+	\
+		May be user defined or from some library\
+\
+			\'93General Purpose\'94 vs \'93Domain Specific Language\'94\
+	\
+		May be stateful\
+\
+\
+		Need to deal with \'93windows\'94 since streams are infinite\
+\
+	Asynchronous (not always assumed but\'85)\
+\
+\
+	Fault Tolerance\
+	\
+		For stateful operations, need a way to checkpoint their \
+			progress and recover\
+		\
+		Need to do this in a way that results in a consistent computation\
+	\
+\
+	Load Balancing\
+\
+		- E.g, if doing parallel ingres want each branch to do about the same\
+		amount of work\
+\
+		- Lots of problems \'97 uneven distribution, stragglers, etc\
+\
+\
+\
+\
+\ul The Database Perspective:  \'93Stream Management Systems\'94\
+\ulnone \
+SQL-like Domain Specific Language  (\'93StreamSQL\'94, \'93Aurora\'94)\
+\
+
+\b Data Model\
+
+\b0 \
+Typed tuples, in streams.  Tuples have timestamps.  Depending on system may or may not assume timestamps in order.\
+\
+Why would I want to be able to handle out of order arrival of timestamps?\
+\
+Ex:  Tweet (Timestamp, Text, Sender, ReplyTo, \'85)\
+\
+
+\b Operators\
+
+\b0 \
+	Filter \
+		Ex:  Select (Sender=\'91madden\'92)\
+	Map\
+		Ex: Map (lowercase(tweet_text))\
+\
+\
+\
+	Aggregate\
+		Ex  Agg( count, group by sender, size 1000 advance 10)\
+			Produces a count of tweets by sender every 10 tuples, over\
+			last 1000 tweets\
+\
+	Windowed Join\
+	Windowed Sort\
+	\
+	\'85\
+\
+\
+Functions can all take UDFs\
+\
+
+\b Implementation:\
+
+\b0 	\
+	Conventionally operators eagerly consume inputs, emit as windows fill\
+	Each operator in a separate thread, with an input queue\
+\
+\
+
+\b Many papers on database languages have been proposed \'97 e.g., pattern matching\
+
+\b0 \
+Ex:\
+\
+Find conversations of length at least three between madden and wu:\
+\
+\pard\pardeftab720
+
+\f1 \cf0 SEQ(tweet x, tweet y, tweet z)\
+WHERE y.replyto = x.tweetid AND z.replyto = y.tweetid\
+AND x.sender = madden\
+AND y.sender = wu\
+AND z.sender = madden\
+WITHIN 12 hours\
+\pard\pardeftab720\sa240
+\cf0 RETURN x.tweetid, y.tweetid, z.tweetid
+\f0 \
+Implementation of some of these operators is interesting\
+Can be thought of as an instance of a state machine (NFA) that looks for patterns that match\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+\cf0 {{\NeXTGraphic Pasted Graphic 1.pdf \width8100 \height5060
+}¬}\
+\pard\pardeftab720\sa240
+\cf0 \ul \ulc0 \
+Naiad Paper;\
+\
+\ulnone What is the objective?\
+To build a general purpose (streaming) data flow system with support for cyclic computations\
+Show word count example.\
+\ul Why cyclic?\
+\ulnone Want to support iterative computations\
+\ul What are some examples they give?\
+\ulnone Word count\
+Iterative learning on twitter data\
+Graph processing - e.g., Page Rank!\
+\
+\
+\pard\pardeftab720
+
+\b \cf0 Show example of word count
+\b0 \
+\pard\pardeftab720
+\cf0 \ul \ulc0 \
+What does parallel implementation look like?\
+\
+\ulnone Word count:\
+	can process blocks of words in parallel - partitioning by word\
+\
+	\'97> count\'97\'97\'97\'97  \\\
+				  \\\
+	\'97> count	\'97\'97\'97   \'97> emit\
+			            /\
+	\'97> count\'97\'97\'97\'97  /\
+\pard\pardeftab720
+\cf0 \
+\pard\pardeftab720
+\cf0 \ul \ulc0 How does pagerank work?\
+\pard\pardeftab720
+\cf0 \ulnone \
+Presumably a \'93pagerank\'94 operator that maintains running pagerank a single node of graph, receives update messages and emits update\
+\pard\pardeftab720
+\cf0 \ul \ulc0 \
+What about fault tolerance?\
+\pard\pardeftab720
+\cf0 \ulnone Quiesce operators\
+\
+Call \'93checkpoint\'94 at some periodicity\
+\
+Can rollback to checkpoint to restore state\
+\pard\pardeftab720
+\cf0 \ul \ulc0 \
+How do I get input back?\ulnone   \
+\
+Doesn\'92t really say \'97 they seem to assume that you have input saved somewhere.\
+\
+Don\'92t seem to have a high availability story.\
+\ul \
+How might I add high avail?\ulnone \
+\ul \
+Great performance \'97 why?  \
+\pard\pardeftab720
+\cf0 \ulnone \
+Vs. systems no optimized for iteration that persist data on every step, clear win, since writing data out in each iteration is painful.\
+\
+Vs optimized graph systems \'97 unclear.  Point probably isn\'92t that they are better but that they are performance competitive.\
+\
+}
