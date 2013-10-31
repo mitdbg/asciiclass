@@ -241,22 +241,25 @@ Use the same IMAGE\_ID etc as you did when launching the master.
 Remember their hostnames (ec2-xx-xx..amazon.com) and instance-IDs. On the master node,
 add the hostnames to `~/hadoop/conf/slaves`.  One hostname per line.
 
-#### Configure the slaves
+#### Configure the slaves and master
 
 Make sure you can passwordless ssh from the master to the slaves by adding the `~/.ssh/id_rsa.pub` value in
 each slave's `~/.ssh/authorized_keys` file.
 
-Now some configuration of the slaves ([documented here](http://hadoop.apache.org/docs/r0.18.3/cluster_setup.html#Site+Configuration)) is necessary...
+As far as we can tell, this is enough setup on the slaves.  Here is a pointer to [setting up clusters on hadoop.apache.org](http://hadoop.apache.org/docs/r0.18.3/cluster_setup.html#Site+Configuration)
 
-Update `~/hadoop/conf/mapred-site.xml` on the slaves to point them to the master job tracker:
+[This post on piazza](https://piazza.com/class/hl6u4m7ft8n373?cid=105) suggests editing `mapred-site.xml` and `core-site.xml` on *the slaves and master* to point the job tracker and fs to the master node.  Several students have verified that it works.  The changes are as follows:
+
+Update `~/hadoop/conf/mapred-site.xml` to point them to the master job tracker:
 
 	<name>mapred.job.tracker</name>
 	<value>{{Master node Public DNS}}:9001</value>
 
-Update `~/hadoop/conf/core-site.xml` on the slaves to point HDFS to the name server:
+Update `~/hadoop/conf/core-site.xml` to point HDFS to the name server on the master:
 
 	<name>fs.default.name</name>
 	<value>{{Master node Public DNS}}:9000</value>
+
 
 #### Configure the master
 
