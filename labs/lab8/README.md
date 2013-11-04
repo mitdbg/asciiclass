@@ -8,6 +8,12 @@
 The goal of this lab is for you to play with creating web-based
 visualizations and learn something interesting about a local dataset.
 
+Here are some useful documents
+
+* [D3 documentation](https://github.com/mbostock/d3/wiki/API-Reference)
+* [mbostock's gallery](https://github.com/mbostock/d3/wiki/API-Reference)
+* [D3 Data Join](http://bost.ocks.org/mike/join/)
+
 
 ## Datasets
 
