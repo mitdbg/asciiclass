@@ -1,0 +1,51 @@
+= Stream Processing
+Computation over a long-lived stream of data, usually with relatively low latency.
+
+Example: Twitter firehose to MIT
+500M tweets/day, 12K/second, 4KB each (Adam's math: 2TB per day)
+There's also a sizable delete stream,  which happens when people delete tweets, and we're contractually obligated to delete all tweets in that stream.
+
+Twitter wants to send the data once to CSAIL, and have CSAIL provide it to anyone at MIT.
+CSAIL would have to filter stream for downstream MIT users, join in the delete stream, etc.
+
+General stream processing requirements
+ - low latency: ~100 microseconds matter for trading stocks
+ - 2 types of parallelism
+   - data parallelism: one machine can't necessarily process all data.  you can split the incoming messages and process them separately.
+     -> not all operations are data-parallel: filtering data down can be split per message, but aggregating it or joining it with other streams means messages have to interact
+   - pipeline parallelism: since you have a workflow (filter for tweets in boston, then filter for students, then count per minute), you can have different machines process different parts of the pipeline.
+
+Operator model: you are building a data flow of operations that filter/aggregate/etc. the data
+  - black-box model, like the Naiad, where each operation is implemented by the developer, and the system knows very little about what each operator does.
+  - query-language model, like SQL, where each operation is well-defined (like filter, group, join, aggregate, etc.)
+
+Considerations
+  - fault tolerance: what if a node goes down?
+  - load-balancing: how to avoid bottleneck in the slowest part of a pipeline by assigning more machines to it
+
+= Previous work in academia
+Aurora, Borealis, Telegraph, StreamSQL
+They all assume typed tuples: Tweet(timestamp, text, author_id, reply_id, ...)
+Common operators, usually expressed in SQL-like language
+  - filter: take a tuple, either emit it or don't [stateless, parallelizable]
+  - map: transform each input tuple, potentially into a new schema [stateless, parallelizable]
+  - aggregate
+  - join
+  - sort
+
+Aggregate/Join/Sort are harder, because streams are potentially infinite.  They are defined on windows of tuples.
+example for aggregate: Count(group by author_id, advance 10, size 1000)
+  -> group tweets by author ID and count them.  Every 10 tweets, emit the count by author of the last 1000 tweets.
+
+Academic projects around this work largely stopped until recently.  There wasn't a lot of demand for the work outside of finance.  Recently, there's been a rekindling of interest due to things like social streams.
+
+= Pattern-matching
+Sometimes you want to talk about a set of events that follow one-another in some sequence.
+  -> SASE was a project that got Eugene into grad school, and also addressed this problem.
+
+Say I want to track conversations of length 3 between madden and wu.  SASE allows you to express this kind of query:
+  SEQ(tweet x, tweet y, tweet z)
+  WHERE y.replyto = x.tweetid and z.replyto = y.tweetid and x.sender = 'madden' and y.sender = 'wu' and ...
+
+This query gets converted into a finite automaton.  Each tweet instance becomes a node.  If a tweet makes it all the way to the last state, emit it.
+Efficiently implementing this: keep a stack of messages that have passed various parts of the automaton.
