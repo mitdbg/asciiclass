@@ -1,0 +1,54 @@
+<ggplot2js!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>The Grammar of Graphics</title>
+<link rel="stylesheet" type="text/css" href="./gg.css"/>
+<script src="./underscore.js"></script>
+<script src="./d3.js"></script>
+<script src="./jquery.js"></script>
+<script src="./gg.js"></script>
+<script src="./newexamples.js"></script>
+</head>
+<body style="width:100%">
+  <style>
+    body {
+      font-size: 13pt;
+    }
+    table {
+      border-collapse: collapse;
+    }
+    td {
+      border: 1px solid gray;
+      padding: 5px;
+    }
+    .node {
+        stroke: black;
+        stroke-width: 1.5px;
+    }
+
+    .link {
+        stroke-opacity: .6;
+    }
+
+  </style>
+
+
+<div id="querydiv" style="float: left; width: 28em;">
+
+  <div id="controls" style=" margin-top: 10px; margin-bottom: 10px; font-size: 15pt;"></div>
+  <div>
+    <textarea rows=20 cols=35 id="query" style="font-size: 15pt;">
+    </textarea>
+  </div>
+  <button id="submit">Compile &amp; Render</button>
+</div>
+
+
+<div id='examples' style="float:left; width: 50%; min-width: 800;"></div>
+<div id='debug' style="float:left; min-width: 800;"></div>
+
+
+
+</body>
+</html>

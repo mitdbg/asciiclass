@@ -1,0 +1,45 @@
+<!doctype html>
+
+<script src="./d3.js"></script>
+<script src="./rickshaw.js"></script>
+<script src="./underscore.js"></script>
+
+<div id="chart"></div>
+
+<script>
+var graphit = function(data) {
+  data.sort(function(a,b) { return a.x - b.x})
+  var graph = new Rickshaw.Graph( {
+      element: document.querySelector("#chart"), 
+      width: 900, 
+      height: 300, 
+      renderer: 'scatterplot',
+      series: [{color: "steelblue", data: data}]
+  });
+
+  graph.render();
+}
+
+
+
+
+d3.csv("/data/data.csv", function(d) {
+  return {
+    name: d.name,
+    lat: +d.lat,
+    lon: +d.lon,
+    time: new Date(Date.parse(d.time)),
+    count: +d.count,
+    diff: +d.diff,
+    x: Date.parse(d.time),
+    y: +d.count,
+    x: +d.lat,
+    y: +d.lon
+  };
+
+}, function(err, rows) {
+  console.log(rows)
+  graphit(rows);
+})
+
+</script>
