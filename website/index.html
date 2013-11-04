@@ -576,7 +576,7 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
         </td>
       <td >
 	<p >
-	  <span >L10: Approximate query processing 
+    <span><a href="https://github.com/mitdbg/asciiclass/blob/master/lectures/lec10/notes.md">L10: Approximate query processing</a>
 	  </span>
 	</p>
       </td>
@@ -639,6 +639,7 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
       <td >
 	<p >
 	  <span >What are the challenges of running ML algorithms on Big Data, what are frameworks that have been proposed, how are they better than existing systems (e.g., Relational DBs  + UDFs/UDAs).
+        In particular, iterative algorithms require you to do several passes over your data. &nbsp;Tools like MapReduce are not as useful for this because both their programming model and execution model aren&rsquo;t designed around iteration.
 	  </span>
 	  <span >&nbsp;
 	  </span>
@@ -648,6 +649,7 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
 	<p >
 	  <span >
         Read the <a href="2011-NIPS-BigLearn-Scalops.pdf">Scalops</a> paper.
+        You may also want to read the 	    <a  href="http://www.cs.berkeley.edu/~matei/papers/2010/hotcloud_spark.pdf">Spark paper</a>.
         </span>
 	</p>
 	<p >
@@ -663,52 +665,7 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
 	</p>
       </td>
     </tr>
-<!--
-     <tr >
-      <td >
-	<p >
-	  <span class="date">
-	  </span>
-        </td>
-      <td >
-	<p >
-	  <span >L12: Computation inside and outside the database  
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >Traditionally, people use tools like databases to store/retrieve/ask basic questions (sums, counts, averages, etc.) of data. &nbsp;They use tools like R/numpy/Julia to do deeper exploration of the data. &nbsp;It turns out that you can do deep computation inside the database, and ask high-level questions of data outside of the database, and we&rsquo;ll show you how.
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >&nbsp;
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >
-	    <a  href="http://doc.madlib.net/v1.0/group__grp__linreg.html">Linear regression in postgres using MADLIB
-	    </a>
-	  </span>
-	</p>
-	<p >
-	  <span >
-	  </span>
-	</p>
-	<p >
-	  <span >
-	    <a  href="https://github.com/amplab/shark/wiki/Running-Shark-on-EC2">Query json files in shark
-	    </a>
-	  </span>
-	</p>
-      </td>
-    </tr>
-    -->
-    <tr style="color:gray;"><td>10/15/13<td colspan=4><b> HOLIDAY: VETERANS DAY </b></tr>
+    <tr style="color:gray;"><td>10/15/13<td colspan=4><b> HOLIDAY: COLUMBUS DAY </b></tr>
      <tr >
       <td >
 	<p >
@@ -719,22 +676,21 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
 	<p >
 	  <span >L12:
 	  </span>
-	  <span >Iterative Algorithms (Carlo Curino)
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >Iterative algorithms require you to do several passes over your data. &nbsp;Tools like MapReduce are not as useful for this because both their programming model and execution model aren&rsquo;t designed around iteration.
+    <span ><a href="https://github.com/mitdbg/asciiclass/blob/master/lectures/lec12/notes.md">Future of Hadoop-Like Platforms (Carlo Curino)</a>
 	  </span>
 	</p>
       </td>
       <td >
 	<p >
 	  <span >
-	    <a  href="http://www.cs.berkeley.edu/~matei/papers/2010/hotcloud_spark.pdf">Spark paper
-	    </a>
 	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+No reading was assigned, but for those interested, you may want to read the <a href="https://54e57bc8-a-62cb3a1a-s-sites.googlegroups.com/site/2013socc/home/program/a5-vavilapalli.pdf?attachauth=ANoY7cqT92es5QkFBwaQdFmL4Idq4jAeS_-o3OkN0E8of-3tMjPju5kcDKeJd_BMTjBIr4AfKhMF-rByipi_46snkr5amvUiZOYql1oUjh6NHeraciPPnfXhF30Wgsn87X_VpUW_1N3XeyNUkrbbrRC8Wh9Wtf0_F7cEnVpVU30ZVQRt_vCzKbY2sg95ok8tEqKPlsKasIopXW2QkBoq0X5tTaefkfdZOJxLwDACcDOD4ES74GepiGY%3D&attredirects=0">YARN paper</a>.
+        </span>
 	</p>
       </td>
       <td >
@@ -753,60 +709,7 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
         </td>
       <td >
 	<p >
-	  <span >L13: Stream data processing
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >Sometimes your datasets are both large and not static (think Twitter, or the stock market): as data streams in, you have to compute information on it without knowing when the stream will end.
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >
-	    <a  href="http://cs.brown.edu/research/pubs/pdfs/2003/Abadi-2003-ANM.pdf">Aurora paper
-	    </a>
-	  </span>
-	</p>
-	<p >
-	  <span >Storm paper?
-	  </span>
-	</p>
-      </td>
-      <td >
-	<p >
-	  <span >
-	    <a  href="https://github.com/nathanmarz/storm-deploy/wiki">Deploy Storm
-	    </a>
-	  </span>
-	  <span >&nbsp;and then use either
-	  </span>
-	  <span >
-	    <a  href="https://github.com/nathanmarz/storm/wiki/Tutorial">Storm
-	    </a>
-	  </span>
-	  <span >&nbsp;or
-	  </span>
-	  <span >
-	    <a  href="https://github.com/nathanmarz/storm/wiki/Trident-tutorial">Trident
-	    </a>
-	  </span>
-	  <span >&nbsp;to connect to the Twitter streaming API and calculate the most retweeted tweets and identify trending topics.
-	  </span>
-	</p>
-      </td>
-    </tr>
-     <tr >
-      <td >
-	<p >
-	  <span class="date">
-	  </span>
-        </td>
-      <td >
-	<p >
-	  <span >L14: Graph processing
+    <span >L13: <a href="https://github.com/mitdbg/asciiclass/blob/master/lectures/lec13/notes.md">Graph processing</a>
 	  </span>
 	</p>
       </td>
@@ -819,14 +722,14 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
       <td >
 	<p >
 	  <span >
-	    <a  href="http://kowshik.github.io/JPregel/pregel_paper.pdf">Pregel paper
-	    </a>
+	    Read the <a  href="http://kowshik.github.io/JPregel/pregel_paper.pdf">Pregel paper
+	    </a> and check out the <a href="http://giraph.apache.org/intro.html">Giraph Docs</a>.
 	  </span>
 	</p>
       </td>
       <td >
 	<p >
-	  <span >&nbsp;
+	  <span >Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab7">Lab 7</a>
 	  </span>
 	</p>
       </td>
@@ -839,7 +742,7 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
         </td>
       <td >
 	<p >
-	  <span >L15: Student Data Case Studies
+	  <span >L14: Student Data Case Studies (Eugene Wu and Students)
 	  </span>
 	</p>
       </td>
@@ -870,6 +773,7 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
 	</p>
       </td>
     </tr>
+
      <tr >
       <td >
 	<p >
@@ -878,7 +782,7 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
         </td>
       <td >
 	<p >
-	  <span >L16: Scalable Algos #2
+	  <span >L15: Scalable Algos (Tim Kraska)
 	  </span>
 	</p>
       </td>
@@ -891,7 +795,7 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
       </td>
       <td >
 	<p >
-	  <span >Daisy&rsquo;s paper, MLBase?
+	  <span >Read the <a href="http://www.cs.berkeley.edu/~ameet/mlbase_cidr.pdf">MLBase Paper</a>
 	  </span>
 	</p>
       </td>
@@ -906,6 +810,45 @@ Out: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab5">Lab 5<
 	</p>
 	<p >
 	  <span >
+	  </span>
+	</p>
+      </td>
+    </tr>
+        <tr >
+      <td >
+	<p >
+	  <span class="date">
+	  </span>
+        </td>
+      <td >
+	<p >
+	  <span >L16: Naiad: "Timely Dataflow"
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >Sometimes your datasets are both large and not static (think Twitter, or the stock market): as data streams in, you have to compute information on it without knowing when the stream will end.
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+	    <a  href="http://sigops.org/sosp/sosp13/papers/p439-murray.pdf">Naiad Paper
+	    </a>
+	  </span>
+	</p>
+	<p >
+	  <span >Storm paper?
+	  </span>
+	</p>
+      </td>
+      <td >
+	<p >
+	  <span >
+        
+        Due: <a href="https://github.com/mitdbg/asciiclass/tree/master/labs/lab7">Lab 7</a>
 	  </span>
 	</p>
       </td>
