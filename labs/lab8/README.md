@@ -50,8 +50,8 @@ Put your visualization and answer to the questions somewhere on the
 internet where we can access.  [http://bl.ocks.org/](http://bl.ocks.org/)
 is a nice place if you don't want to host yourself.
 
-Add your URL and name to [this spreadsheet](https://docs.google.com/spreadsheet/ccc?key=0Amk2aHsGhWktdE5SeF9JVExScGxYVS1PbkpWTWRxYVE&usp=sharing)
-
+Add your URL and name to [this spreadsheet](https://docs.google.com/spreadsheet/ccc?key=0Amk2aHsGhWktdE5SeF9JVExScGxYVS1PbkpWTWRxYVE&usp=sharing).
+If you don't have a Google Drive account, feel free to email us your URL.
 
 **Have you terminated your instances from previous labs?**
 
