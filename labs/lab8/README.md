@@ -13,6 +13,7 @@ Here are some useful documents
 * [D3 documentation](https://github.com/mbostock/d3/wiki/API-Reference)
 * [mbostock's gallery](https://github.com/mbostock/d3/wiki/API-Reference)
 * [D3 Data Join](http://bost.ocks.org/mike/join/)
+* [D3 tutorial](http://alignedleft.com/tutorials/d3)
 
 
 ## Datasets

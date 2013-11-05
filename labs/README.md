@@ -28,3 +28,7 @@ Introduction to Iterative MapReduce (Spark)
 ### [Lab 7](./lab7)
 
 Introduction to Vertex-centric Graph computation (Giraph)
+
+### [Lab 8](./lab8)
+
+Introduction to Visualization
