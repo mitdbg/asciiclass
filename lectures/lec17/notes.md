@@ -18,6 +18,7 @@ Examples
 
 SHOW DEMO
 
+0. console.log(rows[0])
 1. Render the data using y = count, x = time
   * component doesnt support date types.  whoops
 2. Group data by location and render as multiple lines

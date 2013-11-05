@@ -39,12 +39,11 @@ d3.csv("/data/data.csv", function(d) {
     time: new Date(Date.parse(d.time)),
     count: +d.count,
     diff: +d.diff,
-    x: +d.lat,
-    y: +d.lon
+    x: new Date(Date.parse(d.time)),
+    y: +d.count
   };
 
 }, function(err, rows) {
-  console.log(rows)
   graphit(rows);
 })
 
