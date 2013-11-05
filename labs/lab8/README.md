@@ -24,13 +24,13 @@ In this lab, you will use a dataset of all taxi cab pickups in Boston proper ove
 
 Here are the first few lines of this file:
 
-    '156527,2012-05-07 14:54:00,50 Francis St Boston Ma 02215,-71.107178,42.335685,126488'
-    '156528,2012-05-07 17:26:00,1080 Boylston St Boston Ma 02215,-71.08807,42.347138,126489'
-    '156529,2012-05-07 17:26:00,50 Seaport Ln Boston Ma 02210,-71.041327,42.349207,126490'
-    '156530,2012-05-07 14:55:00,Viaduct St Boston Ma,-71.041705,42.349905,126491'
-    '156532,2012-05-07 17:27:00,830 Boylston St Boston Ma 02199,-71.082857,42.348595,126492'
+    156527,2012-05-07 14:54:00,50 Francis St Boston Ma 02215,-71.107178,42.335685,126488
+    156528,2012-05-07 17:26:00,1080 Boylston St Boston Ma 02215,-71.08807,42.347138,126489
+    156529,2012-05-07 17:26:00,50 Seaport Ln Boston Ma 02210,-71.041327,42.349207,126490
+    156530,2012-05-07 14:55:00,Viaduct St Boston Ma,-71.041705,42.349905,126491
+    156532,2012-05-07 17:27:00,830 Boylston St Boston Ma 02199,-71.082857,42.348595,126492
 
-The format is 'trip id,time,address,latitude,longitude,dropoff id'.  Here 'dropoff id' is an identifier in
+The format is `trip id,time,address,latitude,longitude,dropoff id`.  Here `dropoff id` is an identifier in
 a dropoffs data set (that we have not provided).
 
 In the lab directory is also a file `interestpoints.csv` of interesting locations in Boston.
