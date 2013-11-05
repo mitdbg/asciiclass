@@ -35,7 +35,7 @@ are some things you may want to consider:
 1. Do you want to produce a static visualization or an animation (e.g., over time), or an interactive visualization that lets users vary
 some parameter?
 1. For the locations, you will probably want to define some radius around each location to count the number of pickups in that location.
-1. Think about the *story* you want to tell from the data.  For example, you might try to visualize outliers in the dataset, or depict daily/weekly/monthly
+1. Think about the _story_ you want to tell from the data.  For example, you might try to visualize outliers in the dataset, or depict daily/weekly/monthly
 patterns, or show the differences in traffic between locations.  The best visualization for each of these options is likely to be quite different.
 
 Once you have made your visualization, answer the following questions:
