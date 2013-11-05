@@ -1,12 +1,12 @@
 # Lab 8: Visualizing Data
 
-*Assigned: Nov 5, 2013*
+*Assigned: Tuesday, Nov 5, 2013*
 
-*Due:  12:59PM (just before class)*
+*Due:  Tuesday, Nov 12, 2013, 12:59PM (just before class)*
 
 
-The goal of this lab is for you to play with creating web-based
-visualizations and learn something interesting about a local dataset.
+The goal of this lab is for you to create a web-based
+visualization in [D3](http://d3js.org) and learn something interesting about a local dataset.
 
 Here are some useful documents
 
@@ -22,17 +22,27 @@ In this lab, you will use a dataset of all taxi cab pickups in Boston proper.
 
 [Download the dataset here](https://s3.amazonaws.com/mitbigdata/datasets/pickups_train.csv.gz)
 
-In the lab directory is also a file of interesting locations in boston.
-
+In the lab directory is also a file `interestpoints.csv` of interesting locations in Boston.
+Each line of this file is a named location and a latitude/longitude.  These points were provided by the
+City of Boston as a list of locations where they are most interested in taxi activity.  
 
 ### Questions
 
-Construct a visualization that provides insight about the ebb and flow of 
-taxi rides through the interesting locations in Boston.
+Your goal for this lab is to construct a visualization that provides some insight into pattern of 
+taxi rides through the interesting locations in Boston.  You are free to display the data and locations however you want, but here
+are some things you may want to consider:
+
+1. Do you want to produce a static visualization or an animation (e.g., over time), or an interactive visualization that lets users vary
+some parameter?
+1. For the locations, you will probably want to define some radius around each location to count the number of pickups in that location.
+1. Think about the *story* you want to tell from the data.  For example, you might try to visualize outliers in the dataset, or depict daily/weekly/monthly
+patterns, or show the differences in traffic between locations.  The best visualization for each of these options is likely to be quite different.
+
+Once you have made your visualization, answer the following questions:
 
 * What is the message in your visualization and what techniques did you use to illustrate it?
 * If you used interaction or animation, how does it facilitate the user's understanding?
-* What format is the data that is used by the visualization?  Is it the raw data or computed summaries?
+* What format is the data that is used by the visualization?  Is it the raw data or did you need to compute some summary or derived data product?
 
 # Submission Instructions
 
