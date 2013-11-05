@@ -1,0 +1,58 @@
+<!doctype html>
+
+<script src="./d3.js"></script>
+<script src="./underscore.js"></script>
+
+<div id="">
+  <svg id="chart" width=800 height=300></svg>
+</div>
+
+<script>
+var graphit = function(data) {
+  var data = [
+    { time: 10, count: 20},
+    { time: 20, count: 30},
+    { time: 30, count: 100},
+    { time: 40, count: 100},
+    { time: 50, count: 100}
+  ]
+
+  var chart = d3.select("#chart")
+  var els = chart.selectAll("circle")
+
+  els.data(data)
+    .enter()
+    .append('circle')
+    .attr('r', 3)
+    .attr('cx', function(d) { return d.time })
+    .attr('cy', function(d) { return d.count })
+}
+
+
+
+
+
+
+
+
+
+
+
+d3.csv("/data/data.csv", function(d) {
+  return {
+    name: d.name,
+    lat: +d.lat,
+    lon: +d.lon,
+    time: new Date(Date.parse(d.time)),
+    count: +d.count,
+    diff: +d.diff,
+    x: new Date(Date.parse(d.time)),
+    y: +d.count
+  };
+
+}, function(err, rows) {
+  graphit(rows);
+})
+
+
+</script>

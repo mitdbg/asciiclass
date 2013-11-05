@@ -1,13 +1,21 @@
+
+
 ;(function () {
   var render_query = function() {
-    var text = $("#query").val();
-    eval("var specs = " + text);
-    if(!("layers" in specs)) {
-      specs = _.flatten([specs]);
-      specs = {layers: specs};
+    try{
+      $("#err").empty()
+      var text = $("#query").val();
+      eval("var specs = " + text);
+      if(!("layers" in specs)) {
+        specs = _.flatten([specs]);
+        specs = {layers: specs};
+      }
+      console.log(specs)
+      render(specs);
+    } catch (err) {
+      console.log(err)
+      $("#err").text(err)
     }
-    console.log(specs)
-    render(specs);
   }
 
 
@@ -18,7 +26,7 @@
     };
     var guid = gg.util.Util.hashCode(JSON.stringify(specs));
     if (!specs.data) {
-      specs.data = gg.data.Table.fromArray(bigdata, null, 'row')
+      throw Error("need data!")
     }
     //specs.opt = {optimize: true, guid: guid}
     var plot = gg(specs);
@@ -36,3 +44,13 @@
   });
 })();
 
+
+d3.csv('/data/data.csv', function(rows) {
+  _.times(40, function(i) {
+    var d =  gg.util.DateUtil.truncToWeek(new Date(Date.parse(rows[i].time)), null);
+    var t = gg.util.DateUtil.byWeek(new Date(Date.parse(rows[i].time)), null);
+    console.log([d.toString(), t, rows[i].time])
+  })
+
+
+})

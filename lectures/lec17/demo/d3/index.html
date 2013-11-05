@@ -4,7 +4,7 @@
 <script src="./underscore.js"></script>
 
 <div id="">
-  <svg id="chart" width=800 height=500></svg>
+  <svg id="chart" width=800 height=300></svg>
 </div>
 
 <script>
@@ -18,15 +18,14 @@ var graphit = function(data) {
   ]
 
   var chart = d3.select("#chart")
-  var els = chart.selectAll("circle")
-
-  els.data(data)
-    .enter()
-    .append('circle')
-    .attr('r', 3)
-    .attr('cx', function(d) { return d.time })
-    .attr('cy', function(d) { return d.count })
 }
+
+
+
+
+
+
+
 
 
 

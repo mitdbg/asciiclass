@@ -1,0 +1,55 @@
+<!doctype html>
+
+<script src="./d3.js"></script>
+<script src="./rickshaw.js"></script>
+<script src="./underscore.js"></script>
+
+<div id="chart"></div>
+
+<script>
+var graphit = function(data) {
+  var names = _.uniq(_.map(data, function(d) { return d.name; }));
+  console.log(names)
+  var series = _.map(names, function(name) {
+
+    return _.filter(data, function(d) { return d.name == name});
+
+  })
+  console.log(series)
+  series = _.map(series, function(s) {
+    return { color: "black", data: s };
+  })
+
+  var graph = new Rickshaw.Graph( {
+      element: document.querySelector("#chart"), 
+      width: 900, 
+      height: 300, 
+      renderer: 'line',
+      series: series
+  });
+
+  graph.render();
+}
+
+
+
+
+d3.csv("/data/data.csv", function(d) {
+  return {
+    name: d.name,
+    lat: +d.lat,
+    lon: +d.lon,
+    time: new Date(Date.parse(d.time)),
+    count: +d.count,
+    diff: +d.diff,
+    x: Date.parse(d.time),
+    y: +d.count,
+    x: Date.parse(d.time),
+    y: +d.count
+  };
+
+}, function(err, rows) {
+  graphit(rows);
+})
+
+</script>

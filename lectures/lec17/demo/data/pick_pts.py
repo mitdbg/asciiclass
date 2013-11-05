@@ -56,13 +56,13 @@ def std(stats):
   return np.mean([stat[1] for stat in stats])
 
 def valid_loc(d):
-  valids = ['TD Gar', 'South Stat', 'Fenway', 'Convention', 'Children', 'Logan', 'Hynes']
+  valids = ['TD Gar', 'South Stat', 'Fenway', 'Convention', 'Logan']
   for valid in valids:
     if valid in d[0]:
       return True
   return False
 
-edate = datetime(2012, 5, 6)
+edate = datetime(2012, 5, 10)
 all_diffs = json.load(file('./all_diffs.txt','r'))
 all_diffs = filter(valid_loc, all_diffs)
 table = []

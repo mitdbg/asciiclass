@@ -1,0 +1,61 @@
+<!doctype html>
+
+<script src="./d3.js"></script>
+<script src="./underscore.js"></script>
+
+<div id="">
+  <svg id="chart" width=800 height=300></svg>
+</div>
+
+<script>
+var graphit = function(data) {
+  var chart = d3.select("#chart")
+  var els = chart.selectAll("circle")
+
+  var tmin = d3.min(data, function(d){return d.time})
+  var tmax = d3.max(data, function(d){return d.time})
+  var time = d3.scale.linear().domain([tmin, tmax]).range([10, 790]);
+  var countmax = d3.max(data, function(d){return d.count})
+  var y = d3.scale.linear().domain([0, countmax]).range([290, 10])
+  var names = _.uniq(_.map(data, function(d){return d.name}));
+  var color = d3.scale.category10().domain(names);
+
+
+  els.data(data)
+    .enter()
+    .append('circle')
+    .attr('r', 3)
+    .attr('cx', function(d) { return time(d.time) })
+    .attr('cy', function(d) { return y(d.count) })
+    .attr('fill', function(d) { return color(d.name) })
+
+}
+
+
+
+
+
+
+
+
+
+
+
+d3.csv("/data/data.csv", function(d) {
+  return {
+    name: d.name,
+    lat: +d.lat,
+    lon: +d.lon,
+    time: new Date(Date.parse(d.time)),
+    count: +d.count,
+    diff: +d.diff,
+    x: new Date(Date.parse(d.time)),
+    y: +d.count
+  };
+
+}, function(err, rows) {
+  graphit(rows);
+})
+
+
+</script>

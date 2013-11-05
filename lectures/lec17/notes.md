@@ -23,25 +23,29 @@ SHOW DEMO
   * component doesnt support date types.  whoops
 2. Group data by location and render as multiple lines
 
-    var keys = _.uniq(_.map(data, function(d){return d.name}));
-    var series = _.map(keys, function(key) {
-      return _.filter(data, function(d) { return d.name == key; })
-    });
-    var graph = new Rickshaw.Graph( {
-      element: document.querySelector("#chart"),
-      width: 900,
-      height: 300,
-      renderer: 'line',
-      series: series
-    });
+        // extract each location
+        var keys = _.uniq(_.map(data, function(d){return d.name}));
+        var series = _.map(keys, function(key) {
+          return _.filter(data, function(d) { return d.name == key; })
+        });
+        series = _.map(series, function(s) {
+          return { data: s };   // actuall need color!
+        })
+        var graph = new Rickshaw.Graph( {
+          element: document.querySelector("#chart"),
+          width: 900,
+          height: 300,
+          renderer: 'line',
+          series: series
+        });
 
 3. Add color (map location to color)
 
     
-    var colors = ["#c05020", "steelblue", "#6060c0"];
-    series = _.map(series, function(data, i) {
-      return {color: colors[i], data: data };
-    });
+        var colors = ["#c05020", "steelblue", "#6060c0"];
+        series = _.map(series, function(data, i) {
+          return {color: colors[i], data: data };
+        });
 
 Pros
 
@@ -62,18 +66,16 @@ Cons
 * Only performs rendering part of visual analysis
 
 
-## Grammar of Graphics
+## Grammar Based
 
 One of our arguments is that the graphic is defined by the intended
 message/insight, and so entire visualization is driven by the
 message.  What would a language to represent this message look like?
+(this section is based off Wilkinson's Grammar of Graphics)
 
-The value of a grammar based approach:
-
-* reuse existing analysis and only change single part
-* visualization must control transformation/analysis steps
-
-Break down a graphic in
+It turns out that there is a structued approach towards creating 
+statistical graphics.  It can be broken down into several orthogonal 
+components
 
 * Data
 * Facets
@@ -82,6 +84,12 @@ Break down a graphic in
 * Scales
 * Groups
 * Coordinate System
+
+
+The value of a grammar based approach:
+
+* reuse existing analysis and only change single part
+* visualization must control transformation/analysis steps
 
 
 At a high level, a graphic is created via the following discrete
@@ -103,37 +111,59 @@ SHOW DEMO
 
 1. Render per hour in one line
 
-    aes: {
-      x: "{new Date(Date.parse(time));}", 
-      y: "{+count}"
-    },
-    layers: [
-      {geom: "line"}
-    ],
-    data: '/data/data.csv'
+        aes: {
+          x: "{new Date(time);}", 
+          y: "{+count}"
+        },
+        layers: [
+          {geom: "line"}
+        ],
+        data: '/data/data.csv'
 
 2. Facet by name, vs group by name
 
+        
+        facets: { y: "name" }
+        color: "name"
+
+
+3. Render diffs as well
+
+        {geom: 'line', aes: {y: "{+diff}", opacity: 0.2}  }
+
+
 3. Render it as lat lon, add a label
 
-    {
-      aes: {x: "{+lat}", y: "{+lon}", color: "name"},
-      layers: [
-        {geom: "point" },
-        {geom: "text", aes: { text: "name"}}
-      ],
-      data: '/data/data.csv',
-      scales: {
-        y: {lim: [-71.11, -71.04]},
-        x: {lim: [42.34, 42.38]}
-      }
-    }
+        {
+          aes: {x: "{+lat}", y: "{+lon}", color: "name"},
+          layers: [
+            {geom: "point" },
+            {geom: "text", aes: { text: "name"}}
+          ],
+          data: '/data/data.csv',
+          scales: {
+            y: {lim: [-71.11, -71.04]},
+            x: {lim: [42.34, 42.38]}
+          }
+        }
 
 ## Polaris
 
 * Data as table of graphics
 * Algebra for dictating the tabular layout
 * Defines rules for nominal, ordinal, numeric attribute types
+
+What makes an algebra?  Set & operations over the set that satisfy properties e.g., commutivity, etc.
+
+* p-entry: an atom.  (tag:value) pair where
+  * tag may be "field", "constant", <name of field>
+  * value is a base value for first two tags, or value in the fields domain for latter
+* p-tuple: finite sequence of p-entries.  
+  * A p-tuple defines a single pane axis values.
+  * Sequence because it needs to be rendered in order
+* An operand is a finite sequence of p-tuples.  Each tuple is a row/col/layer in the layout
+
+
 
 Define Operators
 
@@ -145,32 +175,33 @@ Define Operators
 
 ## D3
 
-Data joined with DOM elements
+D3 eschews the components and grammers and provides the lowest common denominator for building visualizations.  Its core provides a single abstraction
+
+* Table JOIN  DOM elements
 
 Recall Relational Algebra is about operations on Sets
 
 * explain how left joins work: table join table
   * [id, a] join [id, el] 
 
-    id, a      JOIN   id, el
-    1,  'hi'
-    2,  'bye'
-
-    returns
-
-    id, a,     el
-    1, 'hi',  [DOM element]
-    2, 'bye', [DOM element]
+        key, a      JOIN   key, el
+        1,  'hi'
+        2,  'bye'
+    
+        returns
+    
+        key, a,      el
+        1,   'hi',  [DOM element]
+        2,   'bye', [DOM element]
 
 
 * What do we need? (ask)
   * model DOM elements as a table
-  * how is the data modeled?
-  * what are the semantics of a join between a tuple and a dom element?
+  * what do we join _on_?  (join key?)
+  * aesthetic mappings: how to may a tuple's data to a DOM attribute?
+  * what are the semantics of this join?
     * show venn diagram
     * enter, update, exit
-  * who performs the aesthetic mappings?
-  * what is the join _key_?
   * what is the programatic interface?
   * performance implications?  caching.  nice
 * Join is the only multi-set operator, nice observation
@@ -222,11 +253,7 @@ Now add a line
     .y(function(d){return y(d.count)})
     .interpolate('basis')
 
-    var els = d3.select("#chart")
-    .append("svg")
-    .attr("width", 800)
-    .attr("height", 500)
-    .selectAll("path")
+    var els = d3.select("#chart").selectAll("path")
 
     data = d3.nest().key(function(d){ return d.name}).entries(data)
     var color = d3.scale.category10().domain(_.map(data, function(d){return d.key}))

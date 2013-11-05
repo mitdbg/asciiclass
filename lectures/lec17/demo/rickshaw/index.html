@@ -13,12 +13,7 @@ var graphit = function(data) {
       width: 900, 
       height: 300, 
       renderer: 'scatterplot',
-      series: [
-        { 
-          color: "steelblue", 
-          data: data
-        }
-        ]
+      series: []
   });
 
   graph.render();
@@ -35,8 +30,6 @@ d3.csv("/data/data.csv", function(d) {
     time: new Date(Date.parse(d.time)),
     count: +d.count,
     diff: +d.diff,
-    x: Date.parse(d.time),
-    y: +d.count
   };
 
 }, function(err, rows) {
