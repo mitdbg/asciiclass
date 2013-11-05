@@ -31,7 +31,8 @@ Here are the first few lines of this file:
     156532,2012-05-07 17:27:00,830 Boylston St Boston Ma 02199,-71.082857,42.348595,126492
 
 The format is `trip id,time,address,latitude,longitude,dropoff id`.  Here `dropoff id` is an identifier in
-a dropoffs data set (that we have not provided).
+a dropoffs data set (that we have not provided).  Unfortunately, due to the way this dataset was generated, `trip id` is not
+guaranteed to be unique.
 
 In the lab directory is also a file `interestpoints.csv` of interesting locations in Boston.
 Each line of this file is a named location and a latitude/longitude.  These points were provided by the
