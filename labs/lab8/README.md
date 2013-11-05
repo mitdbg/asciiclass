@@ -31,7 +31,7 @@ Construct a visualization that provides insight about the ebb and flow of
 taxi rides through the interesting locations in Boston.
 
 * What is the message in your visualization and what techniques did you use to illustrate it?
-* If you used interaction, how does it facilitate the user's understanding?
+* If you used interaction or animation, how does it facilitate the user's understanding?
 * What format is the data that is used by the visualization?  Is it the raw data or computed summaries?
 
 # Submission Instructions
