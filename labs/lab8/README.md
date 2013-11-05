@@ -18,9 +18,20 @@ Here are some useful documents
 
 ## Datasets
 
-In this lab, you will use a dataset of all taxi cab pickups in Boston proper. 
+In this lab, you will use a dataset of all taxi cab pickups in Boston proper over the course of one year.
 
 [Download the dataset here](https://s3.amazonaws.com/mitbigdata/datasets/pickups_train.csv.gz)
+
+Here are the first few lines of this file:
+
+    '156527,2012-05-07 14:54:00,50 Francis St Boston Ma 02215,-71.107178,42.335685,126488'
+    '156528,2012-05-07 17:26:00,1080 Boylston St Boston Ma 02215,-71.08807,42.347138,126489'
+    '156529,2012-05-07 17:26:00,50 Seaport Ln Boston Ma 02210,-71.041327,42.349207,126490'
+    '156530,2012-05-07 14:55:00,Viaduct St Boston Ma,-71.041705,42.349905,126491'
+    '156532,2012-05-07 17:27:00,830 Boylston St Boston Ma 02199,-71.082857,42.348595,126492'
+
+The format is 'trip id,time,address,latitude,longitude,dropoff id'.  Here 'dropoff id' is an identifier in
+a dropoffs data set (that we have not provided).
 
 In the lab directory is also a file `interestpoints.csv` of interesting locations in Boston.
 Each line of this file is a named location and a latitude/longitude.  These points were provided by the
