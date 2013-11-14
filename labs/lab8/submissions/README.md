@@ -1,7 +1,11 @@
+This is hosted here:
+
+    http://www.mit.edu/~eugenewu/submissions/
+
 To run:
 
-  ./runserver.sh
+    ./runserver.sh
 
 Go to
 
-  http://localhost:8888
+    http://localhost:8888
