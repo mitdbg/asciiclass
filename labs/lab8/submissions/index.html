@@ -1,0 +1,42 @@
+<!doctype html>
+
+<link rel="stylesheet" type="text/css" href="./style.css" />
+<script src="./d3.js"></script>
+<script src="./underscore.js"></script>
+
+<div id="gallery">
+</div>
+
+<script>
+var graphit = function(data) {
+  var subs = d3.select("#gallery").selectAll(".submission")
+      .data(data)
+    .enter().append("div")
+      .classed("submission", true);
+
+  subs
+    .append('a').attr('href', function(d) { return d.url; })
+      .append("div")
+    .classed("img", true)
+    .style("background-image", function(d) { return "url(" + d.img + ")"; })
+
+  subs.append("div").classed('link', true).append("a")
+    .attr("href", function(d) { return d.url; })
+    .text(function(d) { return d.name; })
+    
+
+}
+
+d3.csv("/data.csv", function(d) {
+  console.log(d)
+  return {
+    img: "/imgs/" + d.name.split(' ').join("_") + ".png",
+    name: d.name,
+    url: d.url
+  }; 
+}, function(err, rows) {
+  graphit(rows);
+})
+
+
+</script>
