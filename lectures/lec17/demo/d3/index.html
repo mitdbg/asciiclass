@@ -9,15 +9,37 @@
 
 <script>
 var graphit = function(data) {
-  var data = [
-    { time: 10, count: 20},
-    { time: 20, count: 30},
-    { time: 30, count: 100},
-    { time: 40, count: 100},
-    { time: 50, count: 100}
-  ]
+  data = _.filter(data, function(d) {return d != undefined && d != null;} )
+  var tmin = d3.min(data, function(d){return d.time})
+  var tmax = d3.max(data, function(d){return d.time})
+  var time = d3.scale.linear().domain([tmin, tmax]).range([10, 790]);
+  var ymin = d3.min(data, function(d) {return d.count})
+  var ymax = d3.max(data, function(d) {return d.count})
+  var yscale = d3.scale.linear().domain([ymin, ymax]).range([300, 10])
 
-  var chart = d3.select("#chart")
+  var chart = d3.select("#chart");
+  var circles = chart.selectAll("circle");
+  circles.data(data)
+    .enter()
+    .append("circle")
+    .attr("cx", function(d) {
+      return time(d.time);
+    })
+    .attr("cy", function(d) {
+      return yscale(d.count);
+    })
+    .attr("r", 3);
+
+  d3.selectAll("circle").transition()
+    .delay(function(d,i){return 1000 + i/(data.length) * 2000})
+    .attr('cy', 0)
+    .attr('r', 20)
+
+d3.selectAll('circle').transition()
+.delay(function(d,i){return 4000 + i/(data.length) * 2000})
+.attr('cx', function(d) { return time(d.time) })
+.attr('cy', function(d) { return yscale(d.count) })
+.attr('r', 5)    
 }
 
 
@@ -35,7 +57,7 @@ d3.csv("/data/data.csv", function(d) {
     name: d.name,
     lat: +d.lat,
     lon: +d.lon,
-    time: new Date(Date.parse(d.time)),
+    time: new Date(d.time),
     count: +d.count,
     diff: +d.diff,
     x: new Date(Date.parse(d.time)),

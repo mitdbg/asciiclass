@@ -8,12 +8,26 @@
 
 <script>
 var graphit = function(data) {
+  var names = _.uniq(_.map(data, function(d) {return d.name;}));
+  console.log(names);
+  var series = _.map(names, function(name) {
+    return _.filter(data, function(d){
+      return d.name == name;
+    })
+  })
+  var colors = [ 'black', 'steelblue', 'orange', 'green', 'red', 'purple'];
+  console.log(series);
+  series = _.map(series, function(s, idx) {
+    return { color: colors[idx], data: s};
+  })
+
+
   var graph = new Rickshaw.Graph( {
       element: document.querySelector("#chart"), 
       width: 900, 
       height: 300, 
-      renderer: 'scatterplot',
-      series: []
+      renderer: 'line',
+      series: series
   });
 
   graph.render();
@@ -25,11 +39,13 @@ var graphit = function(data) {
 d3.csv("/data/data.csv", function(d) {
   return {
     name: d.name,
-    lat: +d.lat,
+    lat: parseInt(d.lat),
     lon: +d.lon,
     time: new Date(Date.parse(d.time)),
     count: +d.count,
     diff: +d.diff,
+    x: Date.parse(d.time),
+    y: +d.count
   };
 
 }, function(err, rows) {
