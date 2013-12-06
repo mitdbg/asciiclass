@@ -7,3 +7,5 @@
 
 * several students had a rough time running on larger datasets, and only ran on a single node with a small dataset
 * several students reported crash-causing memory issues
+* pretty equal split between students that thought MR was an easier/more intuitive programming model than Spark.  Not what I expected.
+* several students had an issue mapping a single object to multiple key/value pairs.  flatMap does this, and most Scala programmers are familiar with it.  It's less common in Python, and we should make sure to underscore its functionality in PySpark.
