@@ -1,0 +1,9 @@
+= lab 2
+
+* storing protocol buffers in a single file made people think protocol buffers are an access method.  emphasize that protocol buffers are for serialization, not for querying data.  you can serialize them to some NoSQL system, etc.
+* question on 'why not just use simplejson in python' suggests having them work through examples by hand would be helpful.
+
+= lab 6
+
+* several students had a rough time running on larger datasets, and only ran on a single node with a small dataset
+* several students reported crash-causing memory issues
