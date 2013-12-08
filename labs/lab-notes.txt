@@ -1,0 +1,23 @@
+= lab 2
+
+* storing protocol buffers in a single file made people think protocol buffers are an access method.  emphasize that protocol buffers are for serialization, not for querying data.  you can serialize them to some NoSQL system, etc.
+* question on 'why not just use simplejson in python' suggests having them work through examples by hand would be helpful.
+
+= lab 3
+
+* many students frustrated by crashing issues with wrangler;  probably should use a simpler task or get a version that doesn't crash
+* students actually like sed/awk  :)
+
+= lab 5
+
+* some students wanted advice about how to chain the output of the MR job into the second. One suggested describing hte possibilities (adding the data to the compressed package, reading it locally or reading from S3 during reduce_init).
+* students didn't like being told "not to worry" about a bunch of the key enron people because their mail wasn't in one place.  This should be cleaned up.
+
+
+= lab 6
+
+* several students had a rough time running on larger datasets, and only ran on a single node with a small dataset
+* several students reported crash-causing memory issues
+* pretty equal split between students that thought MR was an easier/more intuitive programming model than Spark.  Not what I expected.
+* several students had an issue mapping a single object to multiple key/value pairs.  flatMap does this, and most Scala programmers are familiar with it.  It's less common in Python, and we should make sure to underscore its functionality in PySpark.
+
